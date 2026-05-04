@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Portaria PRO</title>
+
+<style>
+body {
+    font-family: Arial;
+    background: #eef1f5;
+    padding: 20px;
+}
+
+h2 {
+    text-align: center;
+}
+
+.box {
+    background: white;
+    padding: 15px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+input, button {
+    padding: 10px;
+    margin: 5px 0;
+    width: 100%;
+    font-size: 14px;
+}
+
+button {
+    background: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.card {
+    background: white;
+    padding: 15px;
+    margin-top: 10px;
+    border-radius: 8px;
+}
+</style>
+</head>
+
+<body>
+
+<h2>🏢 Sistema de Portaria</h2>
+
+<div class="box">
+    <h3>Cadastrar Morador</h3>
+    <input type="text" id="nome" placeholder="Nome do morador">
+    <input type="text" id="apto" placeholder="Apartamento">
+    <button onclick="addMorador()">Cadastrar</button>
+</div>
+
+<div class="box">
+    <h3>Buscar</h3>
+    <input type="text" id="busca" placeholder="Digite o nome..." onkeyup="buscar()">
+</div>
+
+<div id="lista"></div>
+
+<script>
+
+// DADOS INICIAIS
+let moradores = JSON.parse(localStorage.getItem("moradores")) || [
+{ nome: "Vanessa", apto: "301", visitantes: ["Amanda"] },
+{ nome: "João Marcelo", apto: "401", visitantes: ["Diana"] },
+{ nome: "Marcos", apto: "402", visitantes: ["Ana Cecília"] },
+{ nome: "Arthur", apto: "405", visitantes: ["Ana Paula"] },
+{ nome: "Boris", apto: "501", visitantes: ["Luciana"] },
+{ nome: "Rodrigo", apto: "502", visitantes: ["Dona Merces"] },
+{ nome: "Rodolfo Chepaidi", apto: "503", visitantes: ["Naara Raquel"] },
+{ nome: "Thiago Leite", apto: "601", visitantes: ["Déborah Leite"] },
+{ nome: "Milton", apto: "602", visitantes: [] },
+{ nome: "Marton Lúcio", apto: "603", visitantes: ["Josinaide", "Aiana Diniz"] },
+{ nome: "Liana", apto: "701", visitantes: ["Luana", "Socorro"] },
+{ nome: "Luciano Faria", apto: "702", visitantes: ["Roberta"] },
+{ nome: "Diniz Matias", apto: "703", visitantes: ["Tereza"] },
+{ nome: "Anita Felipe", apto: "801", visitantes: ["Carlos Alberto", "Igor"] },
+{ nome: "Cíntia Azevedo", apto: "802", visitantes: ["Júlia Bandeira"] },
+{ nome: "Aline Brito", apto: "803", visitantes: ["Renato"] },
+{ nome: "Fátima Pignataro", apto: "901", visitantes: ["Humberto Pignataro"] },
+{ nome: "Neire de Sá", apto: "902", visitantes: ["Ana Carolina de Sá"] },
+{ nome: "Luísa", apto: "903", visitantes: ["Rita", "Cássio"] },
+{ nome: "Maria Segunda de Araújo", apto: "1001", visitantes: [] },
+{ nome: "Darlan", apto: "1002", visitantes: ["Karina", "Beatriz Ribeiro"] },
+{ nome: "Alex Pascoal", apto: "1003", visitantes: ["Micheline", "Eduardo"] },
+{ nome: "Raquel", apto: "1101", visitantes: ["Marcelo", "Gabriel", "Matheus"] },
+{ nome: "Celina", apto: "1102", visitantes: ["Rita"] },
+{ nome: "Zeneide Caldas", apto: "1201", visitantes: ["Zemilton", "Diogo Caldas"] },
+{ nome: "Maria das Neves", apto: "1202", visitantes: ["Rejane Nicolau", "Gabriela"] },
+{ nome: "Eva Maria Dantas", apto: "1203", visitantes: ["Elinar Cavalcante"] },
+{ nome: "Janaína", apto: "1301", visitantes: ["Domingos Sávio", "Laís", "Antony"] },
+{ nome: "Simone", apto: "1302", visitantes: [] },
+{ nome: "Cristina", apto: "1303", visitantes: ["Adilson"] },
+{ nome: "Gildomar", apto: "1401", visitantes: [] },
+{ nome: "Ana Guimarães", apto: "1402", visitantes: ["José Luiz"] },
+{ nome: "Clébio", apto: "1403", visitantes: ["Marcelo"] },
+{ nome: "Cíntia", apto: "1501", visitantes: ["Pastor Mair"] }
+];
+
+// salvar no navegador
+function salvar() {
+    localStorage.setItem("moradores", JSON.stringify(moradores));
+}
+
+// adicionar morador
+function addMorador() {
+    const nome = document.getElementById("nome").value;
+    const apto = document.getElementById("apto").value;
+
+    if (!nome || !apto) {
+        alert("Preencha tudo!");
+        return;
+    }
+
+    moradores.push({ nome, apto, visitantes: [] });
+
+    salvar();
+    mostrar();
+
+    document.getElementById("nome").value = "";
+    document.getElementById("apto").value = "";
+}
+
+// adicionar visitante
+function addVisitante(index) {
+    const nomeVisitante = prompt("Nome do visitante:");
+    if (!nomeVisitante) return;
+
+    moradores[index].visitantes.push(nomeVisitante);
+    salvar();
+    mostrar();
+}
+
+// editar morador
+function editarMorador(index) {
+    const novoNome = prompt("Editar nome:", moradores[index].nome);
+    if (!novoNome) return;
+
+    const novoApto = prompt("Editar apartamento:", moradores[index].apto);
+    if (!novoApto) return;
+
+    moradores[index].nome = novoNome;
+    moradores[index].apto = novoApto;
+
+    salvar();
+    mostrar();
+}
+
+// busca
+function buscar() {
+    const termo = document.getElementById("busca").value.toLowerCase();
+    mostrar(termo);
+}
+
+// mostrar lista
+function mostrar(filtro = "") {
+    const lista = document.getElementById("lista");
+    lista.innerHTML = "";
+
+    moradores
+    .filter(m => m.nome.toLowerCase().includes(filtro))
+    .forEach((m, index) => {
+        lista.innerHTML += `
+            <div class="card">
+                <strong>${m.nome}</strong><br>
+                Apto: ${m.apto}<br>
+                Visitantes: ${m.visitantes.join(", ") || "Nenhum"}<br><br>
+
+                <button onclick="addVisitante(${index})">+ Visitante</button>
+                <button onclick="editarMorador(${index})">✏️ Editar</button>
+            </div>
+        `;
+    });
+}
+
+// iniciar
+mostrar();
+
+</script>
+
+</body>
+</html>
