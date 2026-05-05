@@ -7,173 +7,100 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
 <style>
-body {
-    font-family: Arial;
-    background: #eef1f5;
-    margin: 0;
-}
+body { font-family: Arial; background:#eef1f5; margin:0; }
 
-.header {
-    background: #7a0f3c;
-    color: white;
-    padding: 15px;
-    text-align: center;
-}
+.header { background:#7a0f3c; color:white; padding:15px; text-align:center; }
+.header img { width:100px; }
 
-.header img {
-    width: 110px;
-}
+.dashboard { display:flex; gap:10px; padding:10px; }
+.card-dash { flex:1; background:white; padding:10px; border-radius:10px; text-align:center; }
 
-.dashboard {
-    display: flex;
-    gap: 10px;
-    padding: 10px;
-}
+.container { padding:10px; }
 
-.card-dash {
-    flex: 1;
-    background: white;
-    padding: 15px;
-    border-radius: 12px;
-    text-align: center;
-}
+.box { background:white; padding:15px; border-radius:10px; margin-bottom:10px; }
 
-.container {
-    padding: 10px;
-}
-
-.box {
-    background: white;
-    padding: 15px;
-    border-radius: 12px;
-    margin-bottom: 10px;
-}
-
-input {
-    width: 100%;
-    padding: 10px;
-    margin-top: 5px;
-    border-radius: 8px;
-    border: 1px solid #ccc;
+input, select {
+ width:100%; padding:10px; margin-top:5px;
+ border-radius:8px; border:1px solid #ccc;
 }
 
 .btn {
-    margin-top: 10px;
-    background: #7a0f3c;
-    color: white;
-    border: none;
-    padding: 12px;
-    border-radius: 8px;
-    width: 100%;
+ margin-top:10px; background:#7a0f3c;
+ color:white; border:none; padding:10px;
+ border-radius:8px; width:100%;
 }
 
 .card {
-    background: white;
-    padding: 15px;
-    border-radius: 12px;
-    margin-bottom: 10px;
-    position: relative;
+ background:white; padding:15px;
+ border-radius:10px; margin-bottom:10px;
+ position:relative;
 }
 
 .btn-editar {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    background: #7a0f3c;
-    color: white;
-    border: none;
-    width: 35px;
-    height: 35px;
-    border-radius: 50%;
+ position:absolute; top:10px; right:10px;
+ background:#7a0f3c; color:white;
+ width:35px; height:35px; border-radius:50%;
+ border:none;
 }
 
 .btn-pdf {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    background: #7a0f3c;
-    color: white;
-    border: none;
-    width: 55px;
-    height: 55px;
-    border-radius: 50%;
-    font-size: 20px;
+ position:fixed; bottom:20px; right:20px;
+ width:55px; height:55px;
+ background:#7a0f3c; color:white;
+ border-radius:50%; border:none;
+ font-size:20px;
 }
 
-.search-box {
-    position: relative;
-}
-
-.search-box input {
-    padding-left: 35px;
-}
-
-.search-box .icon {
-    position: absolute;
-    left: 10px;
-    top: 10px;
-    color: #777;
-}
+.search-box { position:relative; }
+.search-box input { padding-left:35px; }
+.icon { position:absolute; left:10px; top:10px; }
 
 .modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0,0,0,0.5);
-    display: none;
-    justify-content: center;
-    align-items: center;
+ position:fixed; top:0; left:0; right:0; bottom:0;
+ background:rgba(0,0,0,0.5);
+ display:none; justify-content:center; align-items:center;
 }
 
 .modal-content {
-    background: white;
-    padding: 20px;
-    border-radius: 12px;
-    width: 90%;
+ background:white; padding:20px;
+ border-radius:10px; width:90%;
 }
+
+canvas { border:1px solid #ccc; }
 </style>
 </head>
 
 <body>
 
 <div class="header">
-    <img src="./logo.png" onerror="this.style.display='none'">
-    <div>📋 Sistema de Portaria</div>
+<img src="logo.png" onerror="this.style.display='none'">
+<h3>🏢 Sistema de Portaria</h3>
 </div>
 
 <div class="dashboard">
-    <div class="card-dash">
-        Moradores
-        <h2 id="totalMoradores">0</h2>
-    </div>
-    <div class="card-dash">
-        Visitantes
-        <h2 id="totalVisitantes">0</h2>
-    </div>
-    <div class="card-dash">
-        Hoje
-        <h2 id="dataHoje"></h2>
-    </div>
+<div class="card-dash">Moradores<h2 id="totalMoradores">0</h2></div>
+<div class="card-dash">Visitantes<h2 id="totalVisitantes">0</h2></div>
+<div class="card-dash">Hoje<h2 id="dataHoje"></h2></div>
 </div>
 
 <div class="container">
 
+<button class="btn" onclick="abrirReservas()">📅 Reservas</button>
+<button class="btn" onclick="abrirConsulta()">📋 Consultar Reservas</button>
+
 <div class="box">
-    <h3>Cadastrar</h3>
-    <input id="nome" placeholder="Nome do morador">
-    <input id="apto" placeholder="Apartamento">
-    <input id="secretaria" placeholder="Secretária">
-    <input id="visitantes" placeholder="Visitantes (separados por vírgula)">
-    <button class="btn" onclick="addMorador()">Cadastrar</button>
+<input id="nome" placeholder="Nome">
+<input id="apto" placeholder="Apartamento">
+<input id="secretaria" placeholder="Secretária">
+<input id="visitantes" placeholder="Visitantes (vírgula)">
+<button class="btn" onclick="addMorador()">Cadastrar</button>
 </div>
 
 <div class="box">
-    <div class="search-box">
-        <span class="icon">🔍</span>
-        <input id="busca" placeholder="Buscar..." onkeyup="buscar()">
-    </div>
+<div class="search-box">
+<span class="icon">🔍</span>
+<input id="busca" placeholder="Buscar..." onkeyup="buscar()">
+</div>
 </div>
 
 <div id="lista"></div>
@@ -182,156 +109,181 @@ input {
 
 <button class="btn-pdf" onclick="gerarPDF()">💾</button>
 
+<!-- MODAL EDITAR -->
 <div class="modal" id="modal">
-    <div class="modal-content">
-        <h3>Editar</h3>
-        <input id="editNome">
-        <input id="editApto">
-        <input id="editSecretaria">
-        <input id="editVisitantes">
-        <button class="btn" onclick="salvarEdicao()">Salvar</button>
-        <button class="btn" onclick="fecharModal()">Cancelar</button>
-    </div>
+<div class="modal-content">
+<input id="editNome">
+<input id="editApto">
+<input id="editSecretaria">
+<input id="editVisitantes">
+<button class="btn" onclick="salvarEdicao()">Salvar</button>
+<button class="btn" onclick="modal.style.display='none'">Cancelar</button>
+</div>
+</div>
+
+<!-- MODAL RESERVA -->
+<div class="modal" id="modalReserva">
+<div class="modal-content">
+<h3>Reserva</h3>
+
+<select id="tipoReserva">
+<option>Churrasqueira</option>
+<option>Salão</option>
+<option>Combo</option>
+</select>
+
+<input type="date" id="dataReserva">
+<input type="time" id="horaReserva">
+<input id="responsavel" placeholder="Responsável">
+
+<p>Assinatura:</p>
+<canvas id="assinatura" width="300" height="150"></canvas>
+<button onclick="limparAssinatura()">Limpar</button>
+
+<button class="btn" onclick="salvarReserva()">Agendar</button>
+<button class="btn" onclick="fecharReservas()">Cancelar</button>
+</div>
+</div>
+
+<!-- CONSULTA -->
+<div class="modal" id="modalConsulta">
+<div class="modal-content">
+<h3>Reservas</h3>
+<div id="listaReservas"></div>
+<button class="btn" onclick="modalConsulta.style.display='none'">Fechar</button>
+</div>
 </div>
 
 <script>
 
-// 🔥 CARREGAMENTO SEGURO (CORRIGE SEU PROBLEMA)
-let moradores = [];
+// ===== PORTARIA =====
+let moradores = JSON.parse(localStorage.getItem("moradores")) || [];
 
-try {
-    const dados = localStorage.getItem("moradores");
-    moradores = dados ? JSON.parse(dados) : [];
-} catch (e) {
-    moradores = [];
+function salvar(){ localStorage.setItem("moradores", JSON.stringify(moradores)); }
+
+function addMorador(){
+if(!nome.value||!apto.value) return alert("Preencha");
+
+moradores.push({
+nome:nome.value,
+apto:apto.value,
+secretaria:secretaria.value||"",
+visitantes:visitantes.value?visitantes.value.split(",").map(v=>v.trim()):[]
+});
+
+salvar(); mostrar();
+nome.value=""; apto.value=""; secretaria.value=""; visitantes.value="";
 }
 
-// 🔄 AJUSTE AUTOMÁTICO (dados antigos)
-moradores = moradores.map(m => ({
-    nome: m.nome,
-    apto: m.apto,
-    secretaria: m.secretaria || "",
-    visitantes: (m.visitantes || []).map(v => {
-        if (typeof v === "string") return v;
-        return v.nome || "";
-    })
-}));
+let indexAtual;
 
-function salvar() {
-    localStorage.setItem("moradores", JSON.stringify(moradores));
+function abrirModal(i){
+indexAtual=i;
+editNome.value=moradores[i].nome;
+editApto.value=moradores[i].apto;
+editSecretaria.value=moradores[i].secretaria;
+editVisitantes.value=moradores[i].visitantes.join(", ");
+modal.style.display="flex";
 }
 
-function addMorador() {
-    if (!nome.value || !apto.value) return alert("Preencha nome e apto");
-
-    moradores.push({
-        nome: nome.value,
-        apto: apto.value,
-        secretaria: secretaria.value || "",
-        visitantes: visitantes.value
-            ? visitantes.value.split(",").map(v => v.trim())
-            : []
-    });
-
-    salvar();
-    mostrar();
-
-    nome.value = "";
-    apto.value = "";
-    secretaria.value = "";
-    visitantes.value = "";
+function salvarEdicao(){
+moradores[indexAtual].nome=editNome.value;
+moradores[indexAtual].apto=editApto.value;
+moradores[indexAtual].secretaria=editSecretaria.value;
+moradores[indexAtual].visitantes=editVisitantes.value.split(",").map(v=>v.trim());
+salvar(); modal.style.display="none"; mostrar();
 }
 
-let indexAtual = null;
-
-function abrirModal(i) {
-    indexAtual = i;
-
-    editNome.value = moradores[i].nome;
-    editApto.value = moradores[i].apto;
-    editSecretaria.value = moradores[i].secretaria;
-    editVisitantes.value = moradores[i].visitantes.join(", ");
-
-    modal.style.display = "flex";
+function buscar(){
+let t=busca.value.toLowerCase();
+lista.innerHTML="";
+moradores.filter(m=>m.nome.toLowerCase().includes(t)).forEach(render);
 }
 
-function fecharModal() {
-    modal.style.display = "none";
+function render(m,i){
+lista.innerHTML+=`
+<div class="card">
+<b>${m.nome}</b><br>
+Apto: ${m.apto}<br>
+Secretaria: ${m.secretaria||"Nenhuma"}<br>
+Visitantes: ${m.visitantes.join(", ")||"Nenhum"}
+<button class="btn-editar" onclick="abrirModal(${i})">✏️</button>
+</div>`;
 }
 
-function salvarEdicao() {
-    moradores[indexAtual].nome = editNome.value;
-    moradores[indexAtual].apto = editApto.value;
-    moradores[indexAtual].secretaria = editSecretaria.value;
-    moradores[indexAtual].visitantes = editVisitantes.value
-        ? editVisitantes.value.split(",").map(v => v.trim())
-        : [];
-
-    salvar();
-    fecharModal();
-    mostrar();
+function mostrar(){ lista.innerHTML=""; moradores.forEach(render);
+totalMoradores.innerText=moradores.length;
+totalVisitantes.innerText=moradores.reduce((t,m)=>t+m.visitantes.length,0);
+dataHoje.innerText=new Date().toLocaleDateString();
 }
 
-function buscar() {
-    const termo = busca.value.toLowerCase();
-
-    lista.innerHTML = "";
-
-    moradores
-    .filter(m =>
-        m.nome.toLowerCase().includes(termo) ||
-        m.apto.toLowerCase().includes(termo) ||
-        m.secretaria.toLowerCase().includes(termo) ||
-        m.visitantes.some(v => v.toLowerCase().includes(termo))
-    )
-    .forEach((m, i) => {
-        renderCard(m, i);
-    });
-
-    atualizarDashboard();
+// PDF moradores
+function gerarPDF(){
+const { jsPDF } = window.jspdf;
+let doc=new jsPDF(); let y=20;
+moradores.forEach(m=>{
+doc.text(`${m.nome} - ${m.apto}`,10,y); y+=5;
+doc.text(`Visitantes: ${m.visitantes.join(", ")}`,10,y); y+=10;
+});
+doc.save("moradores.pdf");
 }
 
-function renderCard(m, i) {
-    lista.innerHTML += `
-    <div class="card">
-        <strong>${m.nome}</strong><br>
-        Apto: ${m.apto}<br>
-        Secretaria: ${m.secretaria || "Nenhuma"}<br>
-        Visitantes: ${m.visitantes.join(", ") || "Nenhum"}
-        <button class="btn-editar" onclick="abrirModal(${i})">✏️</button>
-    </div>
-    `;
+// ===== RESERVAS =====
+let reservas = JSON.parse(localStorage.getItem("reservas")) || [];
+
+function abrirReservas(){ modalReserva.style.display="flex"; }
+function fecharReservas(){ modalReserva.style.display="none"; }
+
+function abrirConsulta(){ modalConsulta.style.display="flex"; mostrarReservas(); }
+
+function salvarReserva(){
+if(!responsavel.value) return alert("Preencha");
+
+reservas.push({
+tipo:tipoReserva.value,
+data:dataReserva.value,
+hora:horaReserva.value,
+responsavel:responsavel.value,
+assinatura:canvas.toDataURL()
+});
+
+localStorage.setItem("reservas", JSON.stringify(reservas));
+alert("Reserva salva!");
+fecharReservas();
 }
 
-function atualizarDashboard() {
-    totalMoradores.innerText = moradores.length;
-    totalVisitantes.innerText = moradores.reduce((t, m) => t + m.visitantes.length, 0);
-    dataHoje.innerText = new Date().toLocaleDateString("pt-BR");
+function mostrarReservas(){
+listaReservas.innerHTML="";
+reservas.forEach((r,i)=>{
+listaReservas.innerHTML+=`
+<div class="card">
+${r.tipo}<br>${r.data} ${r.hora}<br>${r.responsavel}
+<button onclick="comprovante(${i})">📄</button>
+</div>`;
+});
 }
 
-function mostrar() {
-    lista.innerHTML = "";
-    moradores.forEach(renderCard);
-    atualizarDashboard();
+function comprovante(i){
+const { jsPDF } = window.jspdf;
+let doc=new jsPDF(); let r=reservas[i];
+doc.text("Reserva",10,10);
+doc.text(`${r.tipo}`,10,20);
+doc.text(`${r.data} ${r.hora}`,10,30);
+doc.text(`${r.responsavel}`,10,40);
+doc.addImage(r.assinatura,"PNG",10,50,80,40);
+doc.save("reserva.pdf");
 }
 
-function gerarPDF() {
-    const { jsPDF } = window.jspdf;
-    const doc = new jsPDF();
+// assinatura
+let canvas=document.getElementById("assinatura");
+let ctx=canvas.getContext("2d");
+let desenhando=false;
 
-    let y = 20;
+canvas.onmousedown=()=>desenhando=true;
+canvas.onmouseup=()=>desenhando=false;
+canvas.onmousemove=e=>{ if(!desenhando)return; ctx.lineTo(e.offsetX,e.offsetY); ctx.stroke(); };
 
-    moradores.forEach(m => {
-        doc.text(`${m.nome} - Apto ${m.apto}`, 10, y);
-        y += 5;
-        doc.text(`Secretaria: ${m.secretaria || "Nenhuma"}`, 10, y);
-        y += 5;
-        doc.text(`Visitantes: ${m.visitantes.join(", ") || "Nenhum"}`, 10, y);
-        y += 10;
-    });
-
-    doc.save("moradores.pdf");
-}
+function limparAssinatura(){ ctx.clearRect(0,0,300,150); }
 
 mostrar();
 
