@@ -2,9 +2,11 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 <title>Portaria PRO</title>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js">
+</script>
 
 <style>
 body { margin:0; font-family:Arial; display:flex; }
@@ -28,6 +30,7 @@ body { margin:0; font-family:Arial; display:flex; }
  background:#a31d52;
  color:white;
  border-radius:6px;
+ cursor:pointer;
 }
 
 /* CONTEÚDO */
@@ -60,6 +63,7 @@ input, select {
  margin-top:10px;
  width:100%;
  border-radius:8px;
+ cursor:pointer;
 }
 
 .card {
@@ -67,6 +71,25 @@ input, select {
  padding:10px;
  margin-top:10px;
  border-radius:8px;
+ box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.card button {
+ margin-right: 5px;
+ padding: 5px 12px;
+ border: none;
+ border-radius: 5px;
+ cursor: pointer;
+}
+
+.btn-excluir {
+ background: #c0392b;
+ color: white;
+}
+
+.btn-editar {
+ background: #2980b9;
+ color: white;
 }
 
 /* ESCONDER TELAS */
@@ -74,7 +97,11 @@ input, select {
 .ativa { display:block; }
 
 /* CANVAS */
-canvas { border:1px solid #000; }
+canvas {
+ border:1px solid #000;
+ touch-action: none;  /* IMPEDE SCROLL/ZOOM DURANTE O DESENHO */
+ cursor: crosshair;
+}
 </style>
 </head>
 
@@ -83,10 +110,8 @@ canvas { border:1px solid #000; }
 <!-- MENU -->
 <div class="sidebar">
 <h2>🏢 Portaria</h2>
-
 <button onclick="trocarTela('moradores')">👤 Moradores</button>
 <button onclick="trocarTela('reservas')">📅 Reservas</button>
-
 </div>
 
 <!-- CONTEÚDO -->
@@ -116,7 +141,7 @@ canvas { border:1px solid #000; }
 <div id="reservas" class="tela">
 
 <div class="box">
-<h3>Nova Reserva</h3>
+<h3 id="tituloFormReserva">Nova Reserva</h3>
 
 <select id="tipoReserva">
 <option>Churrasqueira</option>
@@ -131,9 +156,10 @@ canvas { border:1px solid #000; }
 
 <p>Assinatura:</p>
 <canvas id="canvas" width="300" height="150"></canvas>
-<button onclick="limpar()">Limpar</button>
+<button onclick="limparAssinatura()">Limpar assinatura</button>
 
-<button class="btn" onclick="salvarReserva()">Agendar</button>
+<button class="btn" id="btnSalvarReserva" onclick="salvarReserva()">Agendar</button>
+<button class="btn" id="btnCancelarEdicao" style="display:none; background:#95a5a6;" onclick="cancelarEdicao()">Cancelar edição</button>
 </div>
 
 <div class="box">
@@ -147,118 +173,223 @@ canvas { border:1px solid #000; }
 
 <script>
 
-/* MENU */
+/* ========== MENU ========== */
 function trocarTela(id){
-document.querySelectorAll(".tela").forEach(t=>t.classList.remove("ativa"));
-document.getElementById(id).classList.add("ativa");
+  document.querySelectorAll(".tela").forEach(t=>t.classList.remove("ativa"));
+  document.getElementById(id).classList.add("ativa");
 }
 
-/* MORADORES */
+/* ========== MORADORES ========== */
 let moradores = JSON.parse(localStorage.getItem("moradores")) || [];
 
-function salvar(){
-localStorage.setItem("moradores", JSON.stringify(moradores));
+function salvarMoradores(){
+  localStorage.setItem("moradores", JSON.stringify(moradores));
 }
 
 function addMorador(){
-if(!nome.value||!apto.value) return alert("Preencha");
-
-moradores.push({
-nome:nome.value,
-apto:apto.value,
-secretaria:secretaria.value,
-visitantes:visitantes.value?visitantes.value.split(","):[]
-});
-
-salvar();
-mostrar();
-nome.value=""; apto.value=""; secretaria.value=""; visitantes.value="";
+  if(!nome.value||!apto.value) return alert("Preencha nome e apartamento");
+  moradores.push({
+    nome: nome.value,
+    apto: apto.value,
+    secretaria: secretaria.value,
+    visitantes: visitantes.value ? visitantes.value.split(",").map(v=>v.trim()) : []
+  });
+  salvarMoradores();
+  mostrarMoradores();
+  nome.value=""; apto.value=""; secretaria.value=""; visitantes.value="";
 }
 
 function buscar(){
-let t=busca.value.toLowerCase();
-lista.innerHTML="";
-moradores.filter(m=>m.nome.toLowerCase().includes(t)).forEach(render);
+  let termo = busca.value.toLowerCase();
+  lista.innerHTML = "";
+  moradores.filter(m => m.nome.toLowerCase().includes(termo) || m.apto.includes(termo))
+    .forEach(renderMorador);
 }
 
-function render(m,i){
-lista.innerHTML+=`
-<div class="card">
-<b>${m.nome}</b><br>
-Apto: ${m.apto}<br>
-Visitantes: ${m.visitantes.join(", ")}
-</div>`;
+function renderMorador(m, index){
+  lista.innerHTML += `
+    <div class="card">
+      <b>${m.nome}</b> – Apto ${m.apto}<br>
+      Secretária: ${m.secretaria || "—"}<br>
+      Visitantes: ${m.visitantes.length ? m.visitantes.join(", ") : "Nenhum"}
+    </div>`;
 }
 
-function mostrar(){
-lista.innerHTML="";
-moradores.forEach(render);
+function mostrarMoradores(){
+  lista.innerHTML = "";
+  moradores.forEach(renderMorador);
 }
 
-/* RESERVAS */
+/* ========== RESERVAS ========== */
 let reservas = JSON.parse(localStorage.getItem("reservas")) || [];
+let editandoIndex = -1; // -1 significa que não está editando
 
 function salvarReserva(){
+  if(!responsavel.value) return alert("Digite o nome do responsável");
 
-if(!responsavel.value) return alert("Digite o responsável");
+  // Salva a assinatura como imagem
+  let assinatura = canvas.toDataURL();
 
-let assinatura = canvas.toDataURL();
+  let novaReserva = {
+    tipo: tipoReserva.value,
+    data: dataReserva.value,
+    hora: horaReserva.value,
+    responsavel: responsavel.value,
+    assinatura: assinatura
+  };
 
-reservas.push({
-tipo:tipoReserva.value,
-data:dataReserva.value,
-hora:horaReserva.value,
-responsavel:responsavel.value,
-assinatura
-});
+  if(editandoIndex >= 0){
+    // Atualiza reserva existente
+    reservas[editandoIndex] = novaReserva;
+    cancelarEdicao(); // volta ao modo normal
+  } else {
+    // Nova reserva
+    reservas.push(novaReserva);
+  }
 
-localStorage.setItem("reservas", JSON.stringify(reservas));
-
-alert("Reserva salva!");
-mostrarReservas();
+  localStorage.setItem("reservas", JSON.stringify(reservas));
+  alert(editandoIndex >= 0 ? "Reserva atualizada!" : "Reserva salva!");
+  mostrarReservas();
+  limparAssinatura();
+  // Limpa campos
+  tipoReserva.value = "Churrasqueira";
+  dataReserva.value = "";
+  horaReserva.value = "";
+  responsavel.value = "";
 }
 
-/* LISTAR */
+function cancelarEdicao(){
+  editandoIndex = -1;
+  document.getElementById("tituloFormReserva").innerText = "Nova Reserva";
+  document.getElementById("btnSalvarReserva").innerText = "Agendar";
+  document.getElementById("btnCancelarEdicao").style.display = "none";
+  // Limpa campos também
+  tipoReserva.value = "Churrasqueira";
+  dataReserva.value = "";
+  horaReserva.value = "";
+  responsavel.value = "";
+  limparAssinatura();
+}
+
+function excluirReserva(index){
+  if(confirm("Tem certeza que deseja excluir esta reserva?")){
+    reservas.splice(index, 1);
+    localStorage.setItem("reservas", JSON.stringify(reservas));
+    mostrarReservas();
+    // Se estava editando a reserva excluída, cancela edição
+    if(editandoIndex === index) cancelarEdicao();
+  }
+}
+
+function editarReserva(index){
+  let r = reservas[index];
+  // Preenche formulário
+  tipoReserva.value = r.tipo;
+  dataReserva.value = r.data;
+  horaReserva.value = r.hora;
+  responsavel.value = r.responsavel;
+  
+  // Carrega assinatura no canvas
+  let img = new Image();
+  img.onload = function(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    ctx.drawImage(img, 0, 0);
+  };
+  img.src = r.assinatura;
+
+  // Muda o modo para edição
+  editandoIndex = index;
+  document.getElementById("tituloFormReserva").innerText = "Editar Reserva";
+  document.getElementById("btnSalvarReserva").innerText = "Atualizar";
+  document.getElementById("btnCancelarEdicao").style.display = "inline-block";
+}
+
 function mostrarReservas(){
-listaReservas.innerHTML="";
-reservas.forEach(r=>{
-listaReservas.innerHTML+=`
-<div class="card">
-${r.tipo} - ${r.data} ${r.hora}<br>
-${r.responsavel}
-</div>`;
-});
+  listaReservas.innerHTML = "";
+  reservas.forEach((r, index) => {
+    listaReservas.innerHTML += `
+      <div class="card">
+        <b>${r.tipo}</b> – ${r.data} ${r.hora}<br>
+        Responsável: ${r.responsavel}<br>
+        <button class="btn-editar" onclick="editarReserva(${index})">✏️ Editar</button>
+        <button class="btn-excluir" onclick="excluirReserva(${index})">🗑️ Excluir</button>
+      </div>`;
+  });
 }
 
-/* ASSINATURA FUNCIONANDO */
+/* ========== ASSINATURA (CANVAS) ========== */
 let canvas = document.getElementById("canvas");
 let ctx = canvas.getContext("2d");
 let desenhando = false;
 
-canvas.addEventListener("mousedown", ()=> desenhando=true);
-canvas.addEventListener("mouseup", ()=> desenhando=false);
-canvas.addEventListener("mousemove", e=>{
-if(!desenhando) return;
-ctx.lineTo(e.offsetX,e.offsetY);
-ctx.stroke();
+// Configuração do estilo do traço
+ctx.strokeStyle = "black";
+ctx.lineWidth = 2;
+ctx.lineCap = "round";
+ctx.lineJoin = "round";
+
+// ---------- MOUSE ----------
+canvas.addEventListener("mousedown", (e) => {
+  desenhando = true;
+  ctx.beginPath();
+  ctx.moveTo(e.offsetX, e.offsetY);
 });
 
-canvas.addEventListener("touchstart", ()=> desenhando=true);
-canvas.addEventListener("touchend", ()=> desenhando=false);
-canvas.addEventListener("touchmove", e=>{
-let rect = canvas.getBoundingClientRect();
-let x = e.touches[0].clientX - rect.left;
-let y = e.touches[0].clientY - rect.top;
-ctx.lineTo(x,y);
-ctx.stroke();
+canvas.addEventListener("mousemove", (e) => {
+  if(!desenhando) return;
+  ctx.lineTo(e.offsetX, e.offsetY);
+  ctx.stroke();
 });
 
-function limpar(){
-ctx.clearRect(0,0,300,150);
+canvas.addEventListener("mouseup", () => {
+  desenhando = false;
+  ctx.closePath();
+});
+
+canvas.addEventListener("mouseleave", () => {
+  desenhando = false;
+  ctx.closePath();
+});
+
+// ---------- TOUCH ----------
+canvas.addEventListener("touchstart", (e) => {
+  e.preventDefault();
+  desenhando = true;
+  let rect = canvas.getBoundingClientRect();
+  let x = e.touches[0].clientX - rect.left;
+  let y = e.touches[0].clientY - rect.top;
+  ctx.beginPath();
+  ctx.moveTo(x, y);
+});
+
+canvas.addEventListener("touchmove", (e) => {
+  e.preventDefault();
+  if(!desenhando) return;
+  let rect = canvas.getBoundingClientRect();
+  let x = e.touches[0].clientX - rect.left;
+  let y = e.touches[0].clientY - rect.top;
+  ctx.lineTo(x, y);
+  ctx.stroke();
+});
+
+canvas.addEventListener("touchend", (e) => {
+  e.preventDefault();
+  desenhando = false;
+  ctx.closePath();
+});
+
+canvas.addEventListener("touchcancel", (e) => {
+  e.preventDefault();
+  desenhando = false;
+  ctx.closePath();
+});
+
+function limparAssinatura(){
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
 }
 
-/* INICIAR */
-mostrar();
+/* ========== INICIAR ========== */
+mostrarMoradores();
 mostrarReservas();
 
 </script>
