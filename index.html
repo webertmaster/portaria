@@ -7,88 +7,96 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
 <style>
-body { font-family: Arial; background:#eef1f5; margin:0; }
+body { margin:0; font-family:Arial; display:flex; }
 
-.header { background:#7a0f3c; color:white; padding:15px; text-align:center; }
-.header img { width:100px; }
+/* MENU */
+.sidebar {
+ width:220px;
+ background:#7a0f3c;
+ color:white;
+ height:100vh;
+ padding:10px;
+}
 
-.dashboard { display:flex; gap:10px; padding:10px; }
-.card-dash { flex:1; background:white; padding:10px; border-radius:10px; text-align:center; }
+.sidebar h2 { text-align:center; }
 
-.container { padding:10px; }
+.sidebar button {
+ width:100%;
+ margin-top:10px;
+ padding:10px;
+ border:none;
+ background:#a31d52;
+ color:white;
+ border-radius:6px;
+}
 
-.box { background:white; padding:15px; border-radius:10px; margin-bottom:10px; }
+/* CONTEÚDO */
+.content {
+ flex:1;
+ padding:15px;
+ background:#eef1f5;
+}
+
+.box {
+ background:white;
+ padding:15px;
+ border-radius:10px;
+ margin-bottom:10px;
+}
 
 input, select {
- width:100%; padding:10px; margin-top:5px;
- border-radius:8px; border:1px solid #ccc;
+ width:100%;
+ padding:10px;
+ margin-top:5px;
+ border-radius:8px;
+ border:1px solid #ccc;
 }
 
 .btn {
- margin-top:10px; background:#7a0f3c;
- color:white; border:none; padding:10px;
- border-radius:8px; width:100%;
+ background:#7a0f3c;
+ color:white;
+ border:none;
+ padding:10px;
+ margin-top:10px;
+ width:100%;
+ border-radius:8px;
 }
 
 .card {
- background:white; padding:15px;
- border-radius:10px; margin-bottom:10px;
- position:relative;
+ background:white;
+ padding:10px;
+ margin-top:10px;
+ border-radius:8px;
 }
 
-.btn-editar {
- position:absolute; top:10px; right:10px;
- background:#7a0f3c; color:white;
- width:35px; height:35px; border-radius:50%;
- border:none;
-}
+/* ESCONDER TELAS */
+.tela { display:none; }
+.ativa { display:block; }
 
-.btn-pdf {
- position:fixed; bottom:20px; right:20px;
- width:55px; height:55px;
- background:#7a0f3c; color:white;
- border-radius:50%; border:none;
- font-size:20px;
-}
-
-.search-box { position:relative; }
-.search-box input { padding-left:35px; }
-.icon { position:absolute; left:10px; top:10px; }
-
-.modal {
- position:fixed; top:0; left:0; right:0; bottom:0;
- background:rgba(0,0,0,0.5);
- display:none; justify-content:center; align-items:center;
-}
-
-.modal-content {
- background:white; padding:20px;
- border-radius:10px; width:90%;
-}
-
-canvas { border:1px solid #ccc; }
+/* CANVAS */
+canvas { border:1px solid #000; }
 </style>
 </head>
 
 <body>
 
-<div class="header">
-<img src="logo.png" onerror="this.style.display='none'">
-<h3>🏢 Sistema de Portaria</h3>
+<!-- MENU -->
+<div class="sidebar">
+<h2>🏢 Portaria</h2>
+
+<button onclick="trocarTela('moradores')">👤 Moradores</button>
+<button onclick="trocarTela('reservas')">📅 Reservas</button>
+
 </div>
 
-<div class="dashboard">
-<div class="card-dash">Moradores<h2 id="totalMoradores">0</h2></div>
-<div class="card-dash">Visitantes<h2 id="totalVisitantes">0</h2></div>
-<div class="card-dash">Hoje<h2 id="dataHoje"></h2></div>
-</div>
+<!-- CONTEÚDO -->
+<div class="content">
 
-<div class="container">
-
-<button class="btn" onclick="abrirReservas()">📅 Reservas</button>
-<button class="btn" onclick="abrirConsulta()">📋 Consultar Reservas</button>
+<!-- MORADORES -->
+<div id="moradores" class="tela ativa">
 
 <div class="box">
+<h3>Cadastrar</h3>
 <input id="nome" placeholder="Nome">
 <input id="apto" placeholder="Apartamento">
 <input id="secretaria" placeholder="Secretária">
@@ -97,34 +105,18 @@ canvas { border:1px solid #ccc; }
 </div>
 
 <div class="box">
-<div class="search-box">
-<span class="icon">🔍</span>
 <input id="busca" placeholder="Buscar..." onkeyup="buscar()">
-</div>
 </div>
 
 <div id="lista"></div>
 
 </div>
 
-<button class="btn-pdf" onclick="gerarPDF()">💾</button>
+<!-- RESERVAS -->
+<div id="reservas" class="tela">
 
-<!-- MODAL EDITAR -->
-<div class="modal" id="modal">
-<div class="modal-content">
-<input id="editNome">
-<input id="editApto">
-<input id="editSecretaria">
-<input id="editVisitantes">
-<button class="btn" onclick="salvarEdicao()">Salvar</button>
-<button class="btn" onclick="modal.style.display='none'">Cancelar</button>
-</div>
-</div>
-
-<!-- MODAL RESERVA -->
-<div class="modal" id="modalReserva">
-<div class="modal-content">
-<h3>Reserva</h3>
+<div class="box">
+<h3>Nova Reserva</h3>
 
 <select id="tipoReserva">
 <option>Churrasqueira</option>
@@ -134,32 +126,39 @@ canvas { border:1px solid #ccc; }
 
 <input type="date" id="dataReserva">
 <input type="time" id="horaReserva">
-<input id="responsavel" placeholder="Responsável">
+
+<input id="responsavel" placeholder="Nome do responsável">
 
 <p>Assinatura:</p>
-<canvas id="assinatura" width="300" height="150"></canvas>
-<button onclick="limparAssinatura()">Limpar</button>
+<canvas id="canvas" width="300" height="150"></canvas>
+<button onclick="limpar()">Limpar</button>
 
 <button class="btn" onclick="salvarReserva()">Agendar</button>
-<button class="btn" onclick="fecharReservas()">Cancelar</button>
-</div>
 </div>
 
-<!-- CONSULTA -->
-<div class="modal" id="modalConsulta">
-<div class="modal-content">
+<div class="box">
 <h3>Reservas</h3>
 <div id="listaReservas"></div>
-<button class="btn" onclick="modalConsulta.style.display='none'">Fechar</button>
 </div>
+
+</div>
+
 </div>
 
 <script>
 
-// ===== PORTARIA =====
+/* MENU */
+function trocarTela(id){
+document.querySelectorAll(".tela").forEach(t=>t.classList.remove("ativa"));
+document.getElementById(id).classList.add("ativa");
+}
+
+/* MORADORES */
 let moradores = JSON.parse(localStorage.getItem("moradores")) || [];
 
-function salvar(){ localStorage.setItem("moradores", JSON.stringify(moradores)); }
+function salvar(){
+localStorage.setItem("moradores", JSON.stringify(moradores));
+}
 
 function addMorador(){
 if(!nome.value||!apto.value) return alert("Preencha");
@@ -167,31 +166,13 @@ if(!nome.value||!apto.value) return alert("Preencha");
 moradores.push({
 nome:nome.value,
 apto:apto.value,
-secretaria:secretaria.value||"",
-visitantes:visitantes.value?visitantes.value.split(",").map(v=>v.trim()):[]
+secretaria:secretaria.value,
+visitantes:visitantes.value?visitantes.value.split(","):[]
 });
 
-salvar(); mostrar();
+salvar();
+mostrar();
 nome.value=""; apto.value=""; secretaria.value=""; visitantes.value="";
-}
-
-let indexAtual;
-
-function abrirModal(i){
-indexAtual=i;
-editNome.value=moradores[i].nome;
-editApto.value=moradores[i].apto;
-editSecretaria.value=moradores[i].secretaria;
-editVisitantes.value=moradores[i].visitantes.join(", ");
-modal.style.display="flex";
-}
-
-function salvarEdicao(){
-moradores[indexAtual].nome=editNome.value;
-moradores[indexAtual].apto=editApto.value;
-moradores[indexAtual].secretaria=editSecretaria.value;
-moradores[indexAtual].visitantes=editVisitantes.value.split(",").map(v=>v.trim());
-salvar(); modal.style.display="none"; mostrar();
 }
 
 function buscar(){
@@ -205,87 +186,80 @@ lista.innerHTML+=`
 <div class="card">
 <b>${m.nome}</b><br>
 Apto: ${m.apto}<br>
-Secretaria: ${m.secretaria||"Nenhuma"}<br>
-Visitantes: ${m.visitantes.join(", ")||"Nenhum"}
-<button class="btn-editar" onclick="abrirModal(${i})">✏️</button>
+Visitantes: ${m.visitantes.join(", ")}
 </div>`;
 }
 
-function mostrar(){ lista.innerHTML=""; moradores.forEach(render);
-totalMoradores.innerText=moradores.length;
-totalVisitantes.innerText=moradores.reduce((t,m)=>t+m.visitantes.length,0);
-dataHoje.innerText=new Date().toLocaleDateString();
+function mostrar(){
+lista.innerHTML="";
+moradores.forEach(render);
 }
 
-// PDF moradores
-function gerarPDF(){
-const { jsPDF } = window.jspdf;
-let doc=new jsPDF(); let y=20;
-moradores.forEach(m=>{
-doc.text(`${m.nome} - ${m.apto}`,10,y); y+=5;
-doc.text(`Visitantes: ${m.visitantes.join(", ")}`,10,y); y+=10;
-});
-doc.save("moradores.pdf");
-}
-
-// ===== RESERVAS =====
+/* RESERVAS */
 let reservas = JSON.parse(localStorage.getItem("reservas")) || [];
 
-function abrirReservas(){ modalReserva.style.display="flex"; }
-function fecharReservas(){ modalReserva.style.display="none"; }
-
-function abrirConsulta(){ modalConsulta.style.display="flex"; mostrarReservas(); }
-
 function salvarReserva(){
-if(!responsavel.value) return alert("Preencha");
+
+if(!responsavel.value) return alert("Digite o responsável");
+
+let assinatura = canvas.toDataURL();
 
 reservas.push({
 tipo:tipoReserva.value,
 data:dataReserva.value,
 hora:horaReserva.value,
 responsavel:responsavel.value,
-assinatura:canvas.toDataURL()
+assinatura
 });
 
 localStorage.setItem("reservas", JSON.stringify(reservas));
+
 alert("Reserva salva!");
-fecharReservas();
+mostrarReservas();
 }
 
+/* LISTAR */
 function mostrarReservas(){
 listaReservas.innerHTML="";
-reservas.forEach((r,i)=>{
+reservas.forEach(r=>{
 listaReservas.innerHTML+=`
 <div class="card">
-${r.tipo}<br>${r.data} ${r.hora}<br>${r.responsavel}
-<button onclick="comprovante(${i})">📄</button>
+${r.tipo} - ${r.data} ${r.hora}<br>
+${r.responsavel}
 </div>`;
 });
 }
 
-function comprovante(i){
-const { jsPDF } = window.jspdf;
-let doc=new jsPDF(); let r=reservas[i];
-doc.text("Reserva",10,10);
-doc.text(`${r.tipo}`,10,20);
-doc.text(`${r.data} ${r.hora}`,10,30);
-doc.text(`${r.responsavel}`,10,40);
-doc.addImage(r.assinatura,"PNG",10,50,80,40);
-doc.save("reserva.pdf");
+/* ASSINATURA FUNCIONANDO */
+let canvas = document.getElementById("canvas");
+let ctx = canvas.getContext("2d");
+let desenhando = false;
+
+canvas.addEventListener("mousedown", ()=> desenhando=true);
+canvas.addEventListener("mouseup", ()=> desenhando=false);
+canvas.addEventListener("mousemove", e=>{
+if(!desenhando) return;
+ctx.lineTo(e.offsetX,e.offsetY);
+ctx.stroke();
+});
+
+canvas.addEventListener("touchstart", ()=> desenhando=true);
+canvas.addEventListener("touchend", ()=> desenhando=false);
+canvas.addEventListener("touchmove", e=>{
+let rect = canvas.getBoundingClientRect();
+let x = e.touches[0].clientX - rect.left;
+let y = e.touches[0].clientY - rect.top;
+ctx.lineTo(x,y);
+ctx.stroke();
+});
+
+function limpar(){
+ctx.clearRect(0,0,300,150);
 }
 
-// assinatura
-let canvas=document.getElementById("assinatura");
-let ctx=canvas.getContext("2d");
-let desenhando=false;
-
-canvas.onmousedown=()=>desenhando=true;
-canvas.onmouseup=()=>desenhando=false;
-canvas.onmousemove=e=>{ if(!desenhando)return; ctx.lineTo(e.offsetX,e.offsetY); ctx.stroke(); };
-
-function limparAssinatura(){ ctx.clearRect(0,0,300,150); }
-
+/* INICIAR */
 mostrar();
+mostrarReservas();
 
 </script>
 
