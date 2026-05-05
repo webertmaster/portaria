@@ -26,9 +26,24 @@ body {
     margin-bottom: 5px;
 }
 
+/* DASHBOARD */
+.dashboard {
+    display: flex;
+    gap: 10px;
+    padding: 10px;
+}
+
+.card-dash {
+    flex: 1;
+    background: white;
+    padding: 15px;
+    border-radius: 12px;
+    text-align: center;
+}
+
 /* CONTAINER */
 .container {
-    padding: 15px;
+    padding: 10px;
 }
 
 /* BOX */
@@ -36,14 +51,14 @@ body {
     background: white;
     padding: 15px;
     border-radius: 12px;
-    margin-bottom: 15px;
+    margin-bottom: 10px;
 }
 
 /* INPUT */
 input {
     width: 100%;
     padding: 10px;
-    margin-top: 8px;
+    margin-top: 5px;
     border-radius: 8px;
     border: 1px solid #ccc;
 }
@@ -81,6 +96,20 @@ input {
     border-radius: 50%;
 }
 
+/* BOTÃO PDF */
+.btn-pdf {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: #7a0f3c;
+    color: white;
+    border: none;
+    width: 55px;
+    height: 55px;
+    border-radius: 50%;
+    font-size: 20px;
+}
+
 /* MODAL */
 .modal {
     position: fixed;
@@ -90,8 +119,8 @@ input {
     bottom: 0;
     background: rgba(0,0,0,0.5);
     display: none;
-    align-items: center;
     justify-content: center;
+    align-items: center;
 }
 
 .modal-content {
@@ -106,29 +135,42 @@ input {
 <body>
 
 <div class="header">
-    <img src="logo.png">
+    <img src="./logo.png" onerror="this.style.display='none'">
     <div>📋 Sistema de Portaria</div>
+</div>
+
+<div class="dashboard">
+    <div class="card-dash">
+        Moradores
+        <h2 id="totalMoradores">0</h2>
+    </div>
+    <div class="card-dash">
+        Visitantes
+        <h2 id="totalVisitantes">0</h2>
+    </div>
+    <div class="card-dash">
+        Hoje
+        <h2 id="dataHoje"></h2>
+    </div>
 </div>
 
 <div class="container">
 
-<button class="btn" onclick="gerarPDF()">📥 Baixar PDF</button>
-
 <div class="box">
-    <h3>Cadastrar Morador</h3>
     <input id="nome" placeholder="Nome">
     <input id="apto" placeholder="Apartamento">
     <button class="btn" onclick="addMorador()">Cadastrar</button>
 </div>
 
 <div class="box">
-    <h3>Buscar</h3>
-    <input id="busca" placeholder="Digite..." onkeyup="buscar()">
+    <input id="busca" placeholder="Buscar..." onkeyup="buscar()">
 </div>
 
 <div id="lista"></div>
 
 </div>
+
+<button class="btn-pdf" onclick="gerarPDF()">💾</button>
 
 <!-- MODAL -->
 <div class="modal" id="modal">
@@ -145,7 +187,6 @@ input {
 <script>
 
 let moradores = JSON.parse(localStorage.getItem("moradores")) || [];
-
 let indexAtual = null;
 
 function salvar() {
@@ -155,11 +196,7 @@ function salvar() {
 function addMorador() {
     if (!nome.value || !apto.value) return alert("Preencha tudo");
 
-    moradores.push({
-        nome: nome.value,
-        apto: apto.value,
-        visitantes: []
-    });
+    moradores.push({ nome: nome.value, apto: apto.value, visitantes: [] });
 
     salvar();
     mostrar();
@@ -198,6 +235,16 @@ function buscar() {
     mostrar(busca.value.toLowerCase());
 }
 
+function atualizarDashboard() {
+    totalMoradores.innerText = moradores.length;
+
+    let totalVisitantes = moradores.reduce((t, m) => t + m.visitantes.length, 0);
+    totalVisitantesEl = document.getElementById("totalVisitantes");
+    totalVisitantesEl.innerText = totalVisitantes;
+
+    dataHoje.innerText = new Date().toLocaleDateString("pt-BR");
+}
+
 function mostrar(filtro = "") {
     lista.innerHTML = "";
 
@@ -209,11 +256,12 @@ function mostrar(filtro = "") {
             <strong>${m.nome}</strong><br>
             Apto: ${m.apto}<br>
             Visitantes: ${m.visitantes.join(", ") || "Nenhum"}
-
             <button class="btn-editar" onclick="abrirModal(${i})">✏️</button>
         </div>
         `;
     });
+
+    atualizarDashboard();
 }
 
 function gerarPDF() {
@@ -222,36 +270,14 @@ function gerarPDF() {
 
     let y = 20;
 
-    // LOGO
-    const img = new Image();
-    img.src = "logo.png";
-
-    img.onload = function() {
-        doc.addImage(img, "PNG", 70, 5, 70, 30);
-
-        y = 45;
-
-        doc.setFontSize(14);
-        doc.text("Lista de Moradores", 10, y);
+    moradores.forEach(m => {
+        doc.text(`${m.nome} - Apto ${m.apto}`, 10, y);
+        y += 5;
+        doc.text(`Visitantes: ${m.visitantes.join(", ") || "Nenhum"}`, 10, y);
         y += 10;
+    });
 
-        moradores.forEach(m => {
-            doc.setFontSize(10);
-
-            doc.text(`${m.nome} - Apto ${m.apto}`, 10, y);
-            y += 5;
-
-            doc.text(`Visitantes: ${m.visitantes.join(", ") || "Nenhum"}`, 10, y);
-            y += 8;
-
-            if (y > 270) {
-                doc.addPage();
-                y = 10;
-            }
-        });
-
-        doc.save("moradores.pdf");
-    }
+    doc.save("moradores.pdf");
 }
 
 mostrar();
