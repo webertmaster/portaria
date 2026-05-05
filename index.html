@@ -22,8 +22,7 @@ body {
 }
 
 .header img {
-    width: 120px;
-    margin-bottom: 5px;
+    width: 110px;
 }
 
 /* DASHBOARD */
@@ -110,6 +109,22 @@ input {
     font-size: 20px;
 }
 
+/* BUSCA COM LUPA */
+.search-box {
+    position: relative;
+}
+
+.search-box input {
+    padding-left: 35px;
+}
+
+.search-box .icon {
+    position: absolute;
+    left: 10px;
+    top: 10px;
+    color: #777;
+}
+
 /* MODAL */
 .modal {
     position: fixed;
@@ -156,14 +171,22 @@ input {
 
 <div class="container">
 
+<!-- CADASTRO -->
 <div class="box">
-    <input id="nome" placeholder="Nome">
+    <h3>Cadastrar</h3>
+    <input id="nome" placeholder="Nome do morador">
     <input id="apto" placeholder="Apartamento">
+    <input id="secretaria" placeholder="Secretária (opcional)">
+    <input id="visitantes" placeholder="Visitantes (separados por vírgula)">
     <button class="btn" onclick="addMorador()">Cadastrar</button>
 </div>
 
+<!-- BUSCA -->
 <div class="box">
-    <input id="busca" placeholder="Buscar..." onkeyup="buscar()">
+    <div class="search-box">
+        <span class="icon">🔍</span>
+        <input id="busca" placeholder="Buscar morador ou visitante..." onkeyup="buscar()">
+    </div>
 </div>
 
 <div id="lista"></div>
@@ -178,6 +201,7 @@ input {
         <h3>Editar</h3>
         <input id="editNome">
         <input id="editApto">
+        <input id="editSecretaria">
         <input id="editVisitantes">
         <button class="btn" onclick="salvarEdicao()">Salvar</button>
         <button class="btn" onclick="fecharModal()">Cancelar</button>
@@ -194,15 +218,27 @@ function salvar() {
 }
 
 function addMorador() {
-    if (!nome.value || !apto.value) return alert("Preencha tudo");
+    if (!nome.value || !apto.value) {
+        alert("Preencha nome e apartamento");
+        return;
+    }
 
-    moradores.push({ nome: nome.value, apto: apto.value, visitantes: [] });
+    moradores.push({
+        nome: nome.value,
+        apto: apto.value,
+        secretaria: secretaria.value || "",
+        visitantes: visitantes.value 
+            ? visitantes.value.split(",").map(v => v.trim())
+            : []
+    });
 
     salvar();
     mostrar();
 
     nome.value = "";
     apto.value = "";
+    secretaria.value = "";
+    visitantes.value = "";
 }
 
 function abrirModal(i) {
@@ -210,6 +246,7 @@ function abrirModal(i) {
 
     editNome.value = moradores[i].nome;
     editApto.value = moradores[i].apto;
+    editSecretaria.value = moradores[i].secretaria || "";
     editVisitantes.value = moradores[i].visitantes.join(", ");
 
     modal.style.display = "flex";
@@ -222,6 +259,8 @@ function fecharModal() {
 function salvarEdicao() {
     moradores[indexAtual].nome = editNome.value;
     moradores[indexAtual].apto = editApto.value;
+    moradores[indexAtual].secretaria = editSecretaria.value;
+
     moradores[indexAtual].visitantes = editVisitantes.value
         ? editVisitantes.value.split(",").map(v => v.trim())
         : [];
@@ -232,30 +271,54 @@ function salvarEdicao() {
 }
 
 function buscar() {
-    mostrar(busca.value.toLowerCase());
-}
+    const termo = busca.value.toLowerCase();
 
-function atualizarDashboard() {
-    totalMoradores.innerText = moradores.length;
-
-    let totalVisitantes = moradores.reduce((t, m) => t + m.visitantes.length, 0);
-    totalVisitantesEl = document.getElementById("totalVisitantes");
-    totalVisitantesEl.innerText = totalVisitantes;
-
-    dataHoje.innerText = new Date().toLocaleDateString("pt-BR");
-}
-
-function mostrar(filtro = "") {
     lista.innerHTML = "";
 
     moradores
-    .filter(m => m.nome.toLowerCase().includes(filtro))
+    .filter(m =>
+        m.nome.toLowerCase().includes(termo) ||
+        m.apto.toLowerCase().includes(termo) ||
+        (m.secretaria && m.secretaria.toLowerCase().includes(termo)) ||
+        m.visitantes.some(v => v.toLowerCase().includes(termo))
+    )
     .forEach((m, i) => {
         lista.innerHTML += `
         <div class="card">
             <strong>${m.nome}</strong><br>
             Apto: ${m.apto}<br>
+            Secretaria: ${m.secretaria || "Nenhuma"}<br>
             Visitantes: ${m.visitantes.join(", ") || "Nenhum"}
+
+            <button class="btn-editar" onclick="abrirModal(${i})">✏️</button>
+        </div>
+        `;
+    });
+
+    atualizarDashboard();
+}
+
+function atualizarDashboard() {
+    document.getElementById("totalMoradores").innerText = moradores.length;
+
+    let totalVisitantes = moradores.reduce((t, m) => t + m.visitantes.length, 0);
+    document.getElementById("totalVisitantes").innerText = totalVisitantes;
+
+    document.getElementById("dataHoje").innerText =
+        new Date().toLocaleDateString("pt-BR");
+}
+
+function mostrar() {
+    lista.innerHTML = "";
+
+    moradores.forEach((m, i) => {
+        lista.innerHTML += `
+        <div class="card">
+            <strong>${m.nome}</strong><br>
+            Apto: ${m.apto}<br>
+            Secretaria: ${m.secretaria || "Nenhuma"}<br>
+            Visitantes: ${m.visitantes.join(", ") || "Nenhum"}
+
             <button class="btn-editar" onclick="abrirModal(${i})">✏️</button>
         </div>
         `;
@@ -272,6 +335,8 @@ function gerarPDF() {
 
     moradores.forEach(m => {
         doc.text(`${m.nome} - Apto ${m.apto}`, 10, y);
+        y += 5;
+        doc.text(`Secretaria: ${m.secretaria || "Nenhuma"}`, 10, y);
         y += 5;
         doc.text(`Visitantes: ${m.visitantes.join(", ") || "Nenhum"}`, 10, y);
         y += 10;
