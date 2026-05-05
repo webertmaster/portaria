@@ -13,7 +13,6 @@ body {
     margin: 0;
 }
 
-/* HEADER */
 .header {
     background: #7a0f3c;
     color: white;
@@ -25,7 +24,6 @@ body {
     width: 110px;
 }
 
-/* DASHBOARD */
 .dashboard {
     display: flex;
     gap: 10px;
@@ -40,12 +38,10 @@ body {
     text-align: center;
 }
 
-/* CONTAINER */
 .container {
     padding: 10px;
 }
 
-/* BOX */
 .box {
     background: white;
     padding: 15px;
@@ -53,7 +49,6 @@ body {
     margin-bottom: 10px;
 }
 
-/* INPUT */
 input {
     width: 100%;
     padding: 10px;
@@ -62,7 +57,6 @@ input {
     border: 1px solid #ccc;
 }
 
-/* BOTÃO */
 .btn {
     margin-top: 10px;
     background: #7a0f3c;
@@ -73,7 +67,6 @@ input {
     width: 100%;
 }
 
-/* CARD */
 .card {
     background: white;
     padding: 15px;
@@ -82,7 +75,6 @@ input {
     position: relative;
 }
 
-/* BOTÃO EDITAR */
 .btn-editar {
     position: absolute;
     top: 10px;
@@ -95,7 +87,6 @@ input {
     border-radius: 50%;
 }
 
-/* BOTÃO PDF */
 .btn-pdf {
     position: fixed;
     bottom: 20px;
@@ -109,7 +100,6 @@ input {
     font-size: 20px;
 }
 
-/* BUSCA COM LUPA */
 .search-box {
     position: relative;
 }
@@ -125,7 +115,6 @@ input {
     color: #777;
 }
 
-/* MODAL */
 .modal {
     position: fixed;
     top: 0;
@@ -171,21 +160,19 @@ input {
 
 <div class="container">
 
-<!-- CADASTRO -->
 <div class="box">
     <h3>Cadastrar</h3>
     <input id="nome" placeholder="Nome do morador">
     <input id="apto" placeholder="Apartamento">
-    <input id="secretaria" placeholder="Secretária (opcional)">
+    <input id="secretaria" placeholder="Secretária">
     <input id="visitantes" placeholder="Visitantes (separados por vírgula)">
     <button class="btn" onclick="addMorador()">Cadastrar</button>
 </div>
 
-<!-- BUSCA -->
 <div class="box">
     <div class="search-box">
         <span class="icon">🔍</span>
-        <input id="busca" placeholder="Buscar morador ou visitante..." onkeyup="buscar()">
+        <input id="busca" placeholder="Buscar..." onkeyup="buscar()">
     </div>
 </div>
 
@@ -195,7 +182,6 @@ input {
 
 <button class="btn-pdf" onclick="gerarPDF()">💾</button>
 
-<!-- MODAL -->
 <div class="modal" id="modal">
     <div class="modal-content">
         <h3>Editar</h3>
@@ -210,24 +196,39 @@ input {
 
 <script>
 
-let moradores = JSON.parse(localStorage.getItem("moradores")) || [];
-let indexAtual = null;
+// 🔥 CARREGAMENTO SEGURO (CORRIGE SEU PROBLEMA)
+let moradores = [];
+
+try {
+    const dados = localStorage.getItem("moradores");
+    moradores = dados ? JSON.parse(dados) : [];
+} catch (e) {
+    moradores = [];
+}
+
+// 🔄 AJUSTE AUTOMÁTICO (dados antigos)
+moradores = moradores.map(m => ({
+    nome: m.nome,
+    apto: m.apto,
+    secretaria: m.secretaria || "",
+    visitantes: (m.visitantes || []).map(v => {
+        if (typeof v === "string") return v;
+        return v.nome || "";
+    })
+}));
 
 function salvar() {
     localStorage.setItem("moradores", JSON.stringify(moradores));
 }
 
 function addMorador() {
-    if (!nome.value || !apto.value) {
-        alert("Preencha nome e apartamento");
-        return;
-    }
+    if (!nome.value || !apto.value) return alert("Preencha nome e apto");
 
     moradores.push({
         nome: nome.value,
         apto: apto.value,
         secretaria: secretaria.value || "",
-        visitantes: visitantes.value 
+        visitantes: visitantes.value
             ? visitantes.value.split(",").map(v => v.trim())
             : []
     });
@@ -241,12 +242,14 @@ function addMorador() {
     visitantes.value = "";
 }
 
+let indexAtual = null;
+
 function abrirModal(i) {
     indexAtual = i;
 
     editNome.value = moradores[i].nome;
     editApto.value = moradores[i].apto;
-    editSecretaria.value = moradores[i].secretaria || "";
+    editSecretaria.value = moradores[i].secretaria;
     editVisitantes.value = moradores[i].visitantes.join(", ");
 
     modal.style.display = "flex";
@@ -260,7 +263,6 @@ function salvarEdicao() {
     moradores[indexAtual].nome = editNome.value;
     moradores[indexAtual].apto = editApto.value;
     moradores[indexAtual].secretaria = editSecretaria.value;
-
     moradores[indexAtual].visitantes = editVisitantes.value
         ? editVisitantes.value.split(",").map(v => v.trim())
         : [];
@@ -279,51 +281,37 @@ function buscar() {
     .filter(m =>
         m.nome.toLowerCase().includes(termo) ||
         m.apto.toLowerCase().includes(termo) ||
-        (m.secretaria && m.secretaria.toLowerCase().includes(termo)) ||
+        m.secretaria.toLowerCase().includes(termo) ||
         m.visitantes.some(v => v.toLowerCase().includes(termo))
     )
     .forEach((m, i) => {
-        lista.innerHTML += `
-        <div class="card">
-            <strong>${m.nome}</strong><br>
-            Apto: ${m.apto}<br>
-            Secretaria: ${m.secretaria || "Nenhuma"}<br>
-            Visitantes: ${m.visitantes.join(", ") || "Nenhum"}
-
-            <button class="btn-editar" onclick="abrirModal(${i})">✏️</button>
-        </div>
-        `;
+        renderCard(m, i);
     });
 
     atualizarDashboard();
 }
 
+function renderCard(m, i) {
+    lista.innerHTML += `
+    <div class="card">
+        <strong>${m.nome}</strong><br>
+        Apto: ${m.apto}<br>
+        Secretaria: ${m.secretaria || "Nenhuma"}<br>
+        Visitantes: ${m.visitantes.join(", ") || "Nenhum"}
+        <button class="btn-editar" onclick="abrirModal(${i})">✏️</button>
+    </div>
+    `;
+}
+
 function atualizarDashboard() {
-    document.getElementById("totalMoradores").innerText = moradores.length;
-
-    let totalVisitantes = moradores.reduce((t, m) => t + m.visitantes.length, 0);
-    document.getElementById("totalVisitantes").innerText = totalVisitantes;
-
-    document.getElementById("dataHoje").innerText =
-        new Date().toLocaleDateString("pt-BR");
+    totalMoradores.innerText = moradores.length;
+    totalVisitantes.innerText = moradores.reduce((t, m) => t + m.visitantes.length, 0);
+    dataHoje.innerText = new Date().toLocaleDateString("pt-BR");
 }
 
 function mostrar() {
     lista.innerHTML = "";
-
-    moradores.forEach((m, i) => {
-        lista.innerHTML += `
-        <div class="card">
-            <strong>${m.nome}</strong><br>
-            Apto: ${m.apto}<br>
-            Secretaria: ${m.secretaria || "Nenhuma"}<br>
-            Visitantes: ${m.visitantes.join(", ") || "Nenhum"}
-
-            <button class="btn-editar" onclick="abrirModal(${i})">✏️</button>
-        </div>
-        `;
-    });
-
+    moradores.forEach(renderCard);
     atualizarDashboard();
 }
 
