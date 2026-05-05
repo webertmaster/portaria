@@ -4,156 +4,254 @@
 <meta charset="UTF-8">
 <title>Portaria PRO</title>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
 <style>
 body {
     font-family: Arial;
     background: #eef1f5;
-    padding: 20px;
+    margin: 0;
 }
 
-h2 {
+/* HEADER */
+.header {
+    background: #7a0f3c;
+    color: white;
+    padding: 15px;
     text-align: center;
 }
 
+.header img {
+    width: 120px;
+    margin-bottom: 5px;
+}
+
+/* CONTAINER */
+.container {
+    padding: 15px;
+}
+
+/* BOX */
 .box {
     background: white;
     padding: 15px;
-    border-radius: 10px;
-    margin-bottom: 20px;
+    border-radius: 12px;
+    margin-bottom: 15px;
 }
 
-input, button {
-    padding: 10px;
-    margin: 5px 0;
+/* INPUT */
+input {
     width: 100%;
-    font-size: 14px;
+    padding: 10px;
+    margin-top: 8px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
 }
 
-button {
-    background: #007bff;
+/* BOTÃO */
+.btn {
+    margin-top: 10px;
+    background: #7a0f3c;
     color: white;
     border: none;
-    cursor: pointer;
+    padding: 12px;
+    border-radius: 8px;
+    width: 100%;
 }
 
+/* CARD */
 .card {
     background: white;
     padding: 15px;
-    margin-top: 10px;
-    border-radius: 8px;
+    border-radius: 12px;
+    margin-bottom: 10px;
     position: relative;
 }
 
-/* botão lápis */
+/* BOTÃO EDITAR */
 .btn-editar {
     position: absolute;
     top: 10px;
     right: 10px;
-    background: #007bff;
-    border: none;
+    background: #7a0f3c;
     color: white;
-    padding: 8px;
+    border: none;
+    width: 35px;
+    height: 35px;
     border-radius: 50%;
-    cursor: pointer;
+}
+
+/* MODAL */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.5);
+    display: none;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-content {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    width: 90%;
 }
 </style>
 </head>
 
 <body>
 
-<h2>🏢 Sistema de Portaria</h2>
+<div class="header">
+    <img src="logo.png">
+    <div>📋 Sistema de Portaria</div>
+</div>
+
+<div class="container">
+
+<button class="btn" onclick="gerarPDF()">📥 Baixar PDF</button>
 
 <div class="box">
     <h3>Cadastrar Morador</h3>
-    <input type="text" id="nome" placeholder="Nome do morador">
-    <input type="text" id="apto" placeholder="Apartamento">
-    <button onclick="addMorador()">Cadastrar</button>
+    <input id="nome" placeholder="Nome">
+    <input id="apto" placeholder="Apartamento">
+    <button class="btn" onclick="addMorador()">Cadastrar</button>
 </div>
 
 <div class="box">
     <h3>Buscar</h3>
-    <input type="text" id="busca" placeholder="Digite o nome..." onkeyup="buscar()">
+    <input id="busca" placeholder="Digite..." onkeyup="buscar()">
 </div>
 
 <div id="lista"></div>
 
+</div>
+
+<!-- MODAL -->
+<div class="modal" id="modal">
+    <div class="modal-content">
+        <h3>Editar</h3>
+        <input id="editNome">
+        <input id="editApto">
+        <input id="editVisitantes">
+        <button class="btn" onclick="salvarEdicao()">Salvar</button>
+        <button class="btn" onclick="fecharModal()">Cancelar</button>
+    </div>
+</div>
+
 <script>
 
-let moradores = JSON.parse(localStorage.getItem("moradores")) || [
-{ nome: "Vanessa", apto: "301", visitantes: ["Amanda"] },
-{ nome: "João Marcelo", apto: "401", visitantes: ["Diana"] }
-];
+let moradores = JSON.parse(localStorage.getItem("moradores")) || [];
+
+let indexAtual = null;
 
 function salvar() {
     localStorage.setItem("moradores", JSON.stringify(moradores));
 }
 
 function addMorador() {
-    const nome = document.getElementById("nome").value;
-    const apto = document.getElementById("apto").value;
+    if (!nome.value || !apto.value) return alert("Preencha tudo");
 
-    if (!nome || !apto) {
-        alert("Preencha tudo!");
-        return;
-    }
-
-    moradores.push({ nome, apto, visitantes: [] });
+    moradores.push({
+        nome: nome.value,
+        apto: apto.value,
+        visitantes: []
+    });
 
     salvar();
     mostrar();
 
-    document.getElementById("nome").value = "";
-    document.getElementById("apto").value = "";
+    nome.value = "";
+    apto.value = "";
 }
 
-// 🔥 EDITAR COMPLETO (morador + visitantes)
-function editarMorador(index) {
+function abrirModal(i) {
+    indexAtual = i;
 
-    const novoNome = prompt("Editar nome:", moradores[index].nome);
-    if (novoNome === null) return;
+    editNome.value = moradores[i].nome;
+    editApto.value = moradores[i].apto;
+    editVisitantes.value = moradores[i].visitantes.join(", ");
 
-    const novoApto = prompt("Editar apartamento:", moradores[index].apto);
-    if (novoApto === null) return;
+    modal.style.display = "flex";
+}
 
-    const visitantesTexto = prompt(
-        "Editar visitantes (separe por vírgula):",
-        moradores[index].visitantes.join(", ")
-    );
+function fecharModal() {
+    modal.style.display = "none";
+}
 
-    if (visitantesTexto === null) return;
-
-    moradores[index].nome = novoNome;
-    moradores[index].apto = novoApto;
-    moradores[index].visitantes = visitantesTexto
-        ? visitantesTexto.split(",").map(v => v.trim())
+function salvarEdicao() {
+    moradores[indexAtual].nome = editNome.value;
+    moradores[indexAtual].apto = editApto.value;
+    moradores[indexAtual].visitantes = editVisitantes.value
+        ? editVisitantes.value.split(",").map(v => v.trim())
         : [];
 
     salvar();
+    fecharModal();
     mostrar();
 }
 
 function buscar() {
-    const termo = document.getElementById("busca").value.toLowerCase();
-    mostrar(termo);
+    mostrar(busca.value.toLowerCase());
 }
 
 function mostrar(filtro = "") {
-    const lista = document.getElementById("lista");
     lista.innerHTML = "";
 
     moradores
     .filter(m => m.nome.toLowerCase().includes(filtro))
-    .forEach((m, index) => {
+    .forEach((m, i) => {
         lista.innerHTML += `
-            <div class="card">
-                <strong>${m.nome}</strong><br>
-                Apto: ${m.apto}<br>
-                Visitantes: ${m.visitantes.join(", ") || "Nenhum"}
+        <div class="card">
+            <strong>${m.nome}</strong><br>
+            Apto: ${m.apto}<br>
+            Visitantes: ${m.visitantes.join(", ") || "Nenhum"}
 
-                <button onclick="editarMorador(${index})" class="btn-editar">✏️</button>
-            </div>
+            <button class="btn-editar" onclick="abrirModal(${i})">✏️</button>
+        </div>
         `;
     });
+}
+
+function gerarPDF() {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+
+    let y = 20;
+
+    // LOGO
+    const img = new Image();
+    img.src = "logo.png";
+
+    img.onload = function() {
+        doc.addImage(img, "PNG", 70, 5, 70, 30);
+
+        y = 45;
+
+        doc.setFontSize(14);
+        doc.text("Lista de Moradores", 10, y);
+        y += 10;
+
+        moradores.forEach(m => {
+            doc.setFontSize(10);
+
+            doc.text(`${m.nome} - Apto ${m.apto}`, 10, y);
+            y += 5;
+
+            doc.text(`Visitantes: ${m.visitantes.join(", ") || "Nenhum"}`, 10, y);
+            y += 8;
+
+            if (y > 270) {
+                doc.addPage();
+                y = 10;
+            }
+        });
+
+        doc.save("moradores.pdf");
+    }
 }
 
 mostrar();
