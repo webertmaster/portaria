@@ -19,28 +19,24 @@ GERAL
 
 body{
     font-family:Arial;
-    background:#eef1f5;
+    background:#edf1f5;
     display:flex;
     color:#333;
 }
 
 /* =========================
-MENU LATERAL
+SIDEBAR
 ========================= */
 
 .sidebar{
     width:240px;
     height:100vh;
-    background:linear-gradient(
-        180deg,
-        #7a0f3c,
-        #4d0825
-    );
-    color:white;
+    background:linear-gradient(180deg,#7a0f3c,#4d0825);
     position:fixed;
     left:0;
     top:0;
     padding:20px;
+    color:white;
     overflow:auto;
 }
 
@@ -49,8 +45,18 @@ MENU LATERAL
     margin-bottom:30px;
 }
 
+.logo img{
+    width:80px;
+    height:80px;
+    border-radius:20px;
+    object-fit:cover;
+    background:white;
+    padding:5px;
+}
+
 .logo h2{
     margin-top:10px;
+    font-size:20px;
 }
 
 .menu button{
@@ -58,17 +64,17 @@ MENU LATERAL
     border:none;
     background:rgba(255,255,255,0.08);
     color:white;
-    padding:14px;
+    padding:15px;
     margin-bottom:12px;
-    border-radius:12px;
+    border-radius:14px;
     text-align:left;
-    font-size:15px;
     cursor:pointer;
+    font-size:15px;
     transition:0.2s;
 }
 
 .menu button:hover{
-    background:rgba(255,255,255,0.2);
+    background:rgba(255,255,255,0.18);
 }
 
 /* =========================
@@ -82,27 +88,27 @@ CONTEÚDO
 }
 
 /* =========================
-CARDS
+BOX
 ========================= */
 
 .box{
     background:white;
-    border-radius:16px;
+    border-radius:18px;
     padding:20px;
     margin-bottom:20px;
     box-shadow:0 2px 10px rgba(0,0,0,0.08);
 }
 
 .card{
-    background:#fff;
-    border-radius:14px;
+    background:white;
+    border-radius:16px;
     padding:18px;
     margin-top:15px;
-    box-shadow:0 2px 10px rgba(0,0,0,0.05);
+    box-shadow:0 2px 8px rgba(0,0,0,0.06);
 }
 
 /* =========================
-FORMULÁRIOS
+INPUTS
 ========================= */
 
 input,
@@ -135,48 +141,45 @@ BOTÕES
     color:white;
     cursor:pointer;
     font-size:15px;
-    transition:0.2s;
-}
-
-.btn:hover{
-    opacity:0.9;
 }
 
 .btn-mini{
     width:100%;
-    padding:10px;
+    padding:12px;
     border:none;
-    border-radius:10px;
+    border-radius:12px;
     margin-top:10px;
     cursor:pointer;
+    color:white;
     font-size:14px;
 }
 
 .whats{
     background:#25d366;
-    color:white;
 }
 
 .entregue{
     background:#007bff;
-    color:white;
+}
+
+.print{
+    background:#444;
 }
 
 /* =========================
-BADGES
+BADGE
 ========================= */
 
 .badge{
     display:inline-block;
     padding:6px 12px;
-    border-radius:30px;
-    font-size:13px;
+    border-radius:20px;
     margin-top:10px;
+    font-size:13px;
 }
 
 .status-pendente{
     background:#ffe082;
-    color:#5f4200;
 }
 
 .status-entregue{
@@ -213,8 +216,8 @@ CANVAS
 canvas{
     width:100%;
     background:white;
-    border-radius:12px;
     border:1px solid #ccc;
+    border-radius:12px;
     margin-top:10px;
 }
 
@@ -224,23 +227,24 @@ RESPONSIVO
 
 @media(max-width:800px){
 
-    .sidebar{
-        width:85px;
-        padding:10px;
-    }
+.sidebar{
+    width:90px;
+    padding:10px;
+}
 
-    .sidebar h2{
-        display:none;
-    }
+.logo h2{
+    display:none;
+}
 
-    .menu button{
-        text-align:center;
-        font-size:20px;
-    }
+.menu button{
+    text-align:center;
+    font-size:20px;
+}
 
-    .content{
-        margin-left:85px;
-    }
+.content{
+    margin-left:90px;
+}
+
 }
 
 </style>
@@ -254,25 +258,29 @@ MENU
 
 <div class="sidebar">
 
-    <div class="logo">
-        <h2>🏢 Portaria PRO</h2>
-    </div>
+<div class="logo">
 
-    <div class="menu">
+<img src="https://i.imgur.com/0y0y0y0.png">
 
-        <button onclick="trocarTela('moradores')">
-            👤 Moradores
-        </button>
+<h2>Portaria PRO</h2>
 
-        <button onclick="trocarTela('reservas')">
-            📅 Reservas
-        </button>
+</div>
 
-        <button onclick="trocarTela('encomendas')">
-            📦 Encomendas
-        </button>
+<div class="menu">
 
-    </div>
+<button onclick="trocarTela('moradores')">
+👤 Moradores
+</button>
+
+<button onclick="trocarTela('reservas')">
+📅 Reservas
+</button>
+
+<button onclick="trocarTela('encomendas')">
+📦 Encomendas
+</button>
+
+</div>
 
 </div>
 
@@ -312,15 +320,15 @@ Cadastrar Morador
 
 <div class="box">
 
-<h2>🔎 Buscar Morador</h2>
+<h2>🔎 Buscar</h2>
 
 <input id="busca"
-placeholder="Digite o nome..."
-onkeyup="buscar()">
+placeholder="Buscar morador..."
+onkeyup="buscarMorador()">
 
 </div>
 
-<div id="lista"></div>
+<div id="listaMoradores"></div>
 
 </div>
 
@@ -344,14 +352,12 @@ RESERVAS
 
 </select>
 
-<input type="date"
-id="dataReserva">
+<input type="date" id="dataReserva">
 
-<input type="time"
-id="horaReserva">
+<input type="time" id="horaReserva">
 
 <input id="responsavel"
-placeholder="Nome do responsável">
+placeholder="Responsável">
 
 <p style="margin-top:15px;">
 ✍️ Assinatura
@@ -379,7 +385,7 @@ Agendar Reserva
 
 <div class="box">
 
-<h2>📋 Reservas Registradas</h2>
+<h2>📋 Reservas</h2>
 
 <div id="listaReservas"></div>
 
@@ -398,7 +404,7 @@ ENCOMENDAS
 <h2>📦 Nova Encomenda</h2>
 
 <input id="encMorador"
-placeholder="Nome do morador">
+placeholder="Morador">
 
 <input id="encApto"
 placeholder="Apartamento">
@@ -407,7 +413,10 @@ placeholder="Apartamento">
 placeholder="Transportadora">
 
 <input id="encCodigo"
-placeholder="Código/Rastreio (opcional)">
+placeholder="Código/Rastreio">
+
+<input id="encVolumes"
+placeholder="Quantidade de volumes">
 
 <input id="encObs"
 placeholder="Observação">
@@ -439,13 +448,7 @@ onkeyup="buscarEncomenda()">
 
 </div>
 
-<div class="box">
-
-<h2>📦 Encomendas Registradas</h2>
-
 <div id="listaEncomendas"></div>
-
-</div>
 
 </div>
 
@@ -459,15 +462,14 @@ MENU
 
 function trocarTela(id){
 
-    document
-    .querySelectorAll(".tela")
-    .forEach(t =>
-        t.classList.remove("ativa")
-    );
+document
+.querySelectorAll(".tela")
+.forEach(t=>t.classList.remove("ativa"));
 
-    document
-    .getElementById(id)
-    .classList.add("ativa");
+document
+.getElementById(id)
+.classList.add("ativa");
+
 }
 
 /* =========================
@@ -475,101 +477,127 @@ MORADORES
 ========================= */
 
 let moradores =
-JSON.parse(
-localStorage.getItem("moradores")
-) || [];
+JSON.parse(localStorage.getItem("moradores")) || [];
 
 function salvarMoradores(){
 
-    localStorage.setItem(
-        "moradores",
-        JSON.stringify(moradores)
-    );
+localStorage.setItem(
+"moradores",
+JSON.stringify(moradores)
+);
+
 }
 
 function addMorador(){
 
-    if(!nome.value || !apto.value){
+if(!nome.value || !apto.value){
 
-        alert("Preencha os campos");
-        return;
-    }
+alert("Preencha os campos");
+return;
 
-    moradores.push({
-
-        nome:nome.value,
-
-        apto:apto.value,
-
-        secretaria:secretaria.value,
-
-        visitantes:
-        visitantes.value
-        ? visitantes.value
-            .split(",")
-            .map(v=>v.trim())
-        : []
-
-    });
-
-    salvarMoradores();
-
-    mostrarMoradores();
-
-    nome.value="";
-    apto.value="";
-    secretaria.value="";
-    visitantes.value="";
 }
 
-function buscar(){
+moradores.push({
 
-    let termo =
-    busca.value.toLowerCase();
+nome:nome.value,
 
-    lista.innerHTML="";
+apto:apto.value,
 
-    moradores
-    .filter(m=>
-        m.nome
-        .toLowerCase()
-        .includes(termo)
-    )
-    .forEach(renderMorador);
-}
+secretaria:secretaria.value,
 
-function renderMorador(m){
+visitantes:
+visitantes.value
+? visitantes.value.split(",")
+.map(v=>v.trim())
+: []
 
-    lista.innerHTML += `
+});
 
-    <div class="card">
+salvarMoradores();
 
-        <h3>${m.nome}</h3>
+mostrarMoradores();
 
-        <div class="badge">
-            🏢 Apto ${m.apto}
-        </div>
+nome.value="";
+apto.value="";
+secretaria.value="";
+visitantes.value="";
 
-        <p style="margin-top:12px;">
-            <b>Secretária:</b>
-            ${m.secretaria || "Nenhuma"}
-        </p>
-
-        <p style="margin-top:8px;">
-            <b>Visitantes:</b>
-            ${m.visitantes.join(", ") || "Nenhum"}
-        </p>
-
-    </div>
-
-    `;
 }
 
 function mostrarMoradores(){
 
-    lista.innerHTML="";
+listaMoradores.innerHTML="";
 
-    moradores.forEach(renderMorador);
+moradores.forEach(m=>{
+
+listaMoradores.innerHTML += `
+
+<div class="card">
+
+<h3>${m.nome}</h3>
+
+<div class="badge">
+🏢 ${m.apto}
+</div>
+
+<p style="margin-top:10px;">
+<b>Secretária:</b>
+${m.secretaria || "Nenhuma"}
+</p>
+
+<p style="margin-top:8px;">
+<b>Visitantes:</b>
+${m.visitantes.join(", ") || "Nenhum"}
+</p>
+
+</div>
+
+`;
+
+});
+
+}
+
+function buscarMorador(){
+
+let termo =
+busca.value.toLowerCase();
+
+listaMoradores.innerHTML="";
+
+moradores
+.filter(m=>
+m.nome.toLowerCase()
+.includes(termo)
+)
+.forEach(m=>{
+
+listaMoradores.innerHTML += `
+
+<div class="card">
+
+<h3>${m.nome}</h3>
+
+<div class="badge">
+🏢 ${m.apto}
+</div>
+
+<p style="margin-top:10px;">
+<b>Secretária:</b>
+${m.secretaria || "Nenhuma"}
+</p>
+
+<p style="margin-top:8px;">
+<b>Visitantes:</b>
+${m.visitantes.join(", ") || "Nenhum"}
+</p>
+
+</div>
+
+`;
+
+});
+
 }
 
 /* =========================
@@ -577,109 +605,98 @@ RESERVAS
 ========================= */
 
 let reservas =
-JSON.parse(
-localStorage.getItem("reservas")
-) || [];
+JSON.parse(localStorage.getItem("reservas")) || [];
 
 function salvarReserva(){
 
-    if(
-        !responsavel.value ||
-        !dataReserva.value ||
-        !horaReserva.value
-    ){
+if(
+!responsavel.value ||
+!dataReserva.value ||
+!horaReserva.value
+){
 
-        alert("Preencha todos os dados");
-        return;
-    }
+alert("Preencha os campos");
+return;
 
-    /* BLOQUEAR CONFLITO */
+}
 
-    let conflito =
-    reservas.find(r =>
+let conflito =
+reservas.find(r=>
 
-        r.data === dataReserva.value &&
-        r.hora === horaReserva.value &&
+r.data === dataReserva.value &&
+r.hora === horaReserva.value
 
-        (
+);
 
-            r.tipo === tipoReserva.value ||
+if(conflito){
 
-            r.tipo === "Combo" ||
+alert("⚠️ Horário já reservado");
+return;
 
-            tipoReserva.value === "Combo"
+}
 
-        )
+reservas.push({
 
-    );
+tipo:tipoReserva.value,
 
-    if(conflito){
+data:dataReserva.value,
 
-        alert("⚠️ Horário já reservado!");
-        return;
-    }
+hora:horaReserva.value,
 
-    reservas.push({
+responsavel:responsavel.value,
 
-        tipo:tipoReserva.value,
+assinatura:
+canvas.toDataURL()
 
-        data:dataReserva.value,
+});
 
-        hora:horaReserva.value,
+localStorage.setItem(
+"reservas",
+JSON.stringify(reservas)
+);
 
-        responsavel:responsavel.value,
+mostrarReservas();
 
-        assinatura:
-        canvas.toDataURL()
+responsavel.value="";
+dataReserva.value="";
+horaReserva.value="";
 
-    });
+limparAssinatura();
 
-    localStorage.setItem(
-        "reservas",
-        JSON.stringify(reservas)
-    );
+alert("Reserva cadastrada!");
 
-    mostrarReservas();
-
-    responsavel.value="";
-    dataReserva.value="";
-    horaReserva.value="";
-
-    limparAssinatura();
-
-    alert("✅ Reserva cadastrada!");
 }
 
 function mostrarReservas(){
 
-    listaReservas.innerHTML="";
+listaReservas.innerHTML="";
 
-    reservas.forEach(r=>{
+reservas.forEach(r=>{
 
-        listaReservas.innerHTML += `
+listaReservas.innerHTML += `
 
-        <div class="card">
+<div class="card">
 
-            <h3>${r.tipo}</h3>
+<h3>${r.tipo}</h3>
 
-            <div class="badge">
-                📅 ${r.data}
-            </div>
+<div class="badge">
+📅 ${r.data}
+</div>
 
-            <p style="margin-top:12px;">
-                <b>Horário:</b>
-                ${r.hora}
-            </p>
+<p style="margin-top:10px;">
+🕒 ${r.hora}
+</p>
 
-            <p style="margin-top:8px;">
-                <b>Responsável:</b>
-                ${r.responsavel}
-            </p>
+<p style="margin-top:10px;">
+👤 ${r.responsavel}
+</p>
 
-        </div>
+</div>
 
-        `;
-    });
+`;
+
+});
+
 }
 
 /* =========================
@@ -698,8 +715,8 @@ canvas.addEventListener(
 "mousedown",
 ()=>{
 
-    desenhando=true;
-    ctx.beginPath();
+desenhando=true;
+ctx.beginPath();
 
 });
 
@@ -717,11 +734,11 @@ canvas.addEventListener(
 "touchstart",
 (e)=>{
 
-    e.preventDefault();
+e.preventDefault();
 
-    desenhando=true;
+desenhando=true;
 
-    ctx.beginPath();
+ctx.beginPath();
 
 });
 
@@ -737,54 +754,57 @@ desenharTouch
 
 function desenhar(e){
 
-    if(!desenhando) return;
+if(!desenhando) return;
 
-    ctx.lineWidth=2;
+ctx.lineWidth=2;
 
-    ctx.lineCap="round";
+ctx.lineCap="round";
 
-    ctx.lineTo(
-        e.offsetX,
-        e.offsetY
-    );
+ctx.lineTo(
+e.offsetX,
+e.offsetY
+);
 
-    ctx.stroke();
+ctx.stroke();
+
 }
 
 function desenharTouch(e){
 
-    if(!desenhando) return;
+if(!desenhando) return;
 
-    e.preventDefault();
+e.preventDefault();
 
-    let rect =
-    canvas.getBoundingClientRect();
+let rect =
+canvas.getBoundingClientRect();
 
-    let x =
-    e.touches[0].clientX -
-    rect.left;
+let x =
+e.touches[0].clientX -
+rect.left;
 
-    let y =
-    e.touches[0].clientY -
-    rect.top;
+let y =
+e.touches[0].clientY -
+rect.top;
 
-    ctx.lineWidth=2;
+ctx.lineWidth=2;
 
-    ctx.lineCap="round";
+ctx.lineCap="round";
 
-    ctx.lineTo(x,y);
+ctx.lineTo(x,y);
 
-    ctx.stroke();
+ctx.stroke();
+
 }
 
 function limparAssinatura(){
 
-    ctx.clearRect(
-        0,
-        0,
-        canvas.width,
-        canvas.height
-    );
+ctx.clearRect(
+0,
+0,
+canvas.width,
+canvas.height
+);
+
 }
 
 /* =========================
@@ -792,280 +812,396 @@ ENCOMENDAS
 ========================= */
 
 let encomendas =
-JSON.parse(
-localStorage.getItem("encomendas")
-) || [];
+JSON.parse(localStorage.getItem("encomendas")) || [];
 
 function salvarEncomenda(){
 
-    if(
-        !encMorador.value ||
-        !encApto.value
-    ){
+if(
+!encMorador.value ||
+!encApto.value
+){
 
-        alert("Preencha os campos");
-        return;
-    }
+alert("Preencha os campos");
+return;
 
-    let fotoInput =
-    document.getElementById("encFoto");
+}
 
-    let arquivo =
-    fotoInput.files[0];
+let fotoInput =
+document.getElementById("encFoto");
 
-    if(arquivo){
+let arquivo =
+fotoInput.files[0];
 
-        let leitor =
-        new FileReader();
+if(arquivo){
 
-        leitor.onload =
-        function(e){
+let leitor =
+new FileReader();
 
-            criarEncomenda(
-                e.target.result
-            );
-        };
+leitor.onload =
+function(e){
 
-        leitor.readAsDataURL(
-            arquivo
-        );
+criarEncomenda(
+e.target.result
+);
 
-    }else{
+};
 
-        criarEncomenda("");
-    }
+leitor.readAsDataURL(arquivo);
+
+}else{
+
+criarEncomenda("");
+
+}
+
 }
 
 function criarEncomenda(foto){
 
-    encomendas.push({
+encomendas.push({
 
-        morador:
-        encMorador.value,
+morador:
+encMorador.value,
 
-        apto:
-        encApto.value,
+apto:
+encApto.value,
 
-        transportadora:
-        encTransportadora.value,
+transportadora:
+encTransportadora.value,
 
-        codigo:
-        encCodigo.value,
+codigo:
+encCodigo.value,
 
-        observacao:
-        encObs.value,
+volumes:
+encVolumes.value || "1",
 
-        foto,
+observacao:
+encObs.value,
 
-        status:"Pendente",
+foto,
 
-        horario:
-        new Date()
-        .toLocaleString()
+status:"Pendente",
 
-    });
+horario:
+new Date().toLocaleString()
 
-    localStorage.setItem(
-        "encomendas",
-        JSON.stringify(encomendas)
-    );
+});
 
-    mostrarEncomendas();
+localStorage.setItem(
+"encomendas",
+JSON.stringify(encomendas)
+);
 
-    limparFormularioEncomenda();
+mostrarEncomendas();
 
-    alert("📦 Encomenda cadastrada!");
+limparFormulario();
+
+alert("📦 Encomenda cadastrada!");
+
 }
 
-function limparFormularioEncomenda(){
+function limparFormulario(){
 
-    encMorador.value="";
-    encApto.value="";
-    encTransportadora.value="";
-    encCodigo.value="";
-    encObs.value="";
-    encFoto.value="";
+encMorador.value="";
+encApto.value="";
+encTransportadora.value="";
+encCodigo.value="";
+encVolumes.value="";
+encObs.value="";
+encFoto.value="";
+
 }
 
 function mostrarEncomendas(){
 
-    listaEncomendas.innerHTML="";
+listaEncomendas.innerHTML="";
 
-    encomendas.forEach((e,i)=>{
+encomendas.forEach((e,i)=>{
 
-        listaEncomendas.innerHTML += `
+listaEncomendas.innerHTML += `
 
-        <div class="card">
+<div class="card">
 
-            <h3>
-                📦
-                ${e.transportadora || "Encomenda"}
-            </h3>
+<h3>
+📦 ${e.transportadora || "Encomenda"}
+</h3>
 
-            <div class="badge
-            ${e.status === "Pendente"
-            ? "status-pendente"
-            : "status-entregue"}">
+<div class="badge
+${e.status === "Pendente"
+? "status-pendente"
+: "status-entregue"}">
 
-                ${e.status}
+${e.status}
 
-            </div>
+</div>
 
-            <p style="margin-top:12px;">
-                <b>Morador:</b>
-                ${e.morador}
-            </p>
+<p style="margin-top:10px;">
+<b>Morador:</b>
+${e.morador}
+</p>
 
-            <p>
-                <b>Apto:</b>
-                ${e.apto}
-            </p>
+<p>
+<b>Apto:</b>
+${e.apto}
+</p>
 
-            <p>
-                <b>Código:</b>
-                ${e.codigo || "Não informado"}
-            </p>
+<p>
+<b>Código:</b>
+${e.codigo || "N/I"}
+</p>
 
-            <p>
-                <b>Observação:</b>
-                ${e.observacao || "Nenhuma"}
-            </p>
+<p>
+<b>Volumes:</b>
+${e.volumes}
+</p>
 
-            <p>
-                <b>Recebido:</b>
-                ${e.horario}
-            </p>
+<p>
+<b>Observação:</b>
+${e.observacao || "Nenhuma"}
+</p>
 
-            ${e.foto
-            ? `<img
-            src="${e.foto}"
-            class="foto-encomenda">`
-            : ""}
+<p>
+<b>Recebido:</b>
+${e.horario}
+</p>
 
-            <button
-            class="btn-mini whats"
-            onclick="avisarWhatsapp(${i})">
+${e.foto
+? `<img
+src="${e.foto}"
+class="foto-encomenda">`
+: ""}
 
-            📲 Avisar no WhatsApp
+<button
+class="btn-mini whats"
+onclick="avisarWhatsapp(${i})">
 
-            </button>
+📲 Avisar WhatsApp
 
-            <button
-            class="btn-mini entregue"
-            onclick="marcarEntregue(${i})">
+</button>
 
-            ✅ Marcar Entregue
+<button
+class="btn-mini entregue"
+onclick="marcarEntregue(${i})">
 
-            </button>
+✅ Marcar Entregue
 
-        </div>
+</button>
 
-        `;
-    });
+<button
+class="btn-mini print"
+onclick="imprimirEtiqueta(${i})">
+
+🖨️ Imprimir Etiqueta
+
+</button>
+
+</div>
+
+`;
+
+});
+
+}
+
+function buscarEncomenda(){
+
+let termo =
+buscaEncomenda.value.toLowerCase();
+
+listaEncomendas.innerHTML="";
+
+encomendas
+.filter(e=>
+
+e.morador
+.toLowerCase()
+.includes(termo)
+
+||
+
+e.apto
+.toLowerCase()
+.includes(termo)
+
+)
+.forEach((e,i)=>{
+
+listaEncomendas.innerHTML += `
+
+<div class="card">
+
+<h3>
+📦 ${e.transportadora}
+</h3>
+
+<p>${e.morador}</p>
+
+<p>${e.apto}</p>
+
+</div>
+
+`;
+
+});
+
 }
 
 function avisarWhatsapp(i){
 
-    let e = encomendas[i];
+let e = encomendas[i];
 
-    let msg = `Olá ${e.morador} 😊
+let msg = `Olá ${e.morador} 😊
 
 Sua encomenda chegou na portaria.
 
-📦 Transportadora:
-${e.transportadora || "Não informada"}
+📦 ${e.transportadora}
 
 🏢 Apartamento:
 ${e.apto}
 
 📌 Código:
-${e.codigo || "Não informado"}
+${e.codigo || "N/I"}
 
 Retirada disponível.`;
 
-    let url =
-    `https://wa.me/?text=${encodeURIComponent(msg)}`;
+let url =
+`https://wa.me/?text=${encodeURIComponent(msg)}`;
 
-    window.open(url, "_blank");
+window.open(url,"_blank");
+
 }
 
 function marcarEntregue(i){
 
-    encomendas[i].status =
-    "Entregue";
+encomendas[i].status =
+"Entregue";
 
-    localStorage.setItem(
-        "encomendas",
-        JSON.stringify(encomendas)
-    );
+localStorage.setItem(
+"encomendas",
+JSON.stringify(encomendas)
+);
 
-    mostrarEncomendas();
+mostrarEncomendas();
 
-    let e = encomendas[i];
-
-    let msg = `Olá ${e.morador} 😊
-
-Sua encomenda foi entregue com sucesso.
-
-🕒 Horário:
-${new Date().toLocaleTimeString()}`;
-
-    let url =
-    `https://wa.me/?text=${encodeURIComponent(msg)}`;
-
-    window.open(url, "_blank");
 }
 
-function buscarEncomenda(){
+function imprimirEtiqueta(i){
 
-    let termo =
-    buscaEncomenda.value
-    .toLowerCase();
+let e = encomendas[i];
 
-    listaEncomendas.innerHTML="";
+let janela =
+window.open(
+'',
+'',
+'width=300,height=600'
+);
 
-    encomendas
-    .filter(e =>
+janela.document.write(`
 
-        e.morador
-        .toLowerCase()
-        .includes(termo)
+<html>
 
-        ||
+<head>
 
-        e.apto
-        .toLowerCase()
-        .includes(termo)
+<title>Etiqueta</title>
 
-        ||
+<style>
 
-        e.codigo
-        .toLowerCase()
-        .includes(termo)
+body{
 
-    )
-    .forEach((e,i)=>{
+font-family:Arial;
+width:58mm;
+padding:10px;
+text-align:center;
 
-        listaEncomendas.innerHTML += `
+}
 
-        <div class="card">
+.apto{
 
-            <h3>
-                📦 ${e.transportadora}
-            </h3>
+font-size:28px;
+font-weight:bold;
+margin-top:20px;
 
-            <p>
-                ${e.morador}
-            </p>
+}
 
-            <p>
-                ${e.apto}
-            </p>
+.nome{
 
-        </div>
+font-size:22px;
+font-weight:bold;
+margin-top:10px;
 
-        `;
-    });
+}
+
+.linha{
+
+margin-top:10px;
+font-size:16px;
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<h2>📦 ENCOMENDA</h2>
+
+<hr>
+
+<div class="apto">
+AP ${e.apto}
+</div>
+
+<div class="nome">
+${e.morador}
+</div>
+
+<div class="linha">
+📦 ${e.transportadora}
+</div>
+
+<div class="linha">
+Volumes: ${e.volumes}
+</div>
+
+<div class="linha">
+Código:
+${e.codigo || "N/I"}
+</div>
+
+<hr>
+
+<div class="linha">
+${new Date().toLocaleDateString()}
+</div>
+
+<div class="linha">
+${new Date().toLocaleTimeString()}
+</div>
+
+</body>
+
+</html>
+
+`);
+
+janela.document.close();
+
+setTimeout(()=>{
+
+let confirmar =
+confirm(
+"Deseja imprimir?"
+);
+
+if(confirmar){
+
+janela.print();
+
+}
+
+},500);
+
 }
 
 /* =========================
