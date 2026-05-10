@@ -3,225 +3,223 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Portaria PRO</title>
 
 <style>
 
 *{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
+margin:0;
+padding:0;
+box-sizing:border-box;
 }
 
 body{
-    font-family:Arial, sans-serif;
-    background:#edf1f5;
-    display:flex;
-    color:#333;
+font-family:Arial,sans-serif;
+background:#edf1f5;
+display:flex;
+color:#333;
 }
 
 /* SIDEBAR */
 
 .sidebar{
-    width:240px;
-    height:100vh;
-    background:linear-gradient(180deg,#7a0f3c,#4d0825);
-    position:fixed;
-    left:0;
-    top:0;
-    padding:20px;
-    color:white;
-    overflow:auto;
+width:240px;
+height:100vh;
+background:linear-gradient(180deg,#7a0f3c,#4d0825);
+position:fixed;
+left:0;
+top:0;
+padding:20px;
+color:white;
+overflow:auto;
 }
 
 .logo{
-    text-align:center;
-    margin-bottom:30px;
-}
-
-.logo h2{
-    margin-top:10px;
-    font-size:22px;
+text-align:center;
+margin-bottom:30px;
 }
 
 .logo-icon{
-    width:90px;
-    height:90px;
-    border-radius:20px;
-    background:white;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    margin:auto;
-    font-size:40px;
+width:90px;
+height:90px;
+background:white;
+border-radius:20px;
+display:flex;
+align-items:center;
+justify-content:center;
+margin:auto;
+font-size:42px;
 }
 
-/* MENU */
+.logo h2{
+margin-top:10px;
+font-size:22px;
+}
 
 .menu button{
-    width:100%;
-    border:none;
-    background:rgba(255,255,255,0.08);
-    color:white;
-    padding:15px;
-    margin-bottom:12px;
-    border-radius:14px;
-    text-align:left;
-    cursor:pointer;
-    font-size:15px;
-    transition:0.2s;
+width:100%;
+border:none;
+background:rgba(255,255,255,0.08);
+color:white;
+padding:15px;
+margin-bottom:12px;
+border-radius:14px;
+text-align:left;
+cursor:pointer;
+font-size:15px;
+transition:0.2s;
 }
 
 .menu button:hover{
-    background:rgba(255,255,255,0.18);
+background:rgba(255,255,255,0.18);
 }
 
 /* CONTENT */
 
 .content{
-    margin-left:240px;
-    width:100%;
-    padding:20px;
+margin-left:240px;
+width:100%;
+padding:20px;
 }
 
 /* BOX */
 
 .box{
-    background:white;
-    border-radius:18px;
-    padding:20px;
-    margin-bottom:20px;
-    box-shadow:0 2px 10px rgba(0,0,0,0.08);
+background:white;
+border-radius:18px;
+padding:20px;
+margin-bottom:20px;
+box-shadow:0 2px 10px rgba(0,0,0,0.08);
 }
 
 .card{
-    background:white;
-    border-radius:16px;
-    padding:18px;
-    margin-top:15px;
-    box-shadow:0 2px 8px rgba(0,0,0,0.06);
+background:white;
+border-radius:16px;
+padding:18px;
+margin-top:15px;
+box-shadow:0 2px 8px rgba(0,0,0,0.06);
 }
 
 /* INPUTS */
 
 input,
 select{
-    width:100%;
-    padding:14px;
-    border-radius:12px;
-    border:1px solid #ddd;
-    margin-top:10px;
-    font-size:15px;
+width:100%;
+padding:14px;
+border-radius:12px;
+border:1px solid #ddd;
+margin-top:10px;
+font-size:15px;
 }
 
 input:focus,
 select:focus{
-    outline:none;
-    border:1px solid #7a0f3c;
+outline:none;
+border:1px solid #7a0f3c;
 }
 
 /* BUTTONS */
 
 .btn{
-    width:100%;
-    padding:14px;
-    border:none;
-    border-radius:12px;
-    margin-top:12px;
-    background:#7a0f3c;
-    color:white;
-    cursor:pointer;
-    font-size:15px;
+width:100%;
+padding:14px;
+border:none;
+border-radius:12px;
+margin-top:12px;
+background:#7a0f3c;
+color:white;
+cursor:pointer;
+font-size:15px;
 }
 
 .btn:hover{
-    opacity:0.9;
+opacity:0.9;
 }
 
 .acoes{
-    display:flex;
-    gap:10px;
-    margin-top:15px;
+display:flex;
+gap:10px;
+margin-top:15px;
+flex-wrap:wrap;
 }
 
 .btn-acao{
-    flex:1;
-    border:none;
-    padding:12px;
-    border-radius:12px;
-    cursor:pointer;
-    color:white;
-    font-size:14px;
-    font-weight:bold;
+flex:1;
+border:none;
+padding:12px;
+border-radius:12px;
+cursor:pointer;
+color:white;
+font-size:14px;
+font-weight:bold;
 }
 
 .editar{
-    background:#ff9800;
+background:#ff9800;
 }
 
 .excluir{
-    background:#e53935;
+background:#e53935;
 }
 
 .whats{
-    background:#25d366;
+background:#25d366;
 }
 
 .entregue{
-    background:#007bff;
+background:#007bff;
 }
 
 .print{
-    background:#444;
+background:#444;
 }
 
 /* BADGES */
 
 .badge{
-    display:inline-block;
-    padding:6px 12px;
-    border-radius:20px;
-    margin-top:10px;
-    font-size:13px;
-    background:#eee;
+display:inline-block;
+padding:6px 12px;
+border-radius:20px;
+margin-top:10px;
+font-size:13px;
+background:#eee;
 }
 
 .status-pendente{
-    background:#ffe082;
+background:#ffe082;
 }
 
 .status-entregue{
-    background:#28a745;
-    color:white;
+background:#28a745;
+color:white;
 }
 
 /* FOTO */
 
 .foto-encomenda{
-    width:100%;
-    border-radius:12px;
-    margin-top:12px;
+width:100%;
+border-radius:12px;
+margin-top:12px;
 }
 
 /* TELAS */
 
 .tela{
-    display:none;
+display:none;
 }
 
 .ativa{
-    display:block;
+display:block;
 }
 
 /* CANVAS */
 
 canvas{
-    width:100%;
-    background:white;
-    border:1px solid #ccc;
-    border-radius:12px;
-    margin-top:10px;
+width:100%;
+background:white;
+border:1px solid #ccc;
+border-radius:12px;
+margin-top:10px;
 }
 
 /* RESPONSIVO */
@@ -229,21 +227,21 @@ canvas{
 @media(max-width:800px){
 
 .sidebar{
-    width:90px;
-    padding:10px;
+width:90px;
+padding:10px;
 }
 
 .logo h2{
-    display:none;
+display:none;
 }
 
 .menu button{
-    text-align:center;
-    font-size:20px;
+text-align:center;
+font-size:20px;
 }
 
 .content{
-    margin-left:90px;
+margin-left:90px;
 }
 
 }
@@ -271,6 +269,10 @@ canvas{
 
 <button onclick="trocarTela('moradores')">
 👤 Moradores
+</button>
+
+<button onclick="trocarTela('veiculos')">
+🚘 Veículos
 </button>
 
 <button onclick="trocarTela('reservas')">
@@ -320,6 +322,47 @@ Cadastrar Morador
 </div>
 
 <div id="listaMoradores"></div>
+
+</div>
+
+<!-- VEICULOS -->
+
+<div id="veiculos" class="tela">
+
+<div class="box">
+
+<h2>🚘 Cadastro de Veículos</h2>
+
+<input id="veiMorador" placeholder="Proprietário">
+
+<input id="veiModelo" placeholder="Modelo">
+
+<input id="veiPlaca" placeholder="Placa">
+
+<input id="veiCor" placeholder="Cor">
+
+<input id="veiVaga" placeholder="Vaga">
+
+<select id="veiTipo">
+<option>Carro</option>
+<option>Moto</option>
+</select>
+
+<button class="btn" onclick="addVeiculo()">
+Cadastrar Veículo
+</button>
+
+</div>
+
+<div class="box">
+
+<h2>🔎 Buscar Veículo</h2>
+
+<input id="buscaVeiculo" placeholder="Buscar..." onkeyup="buscarVeiculo()">
+
+</div>
+
+<div id="listaVeiculos"></div>
 
 </div>
 
@@ -421,12 +464,10 @@ Cadastrar Encomenda
 
 function trocarTela(id){
 
-document
-.querySelectorAll(".tela")
+document.querySelectorAll(".tela")
 .forEach(t=>t.classList.remove("ativa"));
 
-document
-.getElementById(id)
+document.getElementById(id)
 .classList.add("ativa");
 
 }
@@ -437,38 +478,27 @@ let moradores =
 JSON.parse(localStorage.getItem("moradores")) || [];
 
 function salvarMoradores(){
-
-localStorage.setItem(
-"moradores",
-JSON.stringify(moradores)
-);
-
+localStorage.setItem("moradores",JSON.stringify(moradores));
 }
 
 function addMorador(){
 
 if(!nome.value || !apto.value){
-
 alert("Preencha os campos");
 return;
-
 }
 
 moradores.push({
-
 nome:nome.value,
 apto:apto.value,
 secretaria:secretaria.value,
-
 visitantes:
 visitantes.value
 ? visitantes.value.split(",").map(v=>v.trim())
 : []
-
 });
 
 salvarMoradores();
-
 mostrarMoradores();
 
 nome.value="";
@@ -508,16 +538,12 @@ ${m.visitantes.join(", ") || "Nenhum"}
 
 <button class="btn-acao editar"
 onclick="editarMorador(${index})">
-
 ✏️ Editar
-
 </button>
 
 <button class="btn-acao excluir"
 onclick="excluirMorador(${index})">
-
 🗑️ Excluir
-
 </button>
 
 </div>
@@ -544,8 +570,7 @@ let novaSecretaria =
 prompt("Editar secretária:", moradores[index].secretaria);
 
 let novosVisitantes =
-prompt(
-"Editar visitantes:",
+prompt("Editar visitantes:",
 moradores[index].visitantes.join(", ")
 );
 
@@ -559,7 +584,6 @@ novosVisitantes
 : [];
 
 salvarMoradores();
-
 mostrarMoradores();
 
 }
@@ -571,7 +595,6 @@ if(!confirm("Excluir morador?")) return;
 moradores.splice(index,1);
 
 salvarMoradores();
-
 mostrarMoradores();
 
 }
@@ -583,9 +606,7 @@ let termo = busca.value.toLowerCase();
 listaMoradores.innerHTML="";
 
 moradores
-.filter(m=>
-m.nome.toLowerCase().includes(termo)
-)
+.filter(m=>m.nome.toLowerCase().includes(termo))
 .forEach((m,index)=>{
 
 listaMoradores.innerHTML += `
@@ -597,6 +618,136 @@ listaMoradores.innerHTML += `
 <div class="badge">
 🏢 ${m.apto}
 </div>
+
+</div>
+
+`;
+
+});
+
+}
+
+/* VEICULOS */
+
+let veiculos =
+JSON.parse(localStorage.getItem("veiculos")) || [];
+
+function salvarVeiculos(){
+localStorage.setItem("veiculos",JSON.stringify(veiculos));
+}
+
+function addVeiculo(){
+
+if(!veiMorador.value || !veiPlaca.value){
+alert("Preencha os campos");
+return;
+}
+
+veiculos.push({
+morador:veiMorador.value,
+modelo:veiModelo.value,
+placa:veiPlaca.value,
+cor:veiCor.value,
+vaga:veiVaga.value,
+tipo:veiTipo.value
+});
+
+salvarVeiculos();
+mostrarVeiculos();
+
+veiMorador.value="";
+veiModelo.value="";
+veiPlaca.value="";
+veiCor.value="";
+veiVaga.value="";
+
+}
+
+function mostrarVeiculos(){
+
+listaVeiculos.innerHTML="";
+
+veiculos.forEach((v,index)=>{
+
+listaVeiculos.innerHTML += `
+
+<div class="card">
+
+<h3>🚘 ${v.modelo}</h3>
+
+<p><b>Morador:</b> ${v.morador}</p>
+<p><b>Placa:</b> ${v.placa}</p>
+<p><b>Cor:</b> ${v.cor}</p>
+<p><b>Vaga:</b> ${v.vaga}</p>
+<p><b>Tipo:</b> ${v.tipo}</p>
+
+<div class="acoes">
+
+<button class="btn-acao editar"
+onclick="editarVeiculo(${index})">
+✏️ Editar
+</button>
+
+<button class="btn-acao excluir"
+onclick="excluirVeiculo(${index})">
+🗑️ Excluir
+</button>
+
+</div>
+
+</div>
+
+`;
+
+});
+
+}
+
+function editarVeiculo(index){
+
+let novoModelo =
+prompt("Modelo:",veiculos[index].modelo);
+
+veiculos[index].modelo = novoModelo;
+
+salvarVeiculos();
+mostrarVeiculos();
+
+}
+
+function excluirVeiculo(index){
+
+if(!confirm("Excluir veículo?")) return;
+
+veiculos.splice(index,1);
+
+salvarVeiculos();
+mostrarVeiculos();
+
+}
+
+function buscarVeiculo(){
+
+let termo =
+buscaVeiculo.value.toLowerCase();
+
+listaVeiculos.innerHTML="";
+
+veiculos
+.filter(v=>
+v.placa.toLowerCase().includes(termo)
+||
+v.morador.toLowerCase().includes(termo)
+)
+.forEach((v,index)=>{
+
+listaVeiculos.innerHTML += `
+
+<div class="card">
+
+<h3>${v.modelo}</h3>
+
+<p>${v.placa}</p>
 
 </div>
 
@@ -618,35 +769,27 @@ if(
 !dataReserva.value ||
 !horaReserva.value
 ){
-
 alert("Preencha os campos");
 return;
-
 }
 
 let conflito =
 reservas.find(r=>
-
 r.data === dataReserva.value &&
 r.hora === horaReserva.value
-
 );
 
 if(conflito){
-
-alert("⚠️ Horário já reservado");
+alert("Horário já reservado");
 return;
-
 }
 
 reservas.push({
-
 tipo:tipoReserva.value,
 data:dataReserva.value,
 hora:horaReserva.value,
 responsavel:responsavel.value,
 assinatura:canvas.toDataURL()
-
 });
 
 localStorage.setItem(
@@ -692,16 +835,12 @@ listaReservas.innerHTML += `
 
 <button class="btn-acao editar"
 onclick="editarReserva(${index})">
-
 ✏️ Editar
-
 </button>
 
 <button class="btn-acao excluir"
 onclick="excluirReserva(${index})">
-
 🗑️ Cancelar
-
 </button>
 
 </div>
@@ -717,10 +856,8 @@ onclick="excluirReserva(${index})">
 function editarReserva(index){
 
 let novoResponsavel =
-prompt(
-"Responsável:",
-reservas[index].responsavel
-);
+prompt("Responsável:",
+reservas[index].responsavel);
 
 reservas[index].responsavel =
 novoResponsavel;
@@ -759,24 +896,16 @@ canvas.getContext("2d");
 
 let desenhando=false;
 
-canvas.addEventListener(
-"mousedown",
-()=>{
-
+canvas.addEventListener("mousedown",()=>{
 desenhando=true;
 ctx.beginPath();
-
 });
 
-canvas.addEventListener(
-"mouseup",
-()=> desenhando=false
-);
+canvas.addEventListener("mouseup",()=>{
+desenhando=false;
+});
 
-canvas.addEventListener(
-"mousemove",
-desenhar
-);
+canvas.addEventListener("mousemove",desenhar);
 
 function desenhar(e){
 
@@ -785,10 +914,7 @@ if(!desenhando) return;
 ctx.lineWidth=2;
 ctx.lineCap="round";
 
-ctx.lineTo(
-e.offsetX,
-e.offsetY
-);
+ctx.lineTo(e.offsetX,e.offsetY);
 
 ctx.stroke();
 
@@ -812,14 +938,9 @@ JSON.parse(localStorage.getItem("encomendas")) || [];
 
 function salvarEncomenda(){
 
-if(
-!encMorador.value ||
-!encApto.value
-){
-
+if(!encMorador.value || !encApto.value){
 alert("Preencha os campos");
 return;
-
 }
 
 let fotoInput =
@@ -830,16 +951,10 @@ fotoInput.files[0];
 
 if(arquivo){
 
-let leitor =
-new FileReader();
+let leitor = new FileReader();
 
-leitor.onload =
-function(e){
-
-criarEncomenda(
-e.target.result
-);
-
+leitor.onload = function(e){
+criarEncomenda(e.target.result);
 };
 
 leitor.readAsDataURL(arquivo);
@@ -855,7 +970,6 @@ criarEncomenda("");
 function criarEncomenda(foto){
 
 encomendas.push({
-
 morador:encMorador.value,
 apto:encApto.value,
 transportadora:encTransportadora.value,
@@ -865,7 +979,6 @@ observacao:encObs.value,
 foto,
 status:"Pendente",
 horario:new Date().toLocaleString()
-
 });
 
 localStorage.setItem(
@@ -874,12 +987,6 @@ JSON.stringify(encomendas)
 );
 
 mostrarEncomendas();
-
-limparFormulario();
-
-}
-
-function limparFormulario(){
 
 encMorador.value="";
 encApto.value="";
@@ -915,18 +1022,19 @@ ${e.status}
 </div>
 
 <p style="margin-top:10px;">
-<b>Morador:</b>
-${e.morador}
+<b>Morador:</b> ${e.morador}
 </p>
 
 <p>
-<b>Apto:</b>
-${e.apto}
+<b>Apto:</b> ${e.apto}
 </p>
 
 <p>
-<b>Código:</b>
-${e.codigo || "N/I"}
+<b>Código:</b> ${e.codigo || "N/I"}
+</p>
+
+<p>
+<b>Volumes:</b> ${e.volumes}
 </p>
 
 ${e.foto
@@ -937,25 +1045,29 @@ ${e.foto
 
 <button class="btn-acao editar"
 onclick="editarEncomenda(${i})">
-
 ✏️ Editar
-
 </button>
 
 <button class="btn-acao excluir"
 onclick="excluirEncomenda(${i})">
-
 🗑️ Excluir
+</button>
 
+<button class="btn-acao entregue"
+onclick="marcarEntregue(${i})">
+✅ Entregue
+</button>
+
+<button class="btn-acao print"
+onclick="imprimirEtiqueta(${i})">
+🖨️ Etiqueta
 </button>
 
 </div>
 
 <button class="btn whats"
 onclick="avisarWhatsapp(${i})">
-
 📲 Avisar WhatsApp
-
 </button>
 
 </div>
@@ -969,10 +1081,10 @@ onclick="avisarWhatsapp(${i})">
 function editarEncomenda(i){
 
 let novoMorador =
-prompt("Morador:", encomendas[i].morador);
+prompt("Morador:",encomendas[i].morador);
 
 let novoApto =
-prompt("Apartamento:", encomendas[i].apto);
+prompt("Apartamento:",encomendas[i].apto);
 
 encomendas[i].morador = novoMorador;
 encomendas[i].apto = novoApto;
@@ -1001,6 +1113,19 @@ mostrarEncomendas();
 
 }
 
+function marcarEntregue(i){
+
+encomendas[i].status = "Entregue";
+
+localStorage.setItem(
+"encomendas",
+JSON.stringify(encomendas)
+);
+
+mostrarEncomendas();
+
+}
+
 function avisarWhatsapp(i){
 
 let e = encomendas[i];
@@ -1011,8 +1136,9 @@ Sua encomenda chegou na portaria.
 
 📦 ${e.transportadora}
 
-🏢 Apartamento:
-${e.apto}`;
+🏢 Apartamento: ${e.apto}
+
+📌 Código: ${e.codigo || "N/I"}`;
 
 let url =
 `https://wa.me/?text=${encodeURIComponent(msg)}`;
@@ -1021,9 +1147,96 @@ window.open(url,"_blank");
 
 }
 
+function imprimirEtiqueta(i){
+
+let e = encomendas[i];
+
+let janela =
+window.open('','','width=300,height=600');
+
+janela.document.write(`
+
+<html>
+
+<head>
+
+<title>Etiqueta</title>
+
+<style>
+
+body{
+font-family:Arial;
+width:58mm;
+padding:10px;
+text-align:center;
+}
+
+.apto{
+font-size:28px;
+font-weight:bold;
+margin-top:20px;
+}
+
+.nome{
+font-size:22px;
+font-weight:bold;
+margin-top:10px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<h2>📦 ENCOMENDA</h2>
+
+<hr>
+
+<div class="apto">
+AP ${e.apto}
+</div>
+
+<div class="nome">
+${e.morador}
+</div>
+
+<p>
+📦 ${e.transportadora}
+</p>
+
+<p>
+Volumes: ${e.volumes}
+</p>
+
+<p>
+Código: ${e.codigo || "N/I"}
+</p>
+
+<hr>
+
+</body>
+
+</html>
+
+`);
+
+janela.document.close();
+
+setTimeout(()=>{
+
+if(confirm("Deseja imprimir etiqueta?")){
+janela.print();
+}
+
+},500);
+
+}
+
 /* INICIAR */
 
 mostrarMoradores();
+mostrarVeiculos();
 mostrarReservas();
 mostrarEncomendas();
 
