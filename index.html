@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Portaria PRO</title>
 
 <style>
@@ -97,7 +98,7 @@ background:white;
 border-radius:16px;
 padding:18px;
 margin-top:15px;
-box-shadow:0 2px 8px rgba(0,0,0,0.06);
+box-shadow:0 2px 8px rgba(0,0px,0px,0.06);
 }
 
 /* INPUTS */
@@ -118,7 +119,7 @@ outline:none;
 border:1px solid #7a0f3c;
 }
 
-/* BUTTONS */
+/* BOTÕES */
 
 .btn{
 width:100%;
@@ -167,7 +168,7 @@ background:#25d366;
 }
 
 .entregue{
-background:#007bff;
+background:#28a745;
 }
 
 .print{
@@ -220,6 +221,7 @@ background:white;
 border:1px solid #ccc;
 border-radius:12px;
 margin-top:10px;
+touch-action:none;
 }
 
 /* RESPONSIVO */
@@ -563,25 +565,7 @@ prompt("Editar nome:", moradores[index].nome);
 
 if(novoNome === null) return;
 
-let novoApto =
-prompt("Editar apartamento:", moradores[index].apto);
-
-let novaSecretaria =
-prompt("Editar secretária:", moradores[index].secretaria);
-
-let novosVisitantes =
-prompt("Editar visitantes:",
-moradores[index].visitantes.join(", ")
-);
-
 moradores[index].nome = novoNome;
-moradores[index].apto = novoApto;
-moradores[index].secretaria = novaSecretaria;
-
-moradores[index].visitantes =
-novosVisitantes
-? novosVisitantes.split(",").map(v=>v.trim())
-: [];
 
 salvarMoradores();
 mostrarMoradores();
@@ -607,20 +591,13 @@ listaMoradores.innerHTML="";
 
 moradores
 .filter(m=>m.nome.toLowerCase().includes(termo))
-.forEach((m,index)=>{
+.forEach((m)=>{
 
 listaMoradores.innerHTML += `
-
 <div class="card">
-
 <h3>${m.nome}</h3>
-
-<div class="badge">
-🏢 ${m.apto}
+<p>🏢 ${m.apto}</p>
 </div>
-
-</div>
-
 `;
 
 });
@@ -637,11 +614,6 @@ localStorage.setItem("veiculos",JSON.stringify(veiculos));
 }
 
 function addVeiculo(){
-
-if(!veiMorador.value || !veiPlaca.value){
-alert("Preencha os campos");
-return;
-}
 
 veiculos.push({
 morador:veiMorador.value,
@@ -678,8 +650,6 @@ listaVeiculos.innerHTML += `
 <p><b>Morador:</b> ${v.morador}</p>
 <p><b>Placa:</b> ${v.placa}</p>
 <p><b>Cor:</b> ${v.cor}</p>
-<p><b>Vaga:</b> ${v.vaga}</p>
-<p><b>Tipo:</b> ${v.tipo}</p>
 
 <div class="acoes">
 
@@ -739,18 +709,13 @@ v.placa.toLowerCase().includes(termo)
 ||
 v.morador.toLowerCase().includes(termo)
 )
-.forEach((v,index)=>{
+.forEach((v)=>{
 
 listaVeiculos.innerHTML += `
-
 <div class="card">
-
 <h3>${v.modelo}</h3>
-
 <p>${v.placa}</p>
-
 </div>
-
 `;
 
 });
@@ -770,17 +735,6 @@ if(
 !horaReserva.value
 ){
 alert("Preencha os campos");
-return;
-}
-
-let conflito =
-reservas.find(r=>
-r.data === dataReserva.value &&
-r.hora === horaReserva.value
-);
-
-if(conflito){
-alert("Horário já reservado");
 return;
 }
 
@@ -823,13 +777,9 @@ listaReservas.innerHTML += `
 📅 ${r.data}
 </div>
 
-<p style="margin-top:10px;">
-🕒 ${r.hora}
-</p>
+<p>🕒 ${r.hora}</p>
 
-<p style="margin-top:10px;">
-👤 ${r.responsavel}
-</p>
+<p>👤 ${r.responsavel}</p>
 
 <div class="acoes">
 
@@ -886,8 +836,6 @@ mostrarReservas();
 
 }
 
-<script>
-
 /* ASSINATURA */
 
 let canvas =
@@ -898,51 +846,54 @@ canvas.getContext("2d");
 
 let desenhando = false;
 
-/* ===== MOUSE ===== */
+/* PC */
 
-canvas.addEventListener("mousedown", (e)=>{
+canvas.addEventListener("mousedown",(e)=>{
 
-desenhando = true;
+desenhando=true;
 
 ctx.beginPath();
 
-ctx.moveTo(e.offsetX, e.offsetY);
+ctx.moveTo(
+e.offsetX,
+e.offsetY
+);
 
 });
 
-canvas.addEventListener("mouseup", ()=>{
-
-desenhando = false;
-
+canvas.addEventListener("mouseup",()=>{
+desenhando=false;
 });
 
-canvas.addEventListener("mousemove", desenharMouse);
+canvas.addEventListener("mousemove",desenharMouse);
 
 function desenharMouse(e){
 
 if(!desenhando) return;
 
-ctx.lineWidth = 2;
+ctx.lineWidth=2;
+ctx.lineCap="round";
+ctx.strokeStyle="#000";
 
-ctx.lineCap = "round";
-
-ctx.strokeStyle = "#000";
-
-ctx.lineTo(e.offsetX, e.offsetY);
+ctx.lineTo(
+e.offsetX,
+e.offsetY
+);
 
 ctx.stroke();
 
 }
 
-/* ===== TOUCH CELULAR ===== */
+/* CELULAR */
 
-canvas.addEventListener("touchstart", (e)=>{
+canvas.addEventListener("touchstart",(e)=>{
 
 e.preventDefault();
 
-desenhando = true;
+desenhando=true;
 
-let rect = canvas.getBoundingClientRect();
+let rect =
+canvas.getBoundingClientRect();
 
 let x =
 e.touches[0].clientX - rect.left;
@@ -956,13 +907,11 @@ ctx.moveTo(x,y);
 
 });
 
-canvas.addEventListener("touchend", ()=>{
-
-desenhando = false;
-
+canvas.addEventListener("touchend",()=>{
+desenhando=false;
 });
 
-canvas.addEventListener("touchmove", desenharTouch);
+canvas.addEventListener("touchmove",desenharTouch);
 
 function desenharTouch(e){
 
@@ -979,19 +928,15 @@ e.touches[0].clientX - rect.left;
 let y =
 e.touches[0].clientY - rect.top;
 
-ctx.lineWidth = 2;
-
-ctx.lineCap = "round";
-
-ctx.strokeStyle = "#000";
+ctx.lineWidth=2;
+ctx.lineCap="round";
+ctx.strokeStyle="#000";
 
 ctx.lineTo(x,y);
 
 ctx.stroke();
 
 }
-
-/* ===== LIMPAR ===== */
 
 function limparAssinatura(){
 
@@ -1004,21 +949,12 @@ canvas.height
 
 }
 
-</script>
-
-
-
 /* ENCOMENDAS */
 
 let encomendas =
 JSON.parse(localStorage.getItem("encomendas")) || [];
 
 function salvarEncomenda(){
-
-if(!encMorador.value || !encApto.value){
-alert("Preencha os campos");
-return;
-}
 
 let fotoInput =
 document.getElementById("encFoto");
@@ -1028,10 +964,13 @@ fotoInput.files[0];
 
 if(arquivo){
 
-let leitor = new FileReader();
+let leitor =
+new FileReader();
 
 leitor.onload = function(e){
+
 criarEncomenda(e.target.result);
+
 };
 
 leitor.readAsDataURL(arquivo);
@@ -1051,11 +990,10 @@ morador:encMorador.value,
 apto:encApto.value,
 transportadora:encTransportadora.value,
 codigo:encCodigo.value,
-volumes:encVolumes.value || "1",
+volumes:encVolumes.value,
 observacao:encObs.value,
 foto,
-status:"Pendente",
-horario:new Date().toLocaleString()
+status:"Pendente"
 });
 
 localStorage.setItem(
@@ -1064,14 +1002,6 @@ JSON.stringify(encomendas)
 );
 
 mostrarEncomendas();
-
-encMorador.value="";
-encApto.value="";
-encTransportadora.value="";
-encCodigo.value="";
-encVolumes.value="";
-encObs.value="";
-encFoto.value="";
 
 }
 
@@ -1085,9 +1015,7 @@ listaEncomendas.innerHTML += `
 
 <div class="card">
 
-<h3>
-📦 ${e.transportadora || "Encomenda"}
-</h3>
+<h3>📦 ${e.transportadora}</h3>
 
 <div class="badge
 ${e.status === "Pendente"
@@ -1098,21 +1026,8 @@ ${e.status}
 
 </div>
 
-<p style="margin-top:10px;">
-<b>Morador:</b> ${e.morador}
-</p>
-
-<p>
-<b>Apto:</b> ${e.apto}
-</p>
-
-<p>
-<b>Código:</b> ${e.codigo || "N/I"}
-</p>
-
-<p>
-<b>Volumes:</b> ${e.volumes}
-</p>
+<p><b>Morador:</b> ${e.morador}</p>
+<p><b>Apto:</b> ${e.apto}</p>
 
 ${e.foto
 ? `<img src="${e.foto}" class="foto-encomenda">`
@@ -1160,11 +1075,7 @@ function editarEncomenda(i){
 let novoMorador =
 prompt("Morador:",encomendas[i].morador);
 
-let novoApto =
-prompt("Apartamento:",encomendas[i].apto);
-
 encomendas[i].morador = novoMorador;
-encomendas[i].apto = novoApto;
 
 localStorage.setItem(
 "encomendas",
@@ -1213,9 +1124,7 @@ Sua encomenda chegou na portaria.
 
 📦 ${e.transportadora}
 
-🏢 Apartamento: ${e.apto}
-
-📌 Código: ${e.codigo || "N/I"}`;
+🏢 Apartamento: ${e.apto}`;
 
 let url =
 `https://wa.me/?text=${encodeURIComponent(msg)}`;
@@ -1235,62 +1144,21 @@ janela.document.write(`
 
 <html>
 
-<head>
-
-<title>Etiqueta</title>
-
-<style>
-
-body{
-font-family:Arial;
-width:58mm;
-padding:10px;
-text-align:center;
-}
-
-.apto{
-font-size:28px;
-font-weight:bold;
-margin-top:20px;
-}
-
-.nome{
-font-size:22px;
-font-weight:bold;
-margin-top:10px;
-}
-
-</style>
-
-</head>
-
-<body>
+<body style="font-family:Arial;text-align:center;">
 
 <h2>📦 ENCOMENDA</h2>
 
 <hr>
 
-<div class="apto">
-AP ${e.apto}
-</div>
+<h1>AP ${e.apto}</h1>
 
-<div class="nome">
-${e.morador}
-</div>
+<h2>${e.morador}</h2>
 
-<p>
-📦 ${e.transportadora}
-</p>
+<p>${e.transportadora}</p>
 
-<p>
-Volumes: ${e.volumes}
-</p>
+<p>Volumes: ${e.volumes}</p>
 
-<p>
-Código: ${e.codigo || "N/I"}
-</p>
-
-<hr>
+<p>Código: ${e.codigo}</p>
 
 </body>
 
@@ -1307,6 +1175,32 @@ janela.print();
 }
 
 },500);
+
+}
+
+function buscarEncomenda(){
+
+let termo =
+buscaEncomenda.value.toLowerCase();
+
+listaEncomendas.innerHTML="";
+
+encomendas
+.filter(e=>
+e.morador.toLowerCase().includes(termo)
+||
+e.apto.toLowerCase().includes(termo)
+)
+.forEach((e)=>{
+
+listaEncomendas.innerHTML += `
+<div class="card">
+<h3>${e.transportadora}</h3>
+<p>${e.morador}</p>
+</div>
+`;
+
+});
 
 }
 
