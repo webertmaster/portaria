@@ -252,8 +252,6 @@ margin-left:90px;
 
 <body>
 
-<!-- SIDEBAR -->
-
 <div class="sidebar">
 
 <div class="logo">
@@ -292,11 +290,7 @@ margin-left:90px;
 
 </div>
 
-<!-- CONTENT -->
-
 <div class="content">
-
-<!-- MORADORES -->
 
 <div id="moradores" class="tela ativa">
 
@@ -323,8 +317,6 @@ Cadastrar Morador
 <div id="listaMoradores"></div>
 
 </div>
-
-<!-- VEICULOS -->
 
 <div id="veiculos" class="tela">
 
@@ -353,8 +345,6 @@ Cadastrar Veículo
 
 </div>
 
-<!-- RESERVAS -->
-
 <div id="reservas" class="tela">
 
 <div class="box">
@@ -376,17 +366,6 @@ Cadastrar Veículo
 <input id="responsavel"
 placeholder="Responsável">
 
-<p style="margin-top:15px;">
-✍️ Assinatura
-</p>
-
-<canvas id="canvasReserva"></canvas>
-
-<button class="btn"
-onclick="limparAssinaturaReserva()">
-Limpar Assinatura
-</button>
-
 <button class="btn"
 onclick="salvarReserva()">
 Agendar Reserva
@@ -397,8 +376,6 @@ Agendar Reserva
 <div id="listaReservas"></div>
 
 </div>
-
-<!-- ENCOMENDAS -->
 
 <div id="encomendas" class="tela">
 
@@ -425,6 +402,17 @@ placeholder="Volumes">
 id="encFoto"
 accept="image/*">
 
+<p style="margin-top:15px;">
+✍️ Assinatura de Recebimento
+</p>
+
+<canvas id="canvasEncomenda"></canvas>
+
+<button class="btn"
+onclick="limparAssinaturaEncomenda()">
+Limpar Assinatura
+</button>
+
 <button class="btn"
 onclick="salvarEncomenda()">
 Cadastrar Encomenda
@@ -435,8 +423,6 @@ Cadastrar Encomenda
 <div id="listaEncomendas"></div>
 
 </div>
-
-<!-- COMUNICADOS -->
 
 <div id="comunicados" class="tela">
 
@@ -467,17 +453,6 @@ placeholder="Local">
 
 <textarea id="mensagemComunicado"
 placeholder="Mensagem"></textarea>
-
-<p style="margin-top:15px;">
-✍️ Assinatura
-</p>
-
-<canvas id="canvasComunicado"></canvas>
-
-<button class="btn"
-onclick="limparAssinaturaComunicado()">
-Limpar Assinatura
-</button>
 
 <button class="btn"
 onclick="salvarComunicado()">
@@ -512,6 +487,8 @@ function configurarCanvas(canvasId){
 
 let canvas =
 document.getElementById(canvasId);
+
+if(!canvas) return; // Segurança caso o ID mude
 
 let ctx =
 canvas.getContext("2d");
@@ -601,30 +578,17 @@ ctx
 
 /* ASSINATURAS */
 
-const reservaCanvas =
-configurarCanvas("canvasReserva");
+// AJUSTE: Inicializando apenas a assinatura de Encomendas
+const encomendaCanvas =
+configurarCanvas("canvasEncomenda");
 
-const comunicadoCanvas =
-configurarCanvas("canvasComunicado");
+function limparAssinaturaEncomenda(){
 
-function limparAssinaturaReserva(){
-
-reservaCanvas.ctx.clearRect(
+encomendaCanvas.ctx.clearRect(
 0,
 0,
-reservaCanvas.canvas.width,
-reservaCanvas.canvas.height
-);
-
-}
-
-function limparAssinaturaComunicado(){
-
-comunicadoCanvas.ctx.clearRect(
-0,
-0,
-comunicadoCanvas.canvas.width,
-comunicadoCanvas.canvas.height
+encomendaCanvas.canvas.width,
+encomendaCanvas.canvas.height
 );
 
 }
@@ -795,9 +759,8 @@ reservas.push({
 tipo:tipoReserva.value,
 data:dataReserva.value,
 hora:horaReserva.value,
-responsavel:responsavel.value,
-assinatura:
-reservaCanvas.canvas.toDataURL()
+responsavel:responsavel.value
+// AJUSTE: Assinatura removida do objeto
 
 });
 
@@ -807,8 +770,6 @@ JSON.stringify(reservas)
 );
 
 mostrarReservas();
-
-limparAssinaturaReserva();
 
 }
 
@@ -829,9 +790,6 @@ listaReservas.innerHTML += `
 <p>🕒 ${r.hora}</p>
 
 <p>👤 ${r.responsavel}</p>
-
-<img src="${r.assinatura}"
-class="foto">
 
 <div class="acoes">
 
@@ -933,6 +891,7 @@ transportadora:encTransportadora.value,
 codigo:encCodigo.value,
 volumes:encVolumes.value,
 foto,
+assinatura: encomendaCanvas.canvas.toDataURL(), // AJUSTE: Salvando assinatura
 status:"Pendente"
 
 });
@@ -943,6 +902,7 @@ JSON.stringify(encomendas)
 );
 
 mostrarEncomendas();
+limparAssinaturaEncomenda(); // Limpar após salvar
 
 }
 
@@ -979,6 +939,10 @@ ${e.foto
 ? `<img src="${e.foto}" class="foto">`
 : ""}
 
+${e.assinatura && e.assinatura !== "data:," 
+? `<img src="${e.assinatura}" class="foto" style="border:1px dashed #ccc; background:#f9f9f9;">` 
+: ""}
+
 <div class="acoes">
 
 <button class="btn-acao entregue"
@@ -996,6 +960,11 @@ onclick="imprimirEtiqueta(${index})">
 🖨️ Etiqueta
 </button>
 
+<button class="btn-acao excluir"
+onclick="excluirEncomenda(${index})">
+🗑️ Excluir
+</button>
+
 </div>
 
 </div>
@@ -1010,6 +979,22 @@ function marcarEntregue(index){
 
 encomendas[index].status =
 "Entregue";
+
+localStorage.setItem(
+"encomendas",
+JSON.stringify(encomendas)
+);
+
+mostrarEncomendas();
+
+}
+
+// AJUSTE: Função para excluir encomenda
+function excluirEncomenda(index){
+
+if(!confirm("Deseja realmente excluir esta encomenda?")) return;
+
+encomendas.splice(index,1);
 
 localStorage.setItem(
 "encomendas",
@@ -1069,8 +1054,7 @@ data:dataComunicado.value,
 hora:horaComunicado.value,
 local:localComunicado.value,
 mensagem:mensagemComunicado.value,
-assinatura:
-comunicadoCanvas.canvas.toDataURL(),
+// AJUSTE: Assinatura removida do objeto
 status:"Em andamento"
 
 });
@@ -1081,8 +1065,6 @@ JSON.stringify(comunicados)
 );
 
 mostrarComunicados();
-
-limparAssinaturaComunicado();
 
 }
 
@@ -1111,9 +1093,6 @@ ${c.status}
 <p>📍 ${c.local}</p>
 
 <p>${c.mensagem}</p>
-
-<img src="${c.assinatura}"
-class="foto">
 
 <div class="acoes">
 
