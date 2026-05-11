@@ -6,6 +6,10 @@
 
 <title>Portaria PRO MASTER</title>
 
+<!-- BIBLIOTECAS PARA GERAR O PDF -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+
 <style>
 
 *{
@@ -252,6 +256,8 @@ margin-left:90px;
 
 <body>
 
+<!-- SIDEBAR -->
+
 <div class="sidebar">
 
 <div class="logo">
@@ -290,7 +296,11 @@ margin-left:90px;
 
 </div>
 
+<!-- CONTENT -->
+
 <div class="content">
+
+<!-- MORADORES -->
 
 <div id="moradores" class="tela ativa">
 
@@ -312,11 +322,18 @@ onclick="addMorador()">
 Cadastrar Morador
 </button>
 
+<!-- BOTÃO DE BAIXAR PDF DE MORADORES ADICIONADO AQUI -->
+<button class="btn" style="background:#1976d2;" onclick="gerarRelatorioMoradores()">
+📊 Baixar PDF de Moradores
+</button>
+
 </div>
 
 <div id="listaMoradores"></div>
 
 </div>
+
+<!-- VEICULOS -->
 
 <div id="veiculos" class="tela">
 
@@ -344,6 +361,8 @@ Cadastrar Veículo
 <div id="listaVeiculos"></div>
 
 </div>
+
+<!-- RESERVAS -->
 
 <div id="reservas" class="tela">
 
@@ -376,6 +395,8 @@ Agendar Reserva
 <div id="listaReservas"></div>
 
 </div>
+
+<!-- ENCOMENDAS -->
 
 <div id="encomendas" class="tela">
 
@@ -418,11 +439,17 @@ onclick="salvarEncomenda()">
 Cadastrar Encomenda
 </button>
 
+<button class="btn" style="background:#1976d2;" onclick="gerarRelatorioEncomendas()">
+📊 Gerar Relatório PDF
+</button>
+
 </div>
 
 <div id="listaEncomendas"></div>
 
 </div>
+
+<!-- COMUNICADOS -->
 
 <div id="comunicados" class="tela">
 
@@ -578,7 +605,6 @@ ctx
 
 /* ASSINATURAS */
 
-// AJUSTE: Inicializando apenas a assinatura de Encomendas
 const encomendaCanvas =
 configurarCanvas("canvasEncomenda");
 
@@ -621,6 +647,12 @@ visitantes:visitantes.value
 salvarMoradores();
 
 mostrarMoradores();
+
+// Limpar os campos após cadastrar
+document.getElementById('nome').value = '';
+document.getElementById('apto').value = '';
+document.getElementById('secretaria').value = '';
+document.getElementById('visitantes').value = '';
 
 }
 
@@ -666,11 +698,17 @@ onclick="excluirMorador(${index})">
 
 function editarMorador(index){
 
-moradores[index].nome =
-prompt("Nome:", moradores[index].nome);
+let novoNome = prompt("Nome:", moradores[index].nome);
+if(novoNome !== null) {
+    moradores[index].nome = novoNome;
+}
+
+let novoApto = prompt("Apartamento:", moradores[index].apto);
+if(novoApto !== null) {
+    moradores[index].apto = novoApto;
+}
 
 salvarMoradores();
-
 mostrarMoradores();
 
 }
@@ -685,6 +723,57 @@ salvarMoradores();
 
 mostrarMoradores();
 
+}
+
+/* FUNÇÃO PARA GERAR O RELATÓRIO PDF DE MORADORES */
+function gerarRelatorioMoradores() {
+    
+    if (moradores.length === 0) {
+        alert("Não há moradores cadastrados para gerar o relatório.");
+        return;
+    }
+
+    // Inicializando o jsPDF
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+
+    // Configurando o cabeçalho do PDF
+    doc.setFontSize(18);
+    doc.setTextColor(122, 15, 60); // Cor bordô do seu sistema
+    doc.text("Relatório Geral de Moradores", 14, 20);
+    
+    doc.setFontSize(10);
+    doc.setTextColor(100);
+    doc.text(`Gerado em: ${new Date().toLocaleString('pt-BR')}`, 14, 28);
+    doc.text("Sistema Portaria PRO", 14, 33);
+
+    // Preparando as colunas e as linhas
+    const colunas = ["Nome", "Apartamento", "Secretária", "Visitantes/Autorizados"];
+    const linhas = moradores.map(m => [
+        m.nome || "-",
+        m.apto || "-",
+        m.secretaria || "-",
+        m.visitantes || "-"
+    ]);
+
+    // Criando a tabela no PDF
+    doc.autoTable({
+        head: [colunas],
+        body: linhas,
+        startY: 40,
+        styles: { fontSize: 10, cellPadding: 3 },
+        headStyles: { fillColor: [122, 15, 60] }, // Cor do cabeçalho da tabela
+        alternateRowStyles: { fillColor: [245, 245, 245] },
+        columnStyles: {
+            0: { cellWidth: 50 }, // Largura da coluna Nome
+            1: { cellWidth: 30 }, // Largura da coluna Apto
+            2: { cellWidth: 40 }, // Largura da coluna Secretária
+            3: { cellWidth: 'auto' } // Largura da coluna Visitantes
+        }
+    });
+
+    // Salvando o arquivo no computador do usuário
+    doc.save("Relatorio_Moradores_PortariaPRO.pdf");
 }
 
 /* VEICULOS */
@@ -716,6 +805,13 @@ vaga:veiVaga.value
 salvarVeiculos();
 
 mostrarVeiculos();
+
+// Limpar campos
+veiMorador.value = '';
+veiModelo.value = '';
+veiPlaca.value = '';
+veiCor.value = '';
+veiVaga.value = '';
 
 }
 
@@ -760,7 +856,6 @@ tipo:tipoReserva.value,
 data:dataReserva.value,
 hora:horaReserva.value,
 responsavel:responsavel.value
-// AJUSTE: Assinatura removida do objeto
 
 });
 
@@ -891,7 +986,7 @@ transportadora:encTransportadora.value,
 codigo:encCodigo.value,
 volumes:encVolumes.value,
 foto,
-assinatura: encomendaCanvas.canvas.toDataURL(), // AJUSTE: Salvando assinatura
+assinatura: encomendaCanvas.canvas.toDataURL(),
 status:"Pendente"
 
 });
@@ -902,7 +997,7 @@ JSON.stringify(encomendas)
 );
 
 mostrarEncomendas();
-limparAssinaturaEncomenda(); // Limpar após salvar
+limparAssinaturaEncomenda(); 
 
 }
 
@@ -989,7 +1084,6 @@ mostrarEncomendas();
 
 }
 
-// AJUSTE: Função para excluir encomenda
 function excluirEncomenda(index){
 
 if(!confirm("Deseja realmente excluir esta encomenda?")) return;
@@ -1039,6 +1133,47 @@ janela.print();
 
 }
 
+/* FUNÇÃO PARA GERAR O RELATÓRIO PDF DE ENCOMENDAS */
+function gerarRelatorioEncomendas() {
+    
+    if (encomendas.length === 0) {
+        alert("Não há encomendas cadastradas para gerar o relatório.");
+        return;
+    }
+
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+
+    doc.setFontSize(18);
+    doc.setTextColor(122, 15, 60); 
+    doc.text("Relatório Geral de Encomendas", 14, 20);
+    
+    doc.setFontSize(10);
+    doc.setTextColor(100);
+    doc.text(`Gerado em: ${new Date().toLocaleString('pt-BR')}`, 14, 28);
+    doc.text("Sistema Portaria PRO", 14, 33);
+
+    const colunas = ["Morador", "Apto", "Transportadora", "Cód. Rastreio", "Status"];
+    const linhas = encomendas.map(e => [
+        e.morador || "-",
+        e.apto || "-",
+        e.transportadora || "-",
+        e.codigo || "-",
+        e.status || "-"
+    ]);
+
+    doc.autoTable({
+        head: [colunas],
+        body: linhas,
+        startY: 40,
+        styles: { fontSize: 9 },
+        headStyles: { fillColor: [122, 15, 60] }, 
+        alternateRowStyles: { fillColor: [245, 245, 245] }
+    });
+
+    doc.save("Relatorio_Encomendas_PortariaPRO.pdf");
+}
+
 /* COMUNICADOS */
 
 let comunicados =
@@ -1054,7 +1189,6 @@ data:dataComunicado.value,
 hora:horaComunicado.value,
 local:localComunicado.value,
 mensagem:mensagemComunicado.value,
-// AJUSTE: Assinatura removida do objeto
 status:"Em andamento"
 
 });
