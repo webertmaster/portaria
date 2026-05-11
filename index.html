@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Portaria PRO</title>
+<title>Portaria PRO MASTER</title>
 
 <style>
 
@@ -31,8 +31,8 @@ position:fixed;
 left:0;
 top:0;
 padding:20px;
-color:white;
 overflow:auto;
+color:white;
 }
 
 .logo{
@@ -54,19 +54,18 @@ font-size:42px;
 
 .logo h2{
 margin-top:10px;
-font-size:22px;
 }
 
 .menu button{
 width:100%;
+padding:15px;
 border:none;
+border-radius:14px;
+margin-bottom:10px;
 background:rgba(255,255,255,0.08);
 color:white;
-padding:15px;
-margin-bottom:12px;
-border-radius:14px;
-text-align:left;
 cursor:pointer;
+text-align:left;
 font-size:15px;
 transition:0.2s;
 }
@@ -79,47 +78,47 @@ background:rgba(255,255,255,0.18);
 
 .content{
 margin-left:240px;
-width:100%;
 padding:20px;
+width:100%;
 }
 
 /* BOX */
 
 .box{
 background:white;
-border-radius:18px;
 padding:20px;
+border-radius:18px;
 margin-bottom:20px;
 box-shadow:0 2px 10px rgba(0,0,0,0.08);
 }
 
 .card{
 background:white;
-border-radius:16px;
 padding:18px;
+border-radius:16px;
 margin-top:15px;
-box-shadow:0 2px 8px rgba(0,0px,0px,0.06);
+box-shadow:0 2px 8px rgba(0,0,0,0.06);
 }
 
 /* INPUTS */
 
 input,
-select{
+select,
+textarea{
 width:100%;
 padding:14px;
+margin-top:10px;
 border-radius:12px;
 border:1px solid #ddd;
-margin-top:10px;
 font-size:15px;
 }
 
-input:focus,
-select:focus{
-outline:none;
-border:1px solid #7a0f3c;
+textarea{
+min-height:100px;
+resize:none;
 }
 
-/* BOTÕES */
+/* BUTTONS */
 
 .btn{
 width:100%;
@@ -133,25 +132,20 @@ cursor:pointer;
 font-size:15px;
 }
 
-.btn:hover{
-opacity:0.9;
-}
-
 .acoes{
 display:flex;
 gap:10px;
-margin-top:15px;
 flex-wrap:wrap;
+margin-top:15px;
 }
 
 .btn-acao{
 flex:1;
-border:none;
 padding:12px;
+border:none;
 border-radius:12px;
 cursor:pointer;
 color:white;
-font-size:14px;
 font-weight:bold;
 }
 
@@ -163,19 +157,23 @@ background:#ff9800;
 background:#e53935;
 }
 
-.whats{
-background:#25d366;
-}
-
 .entregue{
 background:#28a745;
+}
+
+.whats{
+background:#25d366;
 }
 
 .print{
 background:#444;
 }
 
-/* BADGES */
+.finalizado{
+background:#1976d2;
+}
+
+/* BADGE */
 
 .badge{
 display:inline-block;
@@ -197,7 +195,7 @@ color:white;
 
 /* FOTO */
 
-.foto-encomenda{
+.foto{
 width:100%;
 border-radius:12px;
 margin-top:12px;
@@ -217,6 +215,7 @@ display:block;
 
 canvas{
 width:100%;
+height:200px;
 background:white;
 border:1px solid #ccc;
 border-radius:12px;
@@ -285,6 +284,10 @@ margin-left:90px;
 📦 Encomendas
 </button>
 
+<button onclick="trocarTela('comunicados')">
+📢 Comunicados
+</button>
+
 </div>
 
 </div>
@@ -301,25 +304,19 @@ margin-left:90px;
 
 <h2>👤 Cadastro de Moradores</h2>
 
-<input id="nome" placeholder="Nome do morador">
+<input id="nome" placeholder="Nome">
 
 <input id="apto" placeholder="Apartamento">
 
 <input id="secretaria" placeholder="Secretária">
 
-<input id="visitantes" placeholder="Visitantes separados por vírgula">
+<input id="visitantes"
+placeholder="Visitantes separados por vírgula">
 
-<button class="btn" onclick="addMorador()">
+<button class="btn"
+onclick="addMorador()">
 Cadastrar Morador
 </button>
-
-</div>
-
-<div class="box">
-
-<h2>🔎 Buscar Morador</h2>
-
-<input id="busca" placeholder="Buscar..." onkeyup="buscarMorador()">
 
 </div>
 
@@ -335,7 +332,7 @@ Cadastrar Morador
 
 <h2>🚘 Cadastro de Veículos</h2>
 
-<input id="veiMorador" placeholder="Proprietário">
+<input id="veiMorador" placeholder="Morador">
 
 <input id="veiModelo" placeholder="Modelo">
 
@@ -345,22 +342,10 @@ Cadastrar Morador
 
 <input id="veiVaga" placeholder="Vaga">
 
-<select id="veiTipo">
-<option>Carro</option>
-<option>Moto</option>
-</select>
-
-<button class="btn" onclick="addVeiculo()">
+<button class="btn"
+onclick="addVeiculo()">
 Cadastrar Veículo
 </button>
-
-</div>
-
-<div class="box">
-
-<h2>🔎 Buscar Veículo</h2>
-
-<input id="buscaVeiculo" placeholder="Buscar..." onkeyup="buscarVeiculo()">
 
 </div>
 
@@ -377,40 +362,39 @@ Cadastrar Veículo
 <h2>📅 Nova Reserva</h2>
 
 <select id="tipoReserva">
+
 <option>Churrasqueira</option>
 <option>Salão de Festa</option>
 <option>Combo</option>
+
 </select>
 
 <input type="date" id="dataReserva">
 
 <input type="time" id="horaReserva">
 
-<input id="responsavel" placeholder="Responsável">
+<input id="responsavel"
+placeholder="Responsável">
 
 <p style="margin-top:15px;">
 ✍️ Assinatura
 </p>
 
-<canvas id="canvas" width="500" height="200"></canvas>
+<canvas id="canvasReserva"></canvas>
 
-<button class="btn" onclick="limparAssinatura()">
+<button class="btn"
+onclick="limparAssinaturaReserva()">
 Limpar Assinatura
 </button>
 
-<button class="btn" onclick="salvarReserva()">
+<button class="btn"
+onclick="salvarReserva()">
 Agendar Reserva
 </button>
 
 </div>
 
-<div class="box">
-
-<h2>📋 Reservas</h2>
-
 <div id="listaReservas"></div>
-
-</div>
 
 </div>
 
@@ -422,39 +406,87 @@ Agendar Reserva
 
 <h2>📦 Nova Encomenda</h2>
 
-<input id="encMorador" placeholder="Morador">
+<input id="encMorador"
+placeholder="Morador">
 
-<input id="encApto" placeholder="Apartamento">
+<input id="encApto"
+placeholder="Apartamento">
 
-<input id="encTransportadora" placeholder="Transportadora">
+<input id="encTransportadora"
+placeholder="Transportadora">
 
-<input id="encCodigo" placeholder="Código/Rastreio">
+<input id="encCodigo"
+placeholder="Código/Rastreio">
 
-<input id="encVolumes" placeholder="Quantidade de volumes">
+<input id="encVolumes"
+placeholder="Volumes">
 
-<input id="encObs" placeholder="Observação">
+<input type="file"
+id="encFoto"
+accept="image/*">
 
-<p style="margin-top:15px;">
-📸 Foto da encomenda
-</p>
-
-<input type="file" id="encFoto" accept="image/*">
-
-<button class="btn" onclick="salvarEncomenda()">
+<button class="btn"
+onclick="salvarEncomenda()">
 Cadastrar Encomenda
 </button>
 
 </div>
 
-<div class="box">
-
-<h2>🔎 Buscar Encomenda</h2>
-
-<input id="buscaEncomenda" placeholder="Buscar..." onkeyup="buscarEncomenda()">
+<div id="listaEncomendas"></div>
 
 </div>
 
-<div id="listaEncomendas"></div>
+<!-- COMUNICADOS -->
+
+<div id="comunicados" class="tela">
+
+<div class="box">
+
+<h2>📢 Novo Comunicado</h2>
+
+<select id="tipoComunicado">
+
+<option>📢 Geral</option>
+<option>🛠️ Manutenção</option>
+<option>⚠️ Ocorrência</option>
+<option>🏛️ Assembleia</option>
+
+</select>
+
+<input id="tituloComunicado"
+placeholder="Título">
+
+<input type="date"
+id="dataComunicado">
+
+<input type="time"
+id="horaComunicado">
+
+<input id="localComunicado"
+placeholder="Local">
+
+<textarea id="mensagemComunicado"
+placeholder="Mensagem"></textarea>
+
+<p style="margin-top:15px;">
+✍️ Assinatura
+</p>
+
+<canvas id="canvasComunicado"></canvas>
+
+<button class="btn"
+onclick="limparAssinaturaComunicado()">
+Limpar Assinatura
+</button>
+
+<button class="btn"
+onclick="salvarComunicado()">
+Publicar Comunicado
+</button>
+
+</div>
+
+<div id="listaComunicados"></div>
 
 </div>
 
@@ -474,39 +506,157 @@ document.getElementById(id)
 
 }
 
+/* CANVAS */
+
+function configurarCanvas(canvasId){
+
+let canvas =
+document.getElementById(canvasId);
+
+let ctx =
+canvas.getContext("2d");
+
+let desenhando = false;
+
+canvas.addEventListener("mousedown",(e)=>{
+
+desenhando = true;
+
+ctx.beginPath();
+
+ctx.moveTo(e.offsetX,e.offsetY);
+
+});
+
+canvas.addEventListener("mouseup",()=>{
+
+desenhando = false;
+
+});
+
+canvas.addEventListener("mousemove",(e)=>{
+
+if(!desenhando) return;
+
+ctx.lineWidth = 2;
+
+ctx.lineCap = "round";
+
+ctx.lineTo(e.offsetX,e.offsetY);
+
+ctx.stroke();
+
+});
+
+canvas.addEventListener("touchstart",(e)=>{
+
+e.preventDefault();
+
+desenhando = true;
+
+let rect = canvas.getBoundingClientRect();
+
+let x = e.touches[0].clientX - rect.left;
+let y = e.touches[0].clientY - rect.top;
+
+ctx.beginPath();
+
+ctx.moveTo(x,y);
+
+});
+
+canvas.addEventListener("touchmove",(e)=>{
+
+if(!desenhando) return;
+
+e.preventDefault();
+
+let rect = canvas.getBoundingClientRect();
+
+let x = e.touches[0].clientX - rect.left;
+let y = e.touches[0].clientY - rect.top;
+
+ctx.lineWidth = 2;
+
+ctx.lineCap = "round";
+
+ctx.lineTo(x,y);
+
+ctx.stroke();
+
+});
+
+canvas.addEventListener("touchend",()=>{
+
+desenhando = false;
+
+});
+
+return {
+canvas,
+ctx
+};
+
+}
+
+/* ASSINATURAS */
+
+const reservaCanvas =
+configurarCanvas("canvasReserva");
+
+const comunicadoCanvas =
+configurarCanvas("canvasComunicado");
+
+function limparAssinaturaReserva(){
+
+reservaCanvas.ctx.clearRect(
+0,
+0,
+reservaCanvas.canvas.width,
+reservaCanvas.canvas.height
+);
+
+}
+
+function limparAssinaturaComunicado(){
+
+comunicadoCanvas.ctx.clearRect(
+0,
+0,
+comunicadoCanvas.canvas.width,
+comunicadoCanvas.canvas.height
+);
+
+}
+
 /* MORADORES */
 
 let moradores =
 JSON.parse(localStorage.getItem("moradores")) || [];
 
 function salvarMoradores(){
-localStorage.setItem("moradores",JSON.stringify(moradores));
+
+localStorage.setItem(
+"moradores",
+JSON.stringify(moradores)
+);
+
 }
 
 function addMorador(){
 
-if(!nome.value || !apto.value){
-alert("Preencha os campos");
-return;
-}
-
 moradores.push({
+
 nome:nome.value,
 apto:apto.value,
 secretaria:secretaria.value,
-visitantes:
-visitantes.value
-? visitantes.value.split(",").map(v=>v.trim())
-: []
+visitantes:visitantes.value
+
 });
 
 salvarMoradores();
-mostrarMoradores();
 
-nome.value="";
-apto.value="";
-secretaria.value="";
-visitantes.value="";
+mostrarMoradores();
 
 }
 
@@ -522,19 +672,11 @@ listaMoradores.innerHTML += `
 
 <h3>${m.nome}</h3>
 
-<div class="badge">
-🏢 ${m.apto}
-</div>
+<p>🏢 ${m.apto}</p>
 
-<p style="margin-top:10px;">
-<b>Secretária:</b>
-${m.secretaria || "Nenhuma"}
-</p>
+<p>👩‍💼 ${m.secretaria}</p>
 
-<p style="margin-top:8px;">
-<b>Visitantes:</b>
-${m.visitantes.join(", ") || "Nenhum"}
-</p>
+<p>👥 ${m.visitantes}</p>
 
 <div class="acoes">
 
@@ -560,14 +702,11 @@ onclick="excluirMorador(${index})">
 
 function editarMorador(index){
 
-let novoNome =
-prompt("Editar nome:", moradores[index].nome);
-
-if(novoNome === null) return;
-
-moradores[index].nome = novoNome;
+moradores[index].nome =
+prompt("Nome:", moradores[index].nome);
 
 salvarMoradores();
+
 mostrarMoradores();
 
 }
@@ -579,28 +718,8 @@ if(!confirm("Excluir morador?")) return;
 moradores.splice(index,1);
 
 salvarMoradores();
+
 mostrarMoradores();
-
-}
-
-function buscarMorador(){
-
-let termo = busca.value.toLowerCase();
-
-listaMoradores.innerHTML="";
-
-moradores
-.filter(m=>m.nome.toLowerCase().includes(termo))
-.forEach((m)=>{
-
-listaMoradores.innerHTML += `
-<div class="card">
-<h3>${m.nome}</h3>
-<p>🏢 ${m.apto}</p>
-</div>
-`;
-
-});
 
 }
 
@@ -610,28 +729,29 @@ let veiculos =
 JSON.parse(localStorage.getItem("veiculos")) || [];
 
 function salvarVeiculos(){
-localStorage.setItem("veiculos",JSON.stringify(veiculos));
+
+localStorage.setItem(
+"veiculos",
+JSON.stringify(veiculos)
+);
+
 }
 
 function addVeiculo(){
 
 veiculos.push({
+
 morador:veiMorador.value,
 modelo:veiModelo.value,
 placa:veiPlaca.value,
 cor:veiCor.value,
-vaga:veiVaga.value,
-tipo:veiTipo.value
+vaga:veiVaga.value
+
 });
 
 salvarVeiculos();
-mostrarVeiculos();
 
-veiMorador.value="";
-veiModelo.value="";
-veiPlaca.value="";
-veiCor.value="";
-veiVaga.value="";
+mostrarVeiculos();
 
 }
 
@@ -645,77 +765,18 @@ listaVeiculos.innerHTML += `
 
 <div class="card">
 
-<h3>🚘 ${v.modelo}</h3>
-
-<p><b>Morador:</b> ${v.morador}</p>
-<p><b>Placa:</b> ${v.placa}</p>
-<p><b>Cor:</b> ${v.cor}</p>
-
-<div class="acoes">
-
-<button class="btn-acao editar"
-onclick="editarVeiculo(${index})">
-✏️ Editar
-</button>
-
-<button class="btn-acao excluir"
-onclick="excluirVeiculo(${index})">
-🗑️ Excluir
-</button>
-
-</div>
-
-</div>
-
-`;
-
-});
-
-}
-
-function editarVeiculo(index){
-
-let novoModelo =
-prompt("Modelo:",veiculos[index].modelo);
-
-veiculos[index].modelo = novoModelo;
-
-salvarVeiculos();
-mostrarVeiculos();
-
-}
-
-function excluirVeiculo(index){
-
-if(!confirm("Excluir veículo?")) return;
-
-veiculos.splice(index,1);
-
-salvarVeiculos();
-mostrarVeiculos();
-
-}
-
-function buscarVeiculo(){
-
-let termo =
-buscaVeiculo.value.toLowerCase();
-
-listaVeiculos.innerHTML="";
-
-veiculos
-.filter(v=>
-v.placa.toLowerCase().includes(termo)
-||
-v.morador.toLowerCase().includes(termo)
-)
-.forEach((v)=>{
-
-listaVeiculos.innerHTML += `
-<div class="card">
 <h3>${v.modelo}</h3>
-<p>${v.placa}</p>
+
+<p>🚘 ${v.placa}</p>
+
+<p>👤 ${v.morador}</p>
+
+<p>🎨 ${v.cor}</p>
+
+<p>🅿️ ${v.vaga}</p>
+
 </div>
+
 `;
 
 });
@@ -729,21 +790,15 @@ JSON.parse(localStorage.getItem("reservas")) || [];
 
 function salvarReserva(){
 
-if(
-!responsavel.value ||
-!dataReserva.value ||
-!horaReserva.value
-){
-alert("Preencha os campos");
-return;
-}
-
 reservas.push({
+
 tipo:tipoReserva.value,
 data:dataReserva.value,
 hora:horaReserva.value,
 responsavel:responsavel.value,
-assinatura:canvas.toDataURL()
+assinatura:
+reservaCanvas.canvas.toDataURL()
+
 });
 
 localStorage.setItem(
@@ -753,11 +808,7 @@ JSON.stringify(reservas)
 
 mostrarReservas();
 
-responsavel.value="";
-dataReserva.value="";
-horaReserva.value="";
-
-limparAssinatura();
+limparAssinaturaReserva();
 
 }
 
@@ -773,13 +824,14 @@ listaReservas.innerHTML += `
 
 <h3>${r.tipo}</h3>
 
-<div class="badge">
-📅 ${r.data}
-</div>
+<p>📅 ${r.data}</p>
 
 <p>🕒 ${r.hora}</p>
 
 <p>👤 ${r.responsavel}</p>
+
+<img src="${r.assinatura}"
+class="foto">
 
 <div class="acoes">
 
@@ -805,12 +857,11 @@ onclick="excluirReserva(${index})">
 
 function editarReserva(index){
 
-let novoResponsavel =
-prompt("Responsável:",
-reservas[index].responsavel);
-
 reservas[index].responsavel =
-novoResponsavel;
+prompt(
+"Responsável:",
+reservas[index].responsavel
+);
 
 localStorage.setItem(
 "reservas",
@@ -836,119 +887,6 @@ mostrarReservas();
 
 }
 
-/* ASSINATURA */
-
-let canvas =
-document.getElementById("canvas");
-
-let ctx =
-canvas.getContext("2d");
-
-let desenhando = false;
-
-/* PC */
-
-canvas.addEventListener("mousedown",(e)=>{
-
-desenhando=true;
-
-ctx.beginPath();
-
-ctx.moveTo(
-e.offsetX,
-e.offsetY
-);
-
-});
-
-canvas.addEventListener("mouseup",()=>{
-desenhando=false;
-});
-
-canvas.addEventListener("mousemove",desenharMouse);
-
-function desenharMouse(e){
-
-if(!desenhando) return;
-
-ctx.lineWidth=2;
-ctx.lineCap="round";
-ctx.strokeStyle="#000";
-
-ctx.lineTo(
-e.offsetX,
-e.offsetY
-);
-
-ctx.stroke();
-
-}
-
-/* CELULAR */
-
-canvas.addEventListener("touchstart",(e)=>{
-
-e.preventDefault();
-
-desenhando=true;
-
-let rect =
-canvas.getBoundingClientRect();
-
-let x =
-e.touches[0].clientX - rect.left;
-
-let y =
-e.touches[0].clientY - rect.top;
-
-ctx.beginPath();
-
-ctx.moveTo(x,y);
-
-});
-
-canvas.addEventListener("touchend",()=>{
-desenhando=false;
-});
-
-canvas.addEventListener("touchmove",desenharTouch);
-
-function desenharTouch(e){
-
-if(!desenhando) return;
-
-e.preventDefault();
-
-let rect =
-canvas.getBoundingClientRect();
-
-let x =
-e.touches[0].clientX - rect.left;
-
-let y =
-e.touches[0].clientY - rect.top;
-
-ctx.lineWidth=2;
-ctx.lineCap="round";
-ctx.strokeStyle="#000";
-
-ctx.lineTo(x,y);
-
-ctx.stroke();
-
-}
-
-function limparAssinatura(){
-
-ctx.clearRect(
-0,
-0,
-canvas.width,
-canvas.height
-);
-
-}
-
 /* ENCOMENDAS */
 
 let encomendas =
@@ -967,9 +905,11 @@ if(arquivo){
 let leitor =
 new FileReader();
 
-leitor.onload = function(e){
+leitor.onload=function(e){
 
-criarEncomenda(e.target.result);
+criarEncomenda(
+e.target.result
+);
 
 };
 
@@ -986,14 +926,15 @@ criarEncomenda("");
 function criarEncomenda(foto){
 
 encomendas.push({
+
 morador:encMorador.value,
 apto:encApto.value,
 transportadora:encTransportadora.value,
 codigo:encCodigo.value,
 volumes:encVolumes.value,
-observacao:encObs.value,
 foto,
 status:"Pendente"
+
 });
 
 localStorage.setItem(
@@ -1009,7 +950,7 @@ function mostrarEncomendas(){
 
 listaEncomendas.innerHTML="";
 
-encomendas.forEach((e,i)=>{
+encomendas.forEach((e,index)=>{
 
 listaEncomendas.innerHTML += `
 
@@ -1018,7 +959,7 @@ listaEncomendas.innerHTML += `
 <h3>📦 ${e.transportadora}</h3>
 
 <div class="badge
-${e.status === "Pendente"
+${e.status==="Pendente"
 ? "status-pendente"
 : "status-entregue"}">
 
@@ -1026,41 +967,36 @@ ${e.status}
 
 </div>
 
-<p><b>Morador:</b> ${e.morador}</p>
-<p><b>Apto:</b> ${e.apto}</p>
+<p>👤 ${e.morador}</p>
+
+<p>🏢 ${e.apto}</p>
+
+<p>📌 ${e.codigo}</p>
+
+<p>📦 ${e.volumes}</p>
 
 ${e.foto
-? `<img src="${e.foto}" class="foto-encomenda">`
+? `<img src="${e.foto}" class="foto">`
 : ""}
 
 <div class="acoes">
 
-<button class="btn-acao editar"
-onclick="editarEncomenda(${i})">
-✏️ Editar
-</button>
-
-<button class="btn-acao excluir"
-onclick="excluirEncomenda(${i})">
-🗑️ Excluir
-</button>
-
 <button class="btn-acao entregue"
-onclick="marcarEntregue(${i})">
+onclick="marcarEntregue(${index})">
 ✅ Entregue
 </button>
 
+<button class="btn-acao whats"
+onclick="avisarWhatsapp(${index})">
+📲 WhatsApp
+</button>
+
 <button class="btn-acao print"
-onclick="imprimirEtiqueta(${i})">
+onclick="imprimirEtiqueta(${index})">
 🖨️ Etiqueta
 </button>
 
 </div>
-
-<button class="btn whats"
-onclick="avisarWhatsapp(${i})">
-📲 Avisar WhatsApp
-</button>
 
 </div>
 
@@ -1070,12 +1006,10 @@ onclick="avisarWhatsapp(${i})">
 
 }
 
-function editarEncomenda(i){
+function marcarEntregue(index){
 
-let novoMorador =
-prompt("Morador:",encomendas[i].morador);
-
-encomendas[i].morador = novoMorador;
+encomendas[index].status =
+"Entregue";
 
 localStorage.setItem(
 "encomendas",
@@ -1086,69 +1020,27 @@ mostrarEncomendas();
 
 }
 
-function excluirEncomenda(i){
+function avisarWhatsapp(index){
 
-if(!confirm("Excluir encomenda?")) return;
+let e = encomendas[index];
 
-encomendas.splice(i,1);
+let msg =
+`Olá ${e.morador}, sua encomenda chegou na portaria.`;
 
-localStorage.setItem(
-"encomendas",
-JSON.stringify(encomendas)
+window.open(
+`https://wa.me/?text=${encodeURIComponent(msg)}`
 );
 
-mostrarEncomendas();
-
 }
 
-function marcarEntregue(i){
+function imprimirEtiqueta(index){
 
-encomendas[i].status = "Entregue";
-
-localStorage.setItem(
-"encomendas",
-JSON.stringify(encomendas)
-);
-
-mostrarEncomendas();
-
-}
-
-function avisarWhatsapp(i){
-
-let e = encomendas[i];
-
-let msg = `Olá ${e.morador} 😊
-
-Sua encomenda chegou na portaria.
-
-📦 ${e.transportadora}
-
-🏢 Apartamento: ${e.apto}`;
-
-let url =
-`https://wa.me/?text=${encodeURIComponent(msg)}`;
-
-window.open(url,"_blank");
-
-}
-
-function imprimirEtiqueta(i){
-
-let e = encomendas[i];
+let e = encomendas[index];
 
 let janela =
-window.open('','','width=300,height=600');
+window.open("","","width=300,height=500");
 
 janela.document.write(`
-
-<html>
-
-<body style="font-family:Arial;text-align:center;">
-
-<h2>📦 ENCOMENDA</h2>
-
-<hr>
 
 <h1>AP ${e.apto}</h1>
 
@@ -1156,51 +1048,121 @@ janela.document.write(`
 
 <p>${e.transportadora}</p>
 
-<p>Volumes: ${e.volumes}</p>
-
-<p>Código: ${e.codigo}</p>
-
-</body>
-
-</html>
-
 `);
 
-janela.document.close();
-
-setTimeout(()=>{
-
-if(confirm("Deseja imprimir etiqueta?")){
 janela.print();
-}
-
-},500);
 
 }
 
-function buscarEncomenda(){
+/* COMUNICADOS */
 
-let termo =
-buscaEncomenda.value.toLowerCase();
+let comunicados =
+JSON.parse(localStorage.getItem("comunicados")) || [];
 
-listaEncomendas.innerHTML="";
+function salvarComunicado(){
 
-encomendas
-.filter(e=>
-e.morador.toLowerCase().includes(termo)
-||
-e.apto.toLowerCase().includes(termo)
-)
-.forEach((e)=>{
+comunicados.unshift({
 
-listaEncomendas.innerHTML += `
+tipo:tipoComunicado.value,
+titulo:tituloComunicado.value,
+data:dataComunicado.value,
+hora:horaComunicado.value,
+local:localComunicado.value,
+mensagem:mensagemComunicado.value,
+assinatura:
+comunicadoCanvas.canvas.toDataURL(),
+status:"Em andamento"
+
+});
+
+localStorage.setItem(
+"comunicados",
+JSON.stringify(comunicados)
+);
+
+mostrarComunicados();
+
+limparAssinaturaComunicado();
+
+}
+
+function mostrarComunicados(){
+
+listaComunicados.innerHTML="";
+
+comunicados.forEach((c,index)=>{
+
+listaComunicados.innerHTML += `
+
 <div class="card">
-<h3>${e.transportadora}</h3>
-<p>${e.morador}</p>
+
+<h3>${c.tipo}</h3>
+
+<div class="badge">
+${c.status}
 </div>
+
+<p><b>${c.titulo}</b></p>
+
+<p>📅 ${c.data}</p>
+
+<p>🕒 ${c.hora}</p>
+
+<p>📍 ${c.local}</p>
+
+<p>${c.mensagem}</p>
+
+<img src="${c.assinatura}"
+class="foto">
+
+<div class="acoes">
+
+<button class="btn-acao finalizado"
+onclick="finalizarComunicado(${index})">
+✅ Resolvido
+</button>
+
+<button class="btn-acao excluir"
+onclick="excluirComunicado(${index})">
+🗑️ Excluir
+</button>
+
+</div>
+
+</div>
+
 `;
 
 });
+
+}
+
+function finalizarComunicado(index){
+
+comunicados[index].status =
+"Finalizado";
+
+localStorage.setItem(
+"comunicados",
+JSON.stringify(comunicados)
+);
+
+mostrarComunicados();
+
+}
+
+function excluirComunicado(index){
+
+if(!confirm("Excluir comunicado?")) return;
+
+comunicados.splice(index,1);
+
+localStorage.setItem(
+"comunicados",
+JSON.stringify(comunicados)
+);
+
+mostrarComunicados();
 
 }
 
@@ -1210,6 +1172,7 @@ mostrarMoradores();
 mostrarVeiculos();
 mostrarReservas();
 mostrarEncomendas();
+mostrarComunicados();
 
 </script>
 
