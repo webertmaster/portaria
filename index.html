@@ -10,182 +10,57 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
 
-<style>
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-}
+<!-- BIBLIOTECA PARA GERAR QR CODE -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
 
-body{
-font-family:Arial,sans-serif;
-background:#edf1f5;
-display:flex;
-color:#333;
-}
+<!-- BIBLIOTECA PARA LER QR CODE -->
+<script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+
+<style>
+*{ margin:0; padding:0; box-sizing:border-box; }
+body{ font-family:Arial,sans-serif; background:#edf1f5; display:flex; color:#333; }
 
 /* SIDEBAR */
-.sidebar{
-width:240px;
-height:100vh;
-background:linear-gradient(180deg,#7a0f3c,#4d0825);
-position:fixed;
-left:0;
-top:0;
-padding:20px;
-overflow:auto;
-color:white;
-}
-
-.logo{
-text-align:center;
-margin-bottom:30px;
-}
-
-.logo-icon{
-width:90px;
-height:90px;
-background:white;
-border-radius:20px;
-display:flex;
-align-items:center;
-justify-content:center;
-margin:auto;
-font-size:42px;
-}
-
-.logo h2{
-margin-top:10px;
-}
-
-.menu button{
-width:100%;
-padding:15px;
-border:none;
-border-radius:14px;
-margin-bottom:10px;
-background:rgba(255,255,255,0.08);
-color:white;
-cursor:pointer;
-text-align:left;
-font-size:15px;
-transition:0.2s;
-}
-
-.menu button:hover{
-background:rgba(255,255,255,0.18);
-}
+.sidebar{ width:240px; height:100vh; background:linear-gradient(180deg,#7a0f3c,#4d0825); position:fixed; left:0; top:0; padding:20px; overflow:auto; color:white; }
+.logo{ text-align:center; margin-bottom:30px; }
+.logo-icon{ width:90px; height:90px; background:white; border-radius:20px; display:flex; align-items:center; justify-content:center; margin:auto; font-size:42px; }
+.logo h2{ margin-top:10px; }
+.menu button{ width:100%; padding:15px; border:none; border-radius:14px; margin-bottom:10px; background:rgba(255,255,255,0.08); color:white; cursor:pointer; text-align:left; font-size:15px; transition:0.2s; }
+.menu button:hover{ background:rgba(255,255,255,0.18); }
 
 /* CONTENT */
-.content{
-margin-left:240px;
-padding:20px;
-width:100%;
-}
+.content{ margin-left:240px; padding:20px; width:100%; }
 
-/* BOX */
-.box{
-background:white;
-padding:20px;
-border-radius:18px;
-margin-bottom:20px;
-box-shadow:0 2px 10px rgba(0,0,0,0.08);
-}
-
-.card{
-background:white;
-padding:18px;
-border-radius:16px;
-margin-top:15px;
-box-shadow:0 2px 8px rgba(0,0,0,0.06);
-}
+/* BOX & CARDS */
+.box{ background:white; padding:20px; border-radius:18px; margin-bottom:20px; box-shadow:0 2px 10px rgba(0,0,0,0.08); }
+.card{ background:white; padding:18px; border-radius:16px; margin-top:15px; box-shadow:0 2px 8px rgba(0,0,0,0.06); }
 
 /* INPUTS */
-input, select, textarea{
-width:100%;
-padding:14px;
-margin-top:10px;
-border-radius:12px;
-border:1px solid #ddd;
-font-size:15px;
-}
-
-textarea{
-min-height:100px;
-resize:none;
-}
+input, select, textarea{ width:100%; padding:14px; margin-top:10px; border-radius:12px; border:1px solid #ddd; font-size:15px; }
+textarea{ min-height:100px; resize:none; }
 
 /* BUTTONS */
-.btn{
-width:100%;
-padding:14px;
-border:none;
-border-radius:12px;
-margin-top:12px;
-background:#7a0f3c;
-color:white;
-cursor:pointer;
-font-size:15px;
-}
-
-.acoes{
-display:flex;
-gap:10px;
-flex-wrap:wrap;
-margin-top:15px;
-}
-
-.btn-acao{
-flex:1;
-padding:12px;
-border:none;
-border-radius:12px;
-cursor:pointer;
-color:white;
-font-weight:bold;
-}
-
+.btn{ width:100%; padding:14px; border:none; border-radius:12px; margin-top:12px; background:#7a0f3c; color:white; cursor:pointer; font-size:15px; }
+.acoes{ display:flex; gap:10px; flex-wrap:wrap; margin-top:15px; }
+.btn-acao{ flex:1; padding:12px; border:none; border-radius:12px; cursor:pointer; color:white; font-weight:bold; font-size: 13px; text-align: center;}
 .editar{ background:#ff9800; }
 .excluir{ background:#e53935; }
 .entregue{ background:#28a745; }
 .whats{ background:#25d366; }
 .print{ background:#444; }
+.qr-btn{ background:#6c757d; }
 .finalizado{ background:#1976d2; }
 
 /* BADGE */
-.badge{
-display:inline-block;
-padding:6px 12px;
-border-radius:20px;
-margin-top:10px;
-font-size:13px;
-background:#eee;
-}
-
+.badge{ display:inline-block; padding:6px 12px; border-radius:20px; margin-top:10px; font-size:13px; background:#eee; }
 .status-pendente{ background:#ffe082; }
 .status-entregue{ background:#28a745; color:white; }
 
-/* FOTO */
-.foto{
-width:100%;
-border-radius:12px;
-margin-top:12px;
-}
-
-/* TELAS */
+/* FOTO & CANVAS */
+.foto{ width:100%; border-radius:12px; margin-top:12px; }
 .tela{ display:none; }
 .ativa{ display:block; }
-
-/* CANVAS */
-canvas{
-width:100%;
-height:200px;
-background:white;
-border:1px solid #ccc;
-border-radius:12px;
-margin-top:10px;
-touch-action:none;
-}
+canvas{ width:100%; height:200px; background:white; border:1px solid #ccc; border-radius:12px; margin-top:10px; touch-action:none; }
 
 /* RESPONSIVO */
 @media(max-width:800px){
@@ -195,22 +70,10 @@ touch-action:none;
 .content{ margin-left:90px; }
 }
 
-/* FILTRO ENCOMENDAS CSS */
-.filtro-container {
-    display: flex;
-    gap: 10px;
-    align-items: center;
-    margin-top: 15px;
-}
-.filtro-container input {
-    margin-top: 0;
-}
-.btn-limpar {
-    background-color: #6c757d;
-    width: auto;
-    white-space: nowrap;
-    margin-top: 0;
-}
+/* FILTRO ENCOMENDAS */
+.filtro-container { display: flex; gap: 10px; align-items: center; margin-top: 15px; }
+.filtro-container input { margin-top: 0; }
+.btn-limpar { background-color: #6c757d; width: auto; white-space: nowrap; margin-top: 0; }
 </style>
 </head>
 
@@ -222,7 +85,6 @@ touch-action:none;
 <div class="logo-icon">🏢</div>
 <h2>Portaria PRO</h2>
 </div>
-
 <div class="menu">
 <button onclick="trocarTela('moradores')">👤 Moradores</button>
 <button onclick="trocarTela('veiculos')">🚘 Veículos</button>
@@ -282,6 +144,20 @@ touch-action:none;
 
 <!-- ENCOMENDAS -->
 <div id="encomendas" class="tela">
+
+<!-- LEITOR DE QR CODE INTERNO -->
+<div class="box" style="background:#e8f5e9; text-align: center;">
+    <h2>📷 Baixa Rápida por QR Code</h2>
+    <p style="font-size: 14px; margin-bottom: 10px;">Use a câmera para ler a etiqueta e confirmar a entrega.</p>
+    <button class="btn" style="background:#28a745; width: auto; padding: 10px 20px;" onclick="iniciarLeitorQR()">
+        Abrir Câmera do Sistema
+    </button>
+    <div id="leitor-qr" style="width: 100%; max-width: 350px; margin: 15px auto; display: none; border-radius: 12px; overflow: hidden; border: 2px solid #ccc;"></div>
+    <button id="btn-fechar-leitor" class="btn" style="background:#dc3545; display:none; margin-top: 10px; width: auto; margin-left: auto; margin-right: auto;" onclick="fecharLeitorQR()">
+        ❌ Cancelar Leitura
+    </button>
+</div>
+
 <div class="box">
 <h2>📦 Nova Encomenda</h2>
 <input id="encMorador" placeholder="Morador">
@@ -333,58 +209,27 @@ touch-action:none;
 </div>
 
 <script>
-/* MENU */
+/* MÁGICA DO MENU E TELAS */
 function trocarTela(id){
 document.querySelectorAll(".tela").forEach(t=>t.classList.remove("ativa"));
 document.getElementById(id).classList.add("ativa");
 }
 
-/* CANVAS */
+/* CONFIGURAÇÃO DO CANVAS DE ASSINATURA */
 function configurarCanvas(canvasId){
 let canvas = document.getElementById(canvasId);
 if(!canvas) return; 
 let ctx = canvas.getContext("2d");
 let desenhando = false;
-
-canvas.addEventListener("mousedown",(e)=>{
-desenhando = true;
-ctx.beginPath();
-ctx.moveTo(e.offsetX,e.offsetY);
-});
+canvas.addEventListener("mousedown",(e)=>{ desenhando = true; ctx.beginPath(); ctx.moveTo(e.offsetX,e.offsetY); });
 canvas.addEventListener("mouseup",()=>{ desenhando = false; });
-canvas.addEventListener("mousemove",(e)=>{
-if(!desenhando) return;
-ctx.lineWidth = 2;
-ctx.lineCap = "round";
-ctx.lineTo(e.offsetX,e.offsetY);
-ctx.stroke();
-});
-canvas.addEventListener("touchstart",(e)=>{
-e.preventDefault();
-desenhando = true;
-let rect = canvas.getBoundingClientRect();
-let x = e.touches[0].clientX - rect.left;
-let y = e.touches[0].clientY - rect.top;
-ctx.beginPath();
-ctx.moveTo(x,y);
-});
-canvas.addEventListener("touchmove",(e)=>{
-if(!desenhando) return;
-e.preventDefault();
-let rect = canvas.getBoundingClientRect();
-let x = e.touches[0].clientX - rect.left;
-let y = e.touches[0].clientY - rect.top;
-ctx.lineWidth = 2;
-ctx.lineCap = "round";
-ctx.lineTo(x,y);
-ctx.stroke();
-});
+canvas.addEventListener("mousemove",(e)=>{ if(!desenhando) return; ctx.lineWidth = 2; ctx.lineCap = "round"; ctx.lineTo(e.offsetX,e.offsetY); ctx.stroke(); });
+canvas.addEventListener("touchstart",(e)=>{ e.preventDefault(); desenhando = true; let rect = canvas.getBoundingClientRect(); ctx.beginPath(); ctx.moveTo(e.touches[0].clientX - rect.left, e.touches[0].clientY - rect.top); });
+canvas.addEventListener("touchmove",(e)=>{ if(!desenhando) return; e.preventDefault(); let rect = canvas.getBoundingClientRect(); ctx.lineWidth = 2; ctx.lineCap = "round"; ctx.lineTo(e.touches[0].clientX - rect.left, e.touches[0].clientY - rect.top); ctx.stroke(); });
 canvas.addEventListener("touchend",()=>{ desenhando = false; });
-
 return { canvas, ctx };
 }
 
-/* ASSINATURAS */
 const encomendaCanvas = configurarCanvas("canvasEncomenda");
 function limparAssinaturaEncomenda(){
 encomendaCanvas.ctx.clearRect(0,0,encomendaCanvas.canvas.width,encomendaCanvas.canvas.height);
@@ -393,345 +238,229 @@ encomendaCanvas.ctx.clearRect(0,0,encomendaCanvas.canvas.width,encomendaCanvas.c
 /* MORADORES */
 let moradores = JSON.parse(localStorage.getItem("moradores")) || [];
 function salvarMoradores(){ localStorage.setItem("moradores",JSON.stringify(moradores)); }
-function addMorador(){
-moradores.push({
-nome:nome.value,
-apto:apto.value,
-secretaria:secretaria.value,
-visitantes:visitantes.value
-});
-salvarMoradores();
-mostrarMoradores();
-document.getElementById('nome').value = '';
-document.getElementById('apto').value = '';
-document.getElementById('secretaria').value = '';
-document.getElementById('visitantes').value = '';
-}
-function mostrarMoradores(){
-listaMoradores.innerHTML="";
-moradores.forEach((m,index)=>{
-listaMoradores.innerHTML += `
-<div class="card">
-<h3>${m.nome}</h3>
-<p>🏢 ${m.apto}</p>
-<p>👩‍💼 ${m.secretaria}</p>
-<p>👥 ${m.visitantes}</p>
-<div class="acoes">
-<button class="btn-acao editar" onclick="editarMorador(${index})">✏️ Editar</button>
-<button class="btn-acao excluir" onclick="excluirMorador(${index})">🗑️ Excluir</button>
-</div>
-</div>
-`;
-});
-}
-function editarMorador(index){
-let novoNome = prompt("Nome:", moradores[index].nome);
-if(novoNome !== null) moradores[index].nome = novoNome;
-let novoApto = prompt("Apartamento:", moradores[index].apto);
-if(novoApto !== null) moradores[index].apto = novoApto;
-salvarMoradores();
-mostrarMoradores();
-}
-function excluirMorador(index){
-if(!confirm("Excluir morador?")) return;
-moradores.splice(index,1);
-salvarMoradores();
-mostrarMoradores();
-}
+function addMorador(){ moradores.push({ nome:nome.value, apto:apto.value, secretaria:secretaria.value, visitantes:visitantes.value }); salvarMoradores(); mostrarMoradores(); nome.value=''; apto.value=''; secretaria.value=''; visitantes.value=''; }
+function mostrarMoradores(){ listaMoradores.innerHTML=""; moradores.forEach((m,index)=>{ listaMoradores.innerHTML += `<div class="card"><h3>${m.nome}</h3><p>🏢 ${m.apto}</p><p>👩‍💼 ${m.secretaria}</p><p>👥 ${m.visitantes}</p><div class="acoes"><button class="btn-acao editar" onclick="editarMorador(${index})">✏️ Editar</button><button class="btn-acao excluir" onclick="excluirMorador(${index})">🗑️ Excluir</button></div></div>`; }); }
+function editarMorador(index){ let novoNome = prompt("Nome:", moradores[index].nome); if(novoNome) moradores[index].nome = novoNome; let novoApto = prompt("Apartamento:", moradores[index].apto); if(novoApto) moradores[index].apto = novoApto; salvarMoradores(); mostrarMoradores(); }
+function excluirMorador(index){ if(confirm("Excluir morador?")) { moradores.splice(index,1); salvarMoradores(); mostrarMoradores(); } }
 
 function gerarRelatorioMoradores() {
-    if (moradores.length === 0) {
-        alert("Não há moradores cadastrados para gerar o relatório.");
-        return;
-    }
-    const { jsPDF } = window.jspdf;
-    const doc = new jsPDF();
-    doc.setFontSize(18);
-    doc.setTextColor(122, 15, 60); 
-    doc.text("Relatório Geral de Moradores", 14, 20);
-    doc.setFontSize(10);
-    doc.setTextColor(100);
-    doc.text(`Gerado em: ${new Date().toLocaleString('pt-BR')}`, 14, 28);
-    doc.text("Sistema Portaria PRO", 14, 33);
-    const colunas = ["Nome", "Apartamento", "Secretária", "Visitantes/Autorizados"];
+    if (moradores.length === 0) return alert("Não há moradores cadastrados.");
+    const { jsPDF } = window.jspdf; const doc = new jsPDF();
+    doc.setFontSize(18); doc.setTextColor(122, 15, 60); doc.text("Relatório de Moradores", 14, 20);
+    doc.setFontSize(10); doc.setTextColor(100); doc.text(`Gerado em: ${new Date().toLocaleString('pt-BR')}`, 14, 28);
+    const colunas = ["Nome", "Apto", "Secretária", "Visitantes/Autorizados"];
     const linhas = moradores.map(m => [m.nome || "-", m.apto || "-", m.secretaria || "-", m.visitantes || "-"]);
-    doc.autoTable({
-        head: [colunas], body: linhas, startY: 40, styles: { fontSize: 10, cellPadding: 3 },
-        headStyles: { fillColor: [122, 15, 60] }, alternateRowStyles: { fillColor: [245, 245, 245] },
-        columnStyles: { 0: { cellWidth: 50 }, 1: { cellWidth: 30 }, 2: { cellWidth: 40 }, 3: { cellWidth: 'auto' } }
-    });
-    doc.save("Relatorio_Moradores_PortariaPRO.pdf");
+    doc.autoTable({ head: [colunas], body: linhas, startY: 35, headStyles: { fillColor: [122, 15, 60] } });
+    doc.save("Relatorio_Moradores.pdf");
 }
 
 /* VEICULOS */
 let veiculos = JSON.parse(localStorage.getItem("veiculos")) || [];
 function salvarVeiculos(){ localStorage.setItem("veiculos",JSON.stringify(veiculos)); }
-function addVeiculo(){
-veiculos.push({
-morador:veiMorador.value, modelo:veiModelo.value, placa:veiPlaca.value, cor:veiCor.value, vaga:veiVaga.value
-});
-salvarVeiculos(); mostrarVeiculos();
-veiMorador.value = ''; veiModelo.value = ''; veiPlaca.value = ''; veiCor.value = ''; veiVaga.value = '';
-}
-function mostrarVeiculos(){
-listaVeiculos.innerHTML="";
-veiculos.forEach((v,index)=>{
-listaVeiculos.innerHTML += `
-<div class="card">
-<h3>${v.modelo}</h3><p>🚘 ${v.placa}</p><p>👤 ${v.morador}</p><p>🎨 ${v.cor}</p><p>🅿️ ${v.vaga}</p>
-</div>
-`;
-});
-}
+function addVeiculo(){ veiculos.push({ morador:veiMorador.value, modelo:veiModelo.value, placa:veiPlaca.value, cor:veiCor.value, vaga:veiVaga.value }); salvarVeiculos(); mostrarVeiculos(); veiMorador.value=''; veiModelo.value=''; veiPlaca.value=''; veiCor.value=''; veiVaga.value=''; }
+function mostrarVeiculos(){ listaVeiculos.innerHTML=""; veiculos.forEach((v,index)=>{ listaVeiculos.innerHTML += `<div class="card"><h3>${v.modelo}</h3><p>🚘 ${v.placa}</p><p>👤 ${v.morador}</p><p>🎨 ${v.cor}</p><p>🅿️ ${v.vaga}</p></div>`; }); }
 
 /* RESERVAS */
 let reservas = JSON.parse(localStorage.getItem("reservas")) || [];
-function salvarReserva(){
-reservas.push({ tipo:tipoReserva.value, data:dataReserva.value, hora:horaReserva.value, responsavel:responsavel.value });
-localStorage.setItem("reservas",JSON.stringify(reservas));
-mostrarReservas();
-}
-function mostrarReservas(){
-listaReservas.innerHTML="";
-reservas.forEach((r,index)=>{
-listaReservas.innerHTML += `
-<div class="card">
-<h3>${r.tipo}</h3><p>📅 ${r.data}</p><p>🕒 ${r.hora}</p><p>👤 ${r.responsavel}</p>
-<div class="acoes">
-<button class="btn-acao editar" onclick="editarReserva(${index})">✏️ Editar</button>
-<button class="btn-acao excluir" onclick="excluirReserva(${index})">🗑️ Cancelar</button>
-</div>
-</div>
-`;
-});
-}
-function editarReserva(index){
-reservas[index].responsavel = prompt("Responsável:",reservas[index].responsavel);
-localStorage.setItem("reservas",JSON.stringify(reservas));
-mostrarReservas();
-}
-function excluirReserva(index){
-if(!confirm("Cancelar reserva?")) return;
-reservas.splice(index,1);
-localStorage.setItem("reservas",JSON.stringify(reservas));
-mostrarReservas();
-}
+function salvarReserva(){ reservas.push({ tipo:tipoReserva.value, data:dataReserva.value, hora:horaReserva.value, responsavel:responsavel.value }); localStorage.setItem("reservas",JSON.stringify(reservas)); mostrarReservas(); }
+function mostrarReservas(){ listaReservas.innerHTML=""; reservas.forEach((r,index)=>{ listaReservas.innerHTML += `<div class="card"><h3>${r.tipo}</h3><p>📅 ${r.data}</p><p>🕒 ${r.hora}</p><p>👤 ${r.responsavel}</p><div class="acoes"><button class="btn-acao editar" onclick="editarReserva(${index})">✏️ Editar</button><button class="btn-acao excluir" onclick="excluirReserva(${index})">🗑️ Cancelar</button></div></div>`; }); }
+function editarReserva(index){ let r = prompt("Responsável:",reservas[index].responsavel); if(r) reservas[index].responsavel = r; localStorage.setItem("reservas",JSON.stringify(reservas)); mostrarReservas(); }
+function excluirReserva(index){ if(confirm("Cancelar reserva?")) { reservas.splice(index,1); localStorage.setItem("reservas",JSON.stringify(reservas)); mostrarReservas(); } }
 
-/* ENCOMENDAS */
+/* ENCOMENDAS ================================================================ */
 let encomendas = JSON.parse(localStorage.getItem("encomendas")) || [];
 
 function salvarEncomenda(){
-let fotoInput = document.getElementById("encFoto");
-let arquivo = fotoInput.files[0];
-if(arquivo){
-    let leitor = new FileReader();
-    leitor.onload=function(e){ criarEncomenda(e.target.result); };
-    leitor.readAsDataURL(arquivo);
-} else {
-    criarEncomenda("");
-}
+    let fotoInput = document.getElementById("encFoto");
+    let arquivo = fotoInput.files[0];
+    if(arquivo){
+        let leitor = new FileReader();
+        leitor.onload=function(e){ criarEncomenda(e.target.result); };
+        leitor.readAsDataURL(arquivo);
+    } else {
+        criarEncomenda("");
+    }
 }
 
 function criarEncomenda(foto){
-// Captura a data atual no formato YYYY-MM-DD
-let dataAtual = new Date().toISOString().split('T')[0];
+    let dataAtual = new Date().toISOString().split('T')[0];
+    let idUnico = Date.now().toString(); // ID ÚNICO PARA QR CODE
 
-encomendas.push({
-morador:encMorador.value,
-apto:encApto.value,
-transportadora:encTransportadora.value,
-codigo:encCodigo.value,
-volumes:encVolumes.value,
-foto,
-assinatura: encomendaCanvas.canvas.toDataURL(),
-status:"Pendente",
-dataChegada: dataAtual // NOVO CAMPO ADICIONADO AQUI
-});
+    encomendas.push({
+        id: idUnico,
+        morador:encMorador.value,
+        apto:encApto.value,
+        transportadora:encTransportadora.value,
+        codigo:encCodigo.value,
+        volumes:encVolumes.value,
+        foto,
+        assinatura: encomendaCanvas.canvas.toDataURL(),
+        status:"Pendente",
+        dataChegada: dataAtual
+    });
 
-localStorage.setItem("encomendas",JSON.stringify(encomendas));
+    localStorage.setItem("encomendas",JSON.stringify(encomendas));
 
-// Limpa formulário após salvar
-encMorador.value = ''; encApto.value = ''; encTransportadora.value = ''; encCodigo.value = ''; encVolumes.value = '';
-document.getElementById("encFoto").value = '';
+    encMorador.value=''; encApto.value=''; encTransportadora.value=''; encCodigo.value=''; encVolumes.value='';
+    document.getElementById("encFoto").value='';
 
-mostrarEncomendas();
-limparAssinaturaEncomenda(); 
+    mostrarEncomendas();
+    limparAssinaturaEncomenda(); 
 }
 
-// O parâmetro opcional serve para filtrar
 function mostrarEncomendas(filtroData = ""){
-listaEncomendas.innerHTML="";
+    listaEncomendas.innerHTML="";
 
-encomendas.forEach((e,index)=>{
+    encomendas.forEach((e,index)=>{
+        if(filtroData && e.dataChegada !== filtroData) return;
 
-// LÓGICA DO FILTRO: Se tiver filtro ativo e a data for diferente, não mostra
-if(filtroData && e.dataChegada !== filtroData) {
-    return; // Pula para a próxima encomenda
+        let dataExibicao = "Sem data registrada";
+        if(e.dataChegada){
+            let p = e.dataChegada.split('-');
+            if(p.length === 3) dataExibicao = `${p[2]}/${p[1]}/${p[0]}`;
+        }
+
+        // AQUI ESTÃO AS DUAS OPÇÕES DE IMPRESSÃO (PADRÃO E SÓ QR) PARA TODAS AS ENCOMENDAS
+        listaEncomendas.innerHTML += `
+        <div class="card">
+            <h3>📦 ${e.transportadora}</h3>
+            <div class="badge ${e.status==="Pendente" ? "status-pendente" : "status-entregue"}">${e.status}</div>
+            <p>👤 ${e.morador}</p>
+            <p>🏢 ${e.apto}</p>
+            <p>📅 Chegada: <b>${dataExibicao}</b></p>
+            <p>📌 ${e.codigo}</p>
+            <p>📦 ${e.volumes}</p>
+            <p style="font-size:12px; color:#999;">ID: ${e.id || "Antigo"}</p>
+            ${e.foto ? `<img src="${e.foto}" class="foto">` : ""}
+            ${e.assinatura && e.assinatura !== "data:," ? `<img src="${e.assinatura}" class="foto" style="border:1px dashed #ccc;">` : ""}
+            
+            <div class="acoes">
+                <button class="btn-acao entregue" onclick="marcarEntregue(${index})">✅ Entregue</button>
+                <button class="btn-acao whats" onclick="avisarWhatsapp(${index})">📲 WhatsApp</button>
+                <button class="btn-acao print" onclick="imprimirEtiqueta(${index})">🖨️ Padrão</button>
+                <button class="btn-acao qr-btn" onclick="imprimirSoQRCode(${index})">🔳 Só QR</button>
+                <button class="btn-acao excluir" onclick="excluirEncomenda(${index})">🗑️ Excluir</button>
+            </div>
+        </div>
+        `;
+    });
 }
 
-// Formata a data para exibir formato Brasileiro (DD/MM/YYYY)
-let dataExibicao = "Sem data registrada";
-if(e.dataChegada){
-    let partes = e.dataChegada.split('-');
-    if(partes.length === 3) dataExibicao = `${partes[2]}/${partes[1]}/${partes[0]}`;
-}
+function filtrarEncomendas() { mostrarEncomendas(document.getElementById("filtroDataEncomenda").value); }
+function limparFiltroEncomendas() { document.getElementById("filtroDataEncomenda").value = ""; mostrarEncomendas(); }
 
-listaEncomendas.innerHTML += `
-<div class="card">
-<h3>📦 ${e.transportadora}</h3>
-<div class="badge ${e.status==="Pendente" ? "status-pendente" : "status-entregue"}">
-${e.status}
-</div>
-<p>👤 ${e.morador}</p>
-<p>🏢 ${e.apto}</p>
-<p>📅 Chegada: <b>${dataExibicao}</b></p> <!-- EXIBIÇÃO DA DATA ADICIONADA AQUI -->
-<p>📌 ${e.codigo}</p>
-<p>📦 ${e.volumes}</p>
-${e.foto ? `<img src="${e.foto}" class="foto">` : ""}
-${e.assinatura && e.assinatura !== "data:," ? `<img src="${e.assinatura}" class="foto" style="border:1px dashed #ccc; background:#f9f9f9;">` : ""}
-<div class="acoes">
-<button class="btn-acao entregue" onclick="marcarEntregue(${index})">✅ Entregue</button>
-<button class="btn-acao whats" onclick="avisarWhatsapp(${index})">📲 WhatsApp</button>
-<button class="btn-acao print" onclick="imprimirEtiqueta(${index})">🖨️ Etiqueta</button>
-<button class="btn-acao excluir" onclick="excluirEncomenda(${index})">🗑️ Excluir</button>
-</div>
-</div>
-`;
-});
-}
+function marcarEntregue(index){ encomendas[index].status = "Entregue"; localStorage.setItem("encomendas",JSON.stringify(encomendas)); filtrarEncomendas(); }
+function excluirEncomenda(index){ if(confirm("Deseja excluir esta encomenda?")) { encomendas.splice(index,1); localStorage.setItem("encomendas",JSON.stringify(encomendas)); filtrarEncomendas(); } }
+function avisarWhatsapp(index){ let msg = `Olá ${encomendas[index].morador}, sua encomenda chegou na portaria.`; window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`); }
 
-/* FUNÇÕES DE FILTRO DE DATA */
-function filtrarEncomendas() {
-    let dataSelecionada = document.getElementById("filtroDataEncomenda").value;
-    mostrarEncomendas(dataSelecionada);
-}
-
-function limparFiltroEncomendas() {
-    document.getElementById("filtroDataEncomenda").value = "";
-    mostrarEncomendas(); // Mostra tudo novamente
-}
-
-function marcarEntregue(index){
-encomendas[index].status = "Entregue";
-localStorage.setItem("encomendas",JSON.stringify(encomendas));
-// Re-aplica o filtro atual para não bugar a tela
-filtrarEncomendas(); 
-}
-
-function excluirEncomenda(index){
-if(!confirm("Deseja realmente excluir esta encomenda?")) return;
-encomendas.splice(index,1);
-localStorage.setItem("encomendas",JSON.stringify(encomendas));
-filtrarEncomendas();
-}
-
-function avisarWhatsapp(index){
-let e = encomendas[index];
-let msg = `Olá ${e.morador}, sua encomenda chegou na portaria.`;
-window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`);
-}
-
+/* IMPRIMIR ETIQUETA PADRÃO COM DADOS E QR CODE PEQUENO */
 function imprimirEtiqueta(index){
-let e = encomendas[index];
-let janela = window.open("","","width=300,height=500");
-janela.document.write(`
-<h1>AP ${e.apto}</h1><h2>${e.morador}</h2><p>${e.transportadora}</p>
-`);
-janela.print();
+    let e = encomendas[index];
+    let janela = window.open("", "", "width=350,height=500");
+    janela.document.write(`
+        <html><head><title>Etiqueta Padrão</title>
+        <style>
+            body { font-family: Arial, sans-serif; text-align: center; padding: 10px; margin: 0; }
+            h1 { margin: 5px 0; font-size: 32px; border-bottom: 2px solid #000; padding-bottom: 5px;}
+            h2 { margin: 10px 0 5px 0; font-size: 20px; }
+            p { margin: 5px 0; font-size: 16px; }
+            canvas { margin-top: 15px; }
+            .rodape { font-size: 10px; margin-top: 10px; color: #555; }
+        </style>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"><\/script>
+        </head><body>
+            <h1>AP ${e.apto}</h1><h2>${e.morador}</h2>
+            <p><b>Transp:</b> ${e.transportadora}</p><p><b>Vols:</b> ${e.volumes || "1"}</p>
+            <canvas id="qr"></canvas><p class="rodape">ID: ${e.id || "Antigo"}</p>
+            <script>
+                if('${e.id}' !== 'undefined') {
+                    let linkSistema = window.location.href.split('?')[0] + "?baixar=${e.id}";
+                    new QRious({ element: document.getElementById('qr'), value: linkSistema, size: 150, level: 'H' });
+                }
+                setTimeout(() => { window.print(); window.close(); }, 500);
+            <\/script>
+        </body></html>
+    `);
+    janela.document.close();
+}
+
+/* IMPRIMIR APENAS O QR CODE (BEM GRANDE) */
+function imprimirSoQRCode(index){
+    let e = encomendas[index];
+    let janela = window.open("", "", "width=300,height=350");
+    janela.document.write(`
+        <html><head><title>Etiqueta QR Code</title>
+        <style>
+            body { font-family: Arial, sans-serif; text-align: center; padding: 0; margin: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh;}
+            canvas { margin-bottom: 5px; }
+            .rodape { font-size: 18px; font-weight: bold; margin: 0; }
+            .sub-rodape { font-size: 12px; color: #555; margin-top: 3px; }
+        </style>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"><\/script>
+        </head><body>
+            <canvas id="qr"></canvas>
+            <p class="rodape">AP ${e.apto}</p>
+            <p class="sub-rodape">ID: ${e.id || "Antigo"}</p>
+            <script>
+                if('${e.id}' !== 'undefined') {
+                    let linkSistema = window.location.href.split('?')[0] + "?baixar=${e.id}";
+                    new QRious({ element: document.getElementById('qr'), value: linkSistema, size: 220, level: 'H' });
+                }
+                setTimeout(() => { window.print(); window.close(); }, 500);
+            <\/script>
+        </body></html>
+    `);
+    janela.document.close();
 }
 
 function gerarRelatorioEncomendas() {
     let dataFiltro = document.getElementById("filtroDataEncomenda").value;
-    let encomendasParaImprimir = encomendas;
-
-    // Se houver filtro ativo, imprime SÓ as do filtro
-    if (dataFiltro) {
-        encomendasParaImprimir = encomendas.filter(e => e.dataChegada === dataFiltro);
-    }
-
-    if (encomendasParaImprimir.length === 0) {
-        alert("Não há encomendas cadastradas para a seleção atual.");
-        return;
-    }
-
-    const { jsPDF } = window.jspdf;
-    const doc = new jsPDF();
-    doc.setFontSize(18);
-    doc.setTextColor(122, 15, 60); 
-    
-    // Título dinâmico dependendo se tem filtro ou não
-    let tituloPdf = dataFiltro ? `Relatório de Encomendas do Dia ${dataFiltro.split('-').reverse().join('/')}` : "Relatório Geral de Encomendas";
-    doc.text(tituloPdf, 14, 20);
-    
-    doc.setFontSize(10);
-    doc.setTextColor(100);
-    doc.text(`Gerado em: ${new Date().toLocaleString('pt-BR')}`, 14, 28);
-    doc.text("Sistema Portaria PRO", 14, 33);
-
+    let encs = dataFiltro ? encomendas.filter(e => e.dataChegada === dataFiltro) : encomendas;
+    if (encs.length === 0) return alert("Não há encomendas para esta data.");
+    const { jsPDF } = window.jspdf; const doc = new jsPDF();
+    doc.setFontSize(18); doc.setTextColor(122, 15, 60); doc.text("Relatório de Encomendas", 14, 20);
+    doc.setFontSize(10); doc.setTextColor(100); doc.text(`Gerado em: ${new Date().toLocaleString('pt-BR')}`, 14, 28);
     const colunas = ["Data", "Morador", "Apto", "Transportadora", "Status"];
-    const linhas = encomendasParaImprimir.map(e => {
-        let dataFormatada = "-";
-        if(e.dataChegada) {
-            let p = e.dataChegada.split('-');
-            dataFormatada = `${p[2]}/${p[1]}`;
-        }
-        return [
-            dataFormatada,
-            e.morador || "-",
-            e.apto || "-",
-            e.transportadora || "-",
-            e.status || "-"
-        ];
-    });
-
-    doc.autoTable({
-        head: [colunas], body: linhas, startY: 40, styles: { fontSize: 9 },
-        headStyles: { fillColor: [122, 15, 60] }, alternateRowStyles: { fillColor: [245, 245, 245] }
-    });
-    doc.save("Relatorio_Encomendas_PortariaPRO.pdf");
+    const linhas = encs.map(e => [e.dataChegada ? e.dataChegada.split('-').reverse().join('/') : "-", e.morador || "-", e.apto || "-", e.transportadora || "-", e.status || "-"]);
+    doc.autoTable({ head: [colunas], body: linhas, startY: 35, headStyles: { fillColor: [122, 15, 60] } });
+    doc.save("Relatorio_Encomendas.pdf");
 }
+
+/* LEITURA DE QR CODE E CONFIRMAÇÃO */
+function confirmarEntregaPorID(id) {
+    let index = encomendas.findIndex(e => e.id === id);
+    if(index === -1) return alert("❌ Encomenda não encontrada!");
+    let e = encomendas[index];
+    if(e.status === "Entregue") return alert(`A encomenda do Apto ${e.apto} já consta como ENTREGUE!`);
+    let msg = `📦 CONFIRMAÇÃO DE ENTREGA 📦\n\nMorador: ${e.morador}\nApto: ${e.apto}\nTransp: ${e.transportadora}\n\nConfirmar entrega?`;
+    if(confirm(msg)) { encomendas[index].status = "Entregue"; localStorage.setItem("encomendas", JSON.stringify(encomendas)); mostrarEncomendas(); alert("✅ Entrega registrada!"); }
+}
+
+window.addEventListener('load', () => {
+    let idParaBaixar = new URLSearchParams(window.location.search).get('baixar');
+    if(idParaBaixar) {
+        trocarTela('encomendas'); 
+        setTimeout(() => { confirmarEntregaPorID(idParaBaixar); window.history.replaceState({}, document.title, window.location.pathname); }, 600);
+    }
+});
+
+let html5QrcodeScanner;
+function iniciarLeitorQR() {
+    document.getElementById('leitor-qr').style.display = 'block'; document.getElementById('btn-fechar-leitor').style.display = 'block';
+    html5QrcodeScanner = new Html5QrcodeScanner("leitor-qr", { fps: 10, qrbox: {width: 250, height: 250} }, false);
+    html5QrcodeScanner.render((text) => { fecharLeitorQR(); if(text.includes('?baixar=')){ try{ confirmarEntregaPorID(new URL(text).searchParams.get('baixar')); }catch(e){alert("Erro");} } }, () => {});
+}
+function fecharLeitorQR() { if (html5QrcodeScanner) html5QrcodeScanner.clear(); document.getElementById('leitor-qr').style.display = 'none'; document.getElementById('btn-fechar-leitor').style.display = 'none'; }
 
 /* COMUNICADOS */
 let comunicados = JSON.parse(localStorage.getItem("comunicados")) || [];
-function salvarComunicado(){
-comunicados.unshift({
-tipo:tipoComunicado.value, titulo:tituloComunicado.value, data:dataComunicado.value, hora:horaComunicado.value, local:localComunicado.value, mensagem:mensagemComunicado.value, status:"Em andamento"
-});
-localStorage.setItem("comunicados",JSON.stringify(comunicados));
-mostrarComunicados();
-}
-function mostrarComunicados(){
-listaComunicados.innerHTML="";
-comunicados.forEach((c,index)=>{
-listaComunicados.innerHTML += `
-<div class="card">
-<h3>${c.tipo}</h3><div class="badge">${c.status}</div><p><b>${c.titulo}</b></p><p>📅 ${c.data}</p><p>🕒 ${c.hora}</p><p>📍 ${c.local}</p><p>${c.mensagem}</p>
-<div class="acoes">
-<button class="btn-acao finalizado" onclick="finalizarComunicado(${index})">✅ Resolvido</button>
-<button class="btn-acao excluir" onclick="excluirComunicado(${index})">🗑️ Excluir</button>
-</div>
-</div>
-`;
-});
-}
-function finalizarComunicado(index){
-comunicados[index].status = "Finalizado";
-localStorage.setItem("comunicados",JSON.stringify(comunicados));
-mostrarComunicados();
-}
-function excluirComunicado(index){
-if(!confirm("Excluir comunicado?")) return;
-comunicados.splice(index,1);
-localStorage.setItem("comunicados",JSON.stringify(comunicados));
-mostrarComunicados();
-}
+function salvarComunicado(){ comunicados.unshift({ tipo:tipoComunicado.value, titulo:tituloComunicado.value, data:dataComunicado.value, hora:horaComunicado.value, local:localComunicado.value, mensagem:mensagemComunicado.value, status:"Em andamento" }); localStorage.setItem("comunicados",JSON.stringify(comunicados)); mostrarComunicados(); }
+function mostrarComunicados(){ listaComunicados.innerHTML=""; comunicados.forEach((c,index)=>{ listaComunicados.innerHTML += `<div class="card"><h3>${c.tipo}</h3><div class="badge">${c.status}</div><p><b>${c.titulo}</b></p><p>📅 ${c.data}</p><p>🕒 ${c.hora}</p><p>📍 ${c.local}</p><p>${c.mensagem}</p><div class="acoes"><button class="btn-acao finalizado" onclick="finalizarComunicado(${index})">✅ Resolvido</button><button class="btn-acao excluir" onclick="excluirComunicado(${index})">🗑️ Excluir</button></div></div>`; }); }
+function finalizarComunicado(index){ comunicados[index].status = "Finalizado"; localStorage.setItem("comunicados",JSON.stringify(comunicados)); mostrarComunicados(); }
+function excluirComunicado(index){ if(confirm("Excluir comunicado?")) { comunicados.splice(index,1); localStorage.setItem("comunicados",JSON.stringify(comunicados)); mostrarComunicados(); } }
 
 /* INICIAR */
-mostrarMoradores();
-mostrarVeiculos();
-mostrarReservas();
-mostrarEncomendas(); // Alterado para renderizar normalmente sem filtro ao carregar
-mostrarComunicados();
+mostrarMoradores(); mostrarVeiculos(); mostrarReservas(); mostrarEncomendas(); mostrarComunicados();
 </script>
 
 </body>
