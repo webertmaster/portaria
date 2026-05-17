@@ -11,7 +11,6 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
 
 <style>
-
 *{
 margin:0;
 padding:0;
@@ -26,7 +25,6 @@ color:#333;
 }
 
 /* SIDEBAR */
-
 .sidebar{
 width:240px;
 height:100vh;
@@ -79,7 +77,6 @@ background:rgba(255,255,255,0.18);
 }
 
 /* CONTENT */
-
 .content{
 margin-left:240px;
 padding:20px;
@@ -87,7 +84,6 @@ width:100%;
 }
 
 /* BOX */
-
 .box{
 background:white;
 padding:20px;
@@ -105,10 +101,7 @@ box-shadow:0 2px 8px rgba(0,0,0,0.06);
 }
 
 /* INPUTS */
-
-input,
-select,
-textarea{
+input, select, textarea{
 width:100%;
 padding:14px;
 margin-top:10px;
@@ -123,7 +116,6 @@ resize:none;
 }
 
 /* BUTTONS */
-
 .btn{
 width:100%;
 padding:14px;
@@ -153,32 +145,14 @@ color:white;
 font-weight:bold;
 }
 
-.editar{
-background:#ff9800;
-}
-
-.excluir{
-background:#e53935;
-}
-
-.entregue{
-background:#28a745;
-}
-
-.whats{
-background:#25d366;
-}
-
-.print{
-background:#444;
-}
-
-.finalizado{
-background:#1976d2;
-}
+.editar{ background:#ff9800; }
+.excluir{ background:#e53935; }
+.entregue{ background:#28a745; }
+.whats{ background:#25d366; }
+.print{ background:#444; }
+.finalizado{ background:#1976d2; }
 
 /* BADGE */
-
 .badge{
 display:inline-block;
 padding:6px 12px;
@@ -188,17 +162,10 @@ font-size:13px;
 background:#eee;
 }
 
-.status-pendente{
-background:#ffe082;
-}
-
-.status-entregue{
-background:#28a745;
-color:white;
-}
+.status-pendente{ background:#ffe082; }
+.status-entregue{ background:#28a745; color:white; }
 
 /* FOTO */
-
 .foto{
 width:100%;
 border-radius:12px;
@@ -206,17 +173,10 @@ margin-top:12px;
 }
 
 /* TELAS */
-
-.tela{
-display:none;
-}
-
-.ativa{
-display:block;
-}
+.tela{ display:none; }
+.ativa{ display:block; }
 
 /* CANVAS */
-
 canvas{
 width:100%;
 height:200px;
@@ -228,758 +188,355 @@ touch-action:none;
 }
 
 /* RESPONSIVO */
-
 @media(max-width:800px){
-
-.sidebar{
-width:90px;
-padding:10px;
+.sidebar{ width:90px; padding:10px; }
+.logo h2{ display:none; }
+.menu button{ text-align:center; font-size:20px; }
+.content{ margin-left:90px; }
 }
 
-.logo h2{
-display:none;
+/* FILTRO ENCOMENDAS CSS */
+.filtro-container {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-top: 15px;
 }
-
-.menu button{
-text-align:center;
-font-size:20px;
+.filtro-container input {
+    margin-top: 0;
 }
-
-.content{
-margin-left:90px;
+.btn-limpar {
+    background-color: #6c757d;
+    width: auto;
+    white-space: nowrap;
+    margin-top: 0;
 }
-
-}
-
 </style>
 </head>
 
 <body>
 
 <!-- SIDEBAR -->
-
 <div class="sidebar">
-
 <div class="logo">
-
-<div class="logo-icon">
-🏢
-</div>
-
+<div class="logo-icon">🏢</div>
 <h2>Portaria PRO</h2>
-
 </div>
 
 <div class="menu">
-
-<button onclick="trocarTela('moradores')">
-👤 Moradores
-</button>
-
-<button onclick="trocarTela('veiculos')">
-🚘 Veículos
-</button>
-
-<button onclick="trocarTela('reservas')">
-📅 Reservas
-</button>
-
-<button onclick="trocarTela('encomendas')">
-📦 Encomendas
-</button>
-
-<button onclick="trocarTela('comunicados')">
-📢 Comunicados
-</button>
-
+<button onclick="trocarTela('moradores')">👤 Moradores</button>
+<button onclick="trocarTela('veiculos')">🚘 Veículos</button>
+<button onclick="trocarTela('reservas')">📅 Reservas</button>
+<button onclick="trocarTela('encomendas')">📦 Encomendas</button>
+<button onclick="trocarTela('comunicados')">📢 Comunicados</button>
 </div>
-
 </div>
 
 <!-- CONTENT -->
-
 <div class="content">
 
 <!-- MORADORES -->
-
 <div id="moradores" class="tela ativa">
-
 <div class="box">
-
 <h2>👤 Cadastro de Moradores</h2>
-
 <input id="nome" placeholder="Nome">
-
 <input id="apto" placeholder="Apartamento">
-
 <input id="secretaria" placeholder="Secretária">
-
-<input id="visitantes"
-placeholder="Visitantes separados por vírgula">
-
-<button class="btn"
-onclick="addMorador()">
-Cadastrar Morador
-</button>
-
-<!-- BOTÃO DE BAIXAR PDF DE MORADORES ADICIONADO AQUI -->
-<button class="btn" style="background:#1976d2;" onclick="gerarRelatorioMoradores()">
-📊 Baixar PDF de Moradores
-</button>
-
+<input id="visitantes" placeholder="Visitantes separados por vírgula">
+<button class="btn" onclick="addMorador()">Cadastrar Morador</button>
+<button class="btn" style="background:#1976d2;" onclick="gerarRelatorioMoradores()">📊 Baixar PDF de Moradores</button>
 </div>
-
 <div id="listaMoradores"></div>
-
 </div>
 
 <!-- VEICULOS -->
-
 <div id="veiculos" class="tela">
-
 <div class="box">
-
 <h2>🚘 Cadastro de Veículos</h2>
-
 <input id="veiMorador" placeholder="Morador">
-
 <input id="veiModelo" placeholder="Modelo">
-
 <input id="veiPlaca" placeholder="Placa">
-
 <input id="veiCor" placeholder="Cor">
-
 <input id="veiVaga" placeholder="Vaga">
-
-<button class="btn"
-onclick="addVeiculo()">
-Cadastrar Veículo
-</button>
-
+<button class="btn" onclick="addVeiculo()">Cadastrar Veículo</button>
 </div>
-
 <div id="listaVeiculos"></div>
-
 </div>
 
 <!-- RESERVAS -->
-
 <div id="reservas" class="tela">
-
 <div class="box">
-
 <h2>📅 Nova Reserva</h2>
-
 <select id="tipoReserva">
-
 <option>Churrasqueira</option>
 <option>Salão de Festa</option>
 <option>Combo</option>
-
 </select>
-
 <input type="date" id="dataReserva">
-
 <input type="time" id="horaReserva">
-
-<input id="responsavel"
-placeholder="Responsável">
-
-<button class="btn"
-onclick="salvarReserva()">
-Agendar Reserva
-</button>
-
+<input id="responsavel" placeholder="Responsável">
+<button class="btn" onclick="salvarReserva()">Agendar Reserva</button>
 </div>
-
 <div id="listaReservas"></div>
-
 </div>
 
 <!-- ENCOMENDAS -->
-
 <div id="encomendas" class="tela">
-
 <div class="box">
-
 <h2>📦 Nova Encomenda</h2>
-
-<input id="encMorador"
-placeholder="Morador">
-
-<input id="encApto"
-placeholder="Apartamento">
-
-<input id="encTransportadora"
-placeholder="Transportadora">
-
-<input id="encCodigo"
-placeholder="Código/Rastreio">
-
-<input id="encVolumes"
-placeholder="Volumes">
-
-<input type="file"
-id="encFoto"
-accept="image/*">
-
-<p style="margin-top:15px;">
-✍️ Assinatura de Recebimento
-</p>
-
+<input id="encMorador" placeholder="Morador">
+<input id="encApto" placeholder="Apartamento">
+<input id="encTransportadora" placeholder="Transportadora">
+<input id="encCodigo" placeholder="Código/Rastreio">
+<input id="encVolumes" placeholder="Volumes">
+<input type="file" id="encFoto" accept="image/*">
+<p style="margin-top:15px;">✍️ Assinatura de Recebimento</p>
 <canvas id="canvasEncomenda"></canvas>
+<button class="btn" onclick="limparAssinaturaEncomenda()">Limpar Assinatura</button>
+<button class="btn" onclick="salvarEncomenda()">Cadastrar Encomenda</button>
+</div>
 
-<button class="btn"
-onclick="limparAssinaturaEncomenda()">
-Limpar Assinatura
-</button>
-
-<button class="btn"
-onclick="salvarEncomenda()">
-Cadastrar Encomenda
-</button>
-
-<button class="btn" style="background:#1976d2;" onclick="gerarRelatorioEncomendas()">
-📊 Gerar Relatório PDF
-</button>
-
+<!-- CAIXA DE FILTRO DE HISTÓRICO -->
+<div class="box" style="background:#f1f4f8;">
+<h2>🔍 Histórico de Encomendas</h2>
+<p style="font-size: 14px; color: #555; margin-top: 5px;">Selecione uma data para ver o histórico do dia.</p>
+<div class="filtro-container">
+    <input type="date" id="filtroDataEncomenda" onchange="filtrarEncomendas()">
+    <button class="btn btn-limpar" onclick="limparFiltroEncomendas()">Limpar Filtro</button>
+</div>
+<button class="btn" style="background:#1976d2;" onclick="gerarRelatorioEncomendas()">📊 Gerar Relatório PDF (Da data filtrada)</button>
 </div>
 
 <div id="listaEncomendas"></div>
-
 </div>
 
 <!-- COMUNICADOS -->
-
 <div id="comunicados" class="tela">
-
 <div class="box">
-
 <h2>📢 Novo Comunicado</h2>
-
 <select id="tipoComunicado">
-
 <option>📢 Geral</option>
 <option>🛠️ Manutenção</option>
 <option>⚠️ Ocorrência</option>
 <option>🏛️ Assembleia</option>
-
 </select>
-
-<input id="tituloComunicado"
-placeholder="Título">
-
-<input type="date"
-id="dataComunicado">
-
-<input type="time"
-id="horaComunicado">
-
-<input id="localComunicado"
-placeholder="Local">
-
-<textarea id="mensagemComunicado"
-placeholder="Mensagem"></textarea>
-
-<button class="btn"
-onclick="salvarComunicado()">
-Publicar Comunicado
-</button>
-
+<input id="tituloComunicado" placeholder="Título">
+<input type="date" id="dataComunicado">
+<input type="time" id="horaComunicado">
+<input id="localComunicado" placeholder="Local">
+<textarea id="mensagemComunicado" placeholder="Mensagem"></textarea>
+<button class="btn" onclick="salvarComunicado()">Publicar Comunicado</button>
 </div>
-
 <div id="listaComunicados"></div>
-
 </div>
 
 </div>
 
 <script>
-
 /* MENU */
-
 function trocarTela(id){
-
-document.querySelectorAll(".tela")
-.forEach(t=>t.classList.remove("ativa"));
-
-document.getElementById(id)
-.classList.add("ativa");
-
+document.querySelectorAll(".tela").forEach(t=>t.classList.remove("ativa"));
+document.getElementById(id).classList.add("ativa");
 }
 
 /* CANVAS */
-
 function configurarCanvas(canvasId){
-
-let canvas =
-document.getElementById(canvasId);
-
-if(!canvas) return; // Segurança caso o ID mude
-
-let ctx =
-canvas.getContext("2d");
-
+let canvas = document.getElementById(canvasId);
+if(!canvas) return; 
+let ctx = canvas.getContext("2d");
 let desenhando = false;
 
 canvas.addEventListener("mousedown",(e)=>{
-
 desenhando = true;
-
 ctx.beginPath();
-
 ctx.moveTo(e.offsetX,e.offsetY);
-
 });
-
-canvas.addEventListener("mouseup",()=>{
-
-desenhando = false;
-
-});
-
+canvas.addEventListener("mouseup",()=>{ desenhando = false; });
 canvas.addEventListener("mousemove",(e)=>{
-
 if(!desenhando) return;
-
 ctx.lineWidth = 2;
-
 ctx.lineCap = "round";
-
 ctx.lineTo(e.offsetX,e.offsetY);
-
 ctx.stroke();
-
 });
-
 canvas.addEventListener("touchstart",(e)=>{
-
 e.preventDefault();
-
 desenhando = true;
-
 let rect = canvas.getBoundingClientRect();
-
 let x = e.touches[0].clientX - rect.left;
 let y = e.touches[0].clientY - rect.top;
-
 ctx.beginPath();
-
 ctx.moveTo(x,y);
-
 });
-
 canvas.addEventListener("touchmove",(e)=>{
-
 if(!desenhando) return;
-
 e.preventDefault();
-
 let rect = canvas.getBoundingClientRect();
-
 let x = e.touches[0].clientX - rect.left;
 let y = e.touches[0].clientY - rect.top;
-
 ctx.lineWidth = 2;
-
 ctx.lineCap = "round";
-
 ctx.lineTo(x,y);
-
 ctx.stroke();
-
 });
+canvas.addEventListener("touchend",()=>{ desenhando = false; });
 
-canvas.addEventListener("touchend",()=>{
-
-desenhando = false;
-
-});
-
-return {
-canvas,
-ctx
-};
-
+return { canvas, ctx };
 }
 
 /* ASSINATURAS */
-
-const encomendaCanvas =
-configurarCanvas("canvasEncomenda");
-
+const encomendaCanvas = configurarCanvas("canvasEncomenda");
 function limparAssinaturaEncomenda(){
-
-encomendaCanvas.ctx.clearRect(
-0,
-0,
-encomendaCanvas.canvas.width,
-encomendaCanvas.canvas.height
-);
-
+encomendaCanvas.ctx.clearRect(0,0,encomendaCanvas.canvas.width,encomendaCanvas.canvas.height);
 }
 
 /* MORADORES */
-
-let moradores =
-JSON.parse(localStorage.getItem("moradores")) || [];
-
-function salvarMoradores(){
-
-localStorage.setItem(
-"moradores",
-JSON.stringify(moradores)
-);
-
-}
-
+let moradores = JSON.parse(localStorage.getItem("moradores")) || [];
+function salvarMoradores(){ localStorage.setItem("moradores",JSON.stringify(moradores)); }
 function addMorador(){
-
 moradores.push({
-
 nome:nome.value,
 apto:apto.value,
 secretaria:secretaria.value,
 visitantes:visitantes.value
-
 });
-
 salvarMoradores();
-
 mostrarMoradores();
-
-// Limpar os campos após cadastrar
 document.getElementById('nome').value = '';
 document.getElementById('apto').value = '';
 document.getElementById('secretaria').value = '';
 document.getElementById('visitantes').value = '';
-
 }
-
 function mostrarMoradores(){
-
 listaMoradores.innerHTML="";
-
 moradores.forEach((m,index)=>{
-
 listaMoradores.innerHTML += `
-
 <div class="card">
-
 <h3>${m.nome}</h3>
-
 <p>🏢 ${m.apto}</p>
-
 <p>👩‍💼 ${m.secretaria}</p>
-
 <p>👥 ${m.visitantes}</p>
-
 <div class="acoes">
-
-<button class="btn-acao editar"
-onclick="editarMorador(${index})">
-✏️ Editar
-</button>
-
-<button class="btn-acao excluir"
-onclick="excluirMorador(${index})">
-🗑️ Excluir
-</button>
-
+<button class="btn-acao editar" onclick="editarMorador(${index})">✏️ Editar</button>
+<button class="btn-acao excluir" onclick="excluirMorador(${index})">🗑️ Excluir</button>
 </div>
-
 </div>
-
 `;
-
 });
-
 }
-
 function editarMorador(index){
-
 let novoNome = prompt("Nome:", moradores[index].nome);
-if(novoNome !== null) {
-    moradores[index].nome = novoNome;
-}
-
+if(novoNome !== null) moradores[index].nome = novoNome;
 let novoApto = prompt("Apartamento:", moradores[index].apto);
-if(novoApto !== null) {
-    moradores[index].apto = novoApto;
-}
-
+if(novoApto !== null) moradores[index].apto = novoApto;
 salvarMoradores();
 mostrarMoradores();
-
 }
-
 function excluirMorador(index){
-
 if(!confirm("Excluir morador?")) return;
-
 moradores.splice(index,1);
-
 salvarMoradores();
-
 mostrarMoradores();
-
 }
 
-/* FUNÇÃO PARA GERAR O RELATÓRIO PDF DE MORADORES */
 function gerarRelatorioMoradores() {
-    
     if (moradores.length === 0) {
         alert("Não há moradores cadastrados para gerar o relatório.");
         return;
     }
-
-    // Inicializando o jsPDF
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF();
-
-    // Configurando o cabeçalho do PDF
     doc.setFontSize(18);
-    doc.setTextColor(122, 15, 60); // Cor bordô do seu sistema
+    doc.setTextColor(122, 15, 60); 
     doc.text("Relatório Geral de Moradores", 14, 20);
-    
     doc.setFontSize(10);
     doc.setTextColor(100);
     doc.text(`Gerado em: ${new Date().toLocaleString('pt-BR')}`, 14, 28);
     doc.text("Sistema Portaria PRO", 14, 33);
-
-    // Preparando as colunas e as linhas
     const colunas = ["Nome", "Apartamento", "Secretária", "Visitantes/Autorizados"];
-    const linhas = moradores.map(m => [
-        m.nome || "-",
-        m.apto || "-",
-        m.secretaria || "-",
-        m.visitantes || "-"
-    ]);
-
-    // Criando a tabela no PDF
+    const linhas = moradores.map(m => [m.nome || "-", m.apto || "-", m.secretaria || "-", m.visitantes || "-"]);
     doc.autoTable({
-        head: [colunas],
-        body: linhas,
-        startY: 40,
-        styles: { fontSize: 10, cellPadding: 3 },
-        headStyles: { fillColor: [122, 15, 60] }, // Cor do cabeçalho da tabela
-        alternateRowStyles: { fillColor: [245, 245, 245] },
-        columnStyles: {
-            0: { cellWidth: 50 }, // Largura da coluna Nome
-            1: { cellWidth: 30 }, // Largura da coluna Apto
-            2: { cellWidth: 40 }, // Largura da coluna Secretária
-            3: { cellWidth: 'auto' } // Largura da coluna Visitantes
-        }
+        head: [colunas], body: linhas, startY: 40, styles: { fontSize: 10, cellPadding: 3 },
+        headStyles: { fillColor: [122, 15, 60] }, alternateRowStyles: { fillColor: [245, 245, 245] },
+        columnStyles: { 0: { cellWidth: 50 }, 1: { cellWidth: 30 }, 2: { cellWidth: 40 }, 3: { cellWidth: 'auto' } }
     });
-
-    // Salvando o arquivo no computador do usuário
     doc.save("Relatorio_Moradores_PortariaPRO.pdf");
 }
 
 /* VEICULOS */
-
-let veiculos =
-JSON.parse(localStorage.getItem("veiculos")) || [];
-
-function salvarVeiculos(){
-
-localStorage.setItem(
-"veiculos",
-JSON.stringify(veiculos)
-);
-
-}
-
+let veiculos = JSON.parse(localStorage.getItem("veiculos")) || [];
+function salvarVeiculos(){ localStorage.setItem("veiculos",JSON.stringify(veiculos)); }
 function addVeiculo(){
-
 veiculos.push({
-
-morador:veiMorador.value,
-modelo:veiModelo.value,
-placa:veiPlaca.value,
-cor:veiCor.value,
-vaga:veiVaga.value
-
+morador:veiMorador.value, modelo:veiModelo.value, placa:veiPlaca.value, cor:veiCor.value, vaga:veiVaga.value
 });
-
-salvarVeiculos();
-
-mostrarVeiculos();
-
-// Limpar campos
-veiMorador.value = '';
-veiModelo.value = '';
-veiPlaca.value = '';
-veiCor.value = '';
-veiVaga.value = '';
-
+salvarVeiculos(); mostrarVeiculos();
+veiMorador.value = ''; veiModelo.value = ''; veiPlaca.value = ''; veiCor.value = ''; veiVaga.value = '';
 }
-
 function mostrarVeiculos(){
-
 listaVeiculos.innerHTML="";
-
 veiculos.forEach((v,index)=>{
-
 listaVeiculos.innerHTML += `
-
 <div class="card">
-
-<h3>${v.modelo}</h3>
-
-<p>🚘 ${v.placa}</p>
-
-<p>👤 ${v.morador}</p>
-
-<p>🎨 ${v.cor}</p>
-
-<p>🅿️ ${v.vaga}</p>
-
+<h3>${v.modelo}</h3><p>🚘 ${v.placa}</p><p>👤 ${v.morador}</p><p>🎨 ${v.cor}</p><p>🅿️ ${v.vaga}</p>
 </div>
-
 `;
-
 });
-
 }
 
 /* RESERVAS */
-
-let reservas =
-JSON.parse(localStorage.getItem("reservas")) || [];
-
+let reservas = JSON.parse(localStorage.getItem("reservas")) || [];
 function salvarReserva(){
-
-reservas.push({
-
-tipo:tipoReserva.value,
-data:dataReserva.value,
-hora:horaReserva.value,
-responsavel:responsavel.value
-
-});
-
-localStorage.setItem(
-"reservas",
-JSON.stringify(reservas)
-);
-
+reservas.push({ tipo:tipoReserva.value, data:dataReserva.value, hora:horaReserva.value, responsavel:responsavel.value });
+localStorage.setItem("reservas",JSON.stringify(reservas));
 mostrarReservas();
-
 }
-
 function mostrarReservas(){
-
 listaReservas.innerHTML="";
-
 reservas.forEach((r,index)=>{
-
 listaReservas.innerHTML += `
-
 <div class="card">
-
-<h3>${r.tipo}</h3>
-
-<p>📅 ${r.data}</p>
-
-<p>🕒 ${r.hora}</p>
-
-<p>👤 ${r.responsavel}</p>
-
+<h3>${r.tipo}</h3><p>📅 ${r.data}</p><p>🕒 ${r.hora}</p><p>👤 ${r.responsavel}</p>
 <div class="acoes">
-
-<button class="btn-acao editar"
-onclick="editarReserva(${index})">
-✏️ Editar
-</button>
-
-<button class="btn-acao excluir"
-onclick="excluirReserva(${index})">
-🗑️ Cancelar
-</button>
-
+<button class="btn-acao editar" onclick="editarReserva(${index})">✏️ Editar</button>
+<button class="btn-acao excluir" onclick="excluirReserva(${index})">🗑️ Cancelar</button>
 </div>
-
 </div>
-
 `;
-
 });
-
 }
-
 function editarReserva(index){
-
-reservas[index].responsavel =
-prompt(
-"Responsável:",
-reservas[index].responsavel
-);
-
-localStorage.setItem(
-"reservas",
-JSON.stringify(reservas)
-);
-
+reservas[index].responsavel = prompt("Responsável:",reservas[index].responsavel);
+localStorage.setItem("reservas",JSON.stringify(reservas));
 mostrarReservas();
-
 }
-
 function excluirReserva(index){
-
 if(!confirm("Cancelar reserva?")) return;
-
 reservas.splice(index,1);
-
-localStorage.setItem(
-"reservas",
-JSON.stringify(reservas)
-);
-
+localStorage.setItem("reservas",JSON.stringify(reservas));
 mostrarReservas();
-
 }
 
 /* ENCOMENDAS */
-
-let encomendas =
-JSON.parse(localStorage.getItem("encomendas")) || [];
+let encomendas = JSON.parse(localStorage.getItem("encomendas")) || [];
 
 function salvarEncomenda(){
-
-let fotoInput =
-document.getElementById("encFoto");
-
-let arquivo =
-fotoInput.files[0];
-
+let fotoInput = document.getElementById("encFoto");
+let arquivo = fotoInput.files[0];
 if(arquivo){
-
-let leitor =
-new FileReader();
-
-leitor.onload=function(e){
-
-criarEncomenda(
-e.target.result
-);
-
-};
-
-leitor.readAsDataURL(arquivo);
-
-}else{
-
-criarEncomenda("");
-
+    let leitor = new FileReader();
+    leitor.onload=function(e){ criarEncomenda(e.target.result); };
+    leitor.readAsDataURL(arquivo);
+} else {
+    criarEncomenda("");
 }
-
 }
 
 function criarEncomenda(foto){
+// Captura a data atual no formato YYYY-MM-DD
+let dataAtual = new Date().toISOString().split('T')[0];
 
 encomendas.push({
-
 morador:encMorador.value,
 apto:encApto.value,
 transportadora:encTransportadora.value,
@@ -987,306 +544,194 @@ codigo:encCodigo.value,
 volumes:encVolumes.value,
 foto,
 assinatura: encomendaCanvas.canvas.toDataURL(),
-status:"Pendente"
-
+status:"Pendente",
+dataChegada: dataAtual // NOVO CAMPO ADICIONADO AQUI
 });
 
-localStorage.setItem(
-"encomendas",
-JSON.stringify(encomendas)
-);
+localStorage.setItem("encomendas",JSON.stringify(encomendas));
+
+// Limpa formulário após salvar
+encMorador.value = ''; encApto.value = ''; encTransportadora.value = ''; encCodigo.value = ''; encVolumes.value = '';
+document.getElementById("encFoto").value = '';
 
 mostrarEncomendas();
 limparAssinaturaEncomenda(); 
-
 }
 
-function mostrarEncomendas(){
-
+// O parâmetro opcional serve para filtrar
+function mostrarEncomendas(filtroData = ""){
 listaEncomendas.innerHTML="";
 
 encomendas.forEach((e,index)=>{
 
+// LÓGICA DO FILTRO: Se tiver filtro ativo e a data for diferente, não mostra
+if(filtroData && e.dataChegada !== filtroData) {
+    return; // Pula para a próxima encomenda
+}
+
+// Formata a data para exibir formato Brasileiro (DD/MM/YYYY)
+let dataExibicao = "Sem data registrada";
+if(e.dataChegada){
+    let partes = e.dataChegada.split('-');
+    if(partes.length === 3) dataExibicao = `${partes[2]}/${partes[1]}/${partes[0]}`;
+}
+
 listaEncomendas.innerHTML += `
-
 <div class="card">
-
 <h3>📦 ${e.transportadora}</h3>
-
-<div class="badge
-${e.status==="Pendente"
-? "status-pendente"
-: "status-entregue"}">
-
+<div class="badge ${e.status==="Pendente" ? "status-pendente" : "status-entregue"}">
 ${e.status}
-
 </div>
-
 <p>👤 ${e.morador}</p>
-
 <p>🏢 ${e.apto}</p>
-
+<p>📅 Chegada: <b>${dataExibicao}</b></p> <!-- EXIBIÇÃO DA DATA ADICIONADA AQUI -->
 <p>📌 ${e.codigo}</p>
-
 <p>📦 ${e.volumes}</p>
-
-${e.foto
-? `<img src="${e.foto}" class="foto">`
-: ""}
-
-${e.assinatura && e.assinatura !== "data:," 
-? `<img src="${e.assinatura}" class="foto" style="border:1px dashed #ccc; background:#f9f9f9;">` 
-: ""}
-
+${e.foto ? `<img src="${e.foto}" class="foto">` : ""}
+${e.assinatura && e.assinatura !== "data:," ? `<img src="${e.assinatura}" class="foto" style="border:1px dashed #ccc; background:#f9f9f9;">` : ""}
 <div class="acoes">
-
-<button class="btn-acao entregue"
-onclick="marcarEntregue(${index})">
-✅ Entregue
-</button>
-
-<button class="btn-acao whats"
-onclick="avisarWhatsapp(${index})">
-📲 WhatsApp
-</button>
-
-<button class="btn-acao print"
-onclick="imprimirEtiqueta(${index})">
-🖨️ Etiqueta
-</button>
-
-<button class="btn-acao excluir"
-onclick="excluirEncomenda(${index})">
-🗑️ Excluir
-</button>
-
+<button class="btn-acao entregue" onclick="marcarEntregue(${index})">✅ Entregue</button>
+<button class="btn-acao whats" onclick="avisarWhatsapp(${index})">📲 WhatsApp</button>
+<button class="btn-acao print" onclick="imprimirEtiqueta(${index})">🖨️ Etiqueta</button>
+<button class="btn-acao excluir" onclick="excluirEncomenda(${index})">🗑️ Excluir</button>
 </div>
-
 </div>
-
 `;
-
 });
+}
 
+/* FUNÇÕES DE FILTRO DE DATA */
+function filtrarEncomendas() {
+    let dataSelecionada = document.getElementById("filtroDataEncomenda").value;
+    mostrarEncomendas(dataSelecionada);
+}
+
+function limparFiltroEncomendas() {
+    document.getElementById("filtroDataEncomenda").value = "";
+    mostrarEncomendas(); // Mostra tudo novamente
 }
 
 function marcarEntregue(index){
-
-encomendas[index].status =
-"Entregue";
-
-localStorage.setItem(
-"encomendas",
-JSON.stringify(encomendas)
-);
-
-mostrarEncomendas();
-
+encomendas[index].status = "Entregue";
+localStorage.setItem("encomendas",JSON.stringify(encomendas));
+// Re-aplica o filtro atual para não bugar a tela
+filtrarEncomendas(); 
 }
 
 function excluirEncomenda(index){
-
 if(!confirm("Deseja realmente excluir esta encomenda?")) return;
-
 encomendas.splice(index,1);
-
-localStorage.setItem(
-"encomendas",
-JSON.stringify(encomendas)
-);
-
-mostrarEncomendas();
-
+localStorage.setItem("encomendas",JSON.stringify(encomendas));
+filtrarEncomendas();
 }
 
 function avisarWhatsapp(index){
-
 let e = encomendas[index];
-
-let msg =
-`Olá ${e.morador}, sua encomenda chegou na portaria.`;
-
-window.open(
-`https://wa.me/?text=${encodeURIComponent(msg)}`
-);
-
+let msg = `Olá ${e.morador}, sua encomenda chegou na portaria.`;
+window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`);
 }
 
 function imprimirEtiqueta(index){
-
 let e = encomendas[index];
-
-let janela =
-window.open("","","width=300,height=500");
-
+let janela = window.open("","","width=300,height=500");
 janela.document.write(`
-
-<h1>AP ${e.apto}</h1>
-
-<h2>${e.morador}</h2>
-
-<p>${e.transportadora}</p>
-
+<h1>AP ${e.apto}</h1><h2>${e.morador}</h2><p>${e.transportadora}</p>
 `);
-
 janela.print();
-
 }
 
-/* FUNÇÃO PARA GERAR O RELATÓRIO PDF DE ENCOMENDAS */
 function gerarRelatorioEncomendas() {
-    
-    if (encomendas.length === 0) {
-        alert("Não há encomendas cadastradas para gerar o relatório.");
+    let dataFiltro = document.getElementById("filtroDataEncomenda").value;
+    let encomendasParaImprimir = encomendas;
+
+    // Se houver filtro ativo, imprime SÓ as do filtro
+    if (dataFiltro) {
+        encomendasParaImprimir = encomendas.filter(e => e.dataChegada === dataFiltro);
+    }
+
+    if (encomendasParaImprimir.length === 0) {
+        alert("Não há encomendas cadastradas para a seleção atual.");
         return;
     }
 
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF();
-
     doc.setFontSize(18);
     doc.setTextColor(122, 15, 60); 
-    doc.text("Relatório Geral de Encomendas", 14, 20);
+    
+    // Título dinâmico dependendo se tem filtro ou não
+    let tituloPdf = dataFiltro ? `Relatório de Encomendas do Dia ${dataFiltro.split('-').reverse().join('/')}` : "Relatório Geral de Encomendas";
+    doc.text(tituloPdf, 14, 20);
     
     doc.setFontSize(10);
     doc.setTextColor(100);
     doc.text(`Gerado em: ${new Date().toLocaleString('pt-BR')}`, 14, 28);
     doc.text("Sistema Portaria PRO", 14, 33);
 
-    const colunas = ["Morador", "Apto", "Transportadora", "Cód. Rastreio", "Status"];
-    const linhas = encomendas.map(e => [
-        e.morador || "-",
-        e.apto || "-",
-        e.transportadora || "-",
-        e.codigo || "-",
-        e.status || "-"
-    ]);
-
-    doc.autoTable({
-        head: [colunas],
-        body: linhas,
-        startY: 40,
-        styles: { fontSize: 9 },
-        headStyles: { fillColor: [122, 15, 60] }, 
-        alternateRowStyles: { fillColor: [245, 245, 245] }
+    const colunas = ["Data", "Morador", "Apto", "Transportadora", "Status"];
+    const linhas = encomendasParaImprimir.map(e => {
+        let dataFormatada = "-";
+        if(e.dataChegada) {
+            let p = e.dataChegada.split('-');
+            dataFormatada = `${p[2]}/${p[1]}`;
+        }
+        return [
+            dataFormatada,
+            e.morador || "-",
+            e.apto || "-",
+            e.transportadora || "-",
+            e.status || "-"
+        ];
     });
 
+    doc.autoTable({
+        head: [colunas], body: linhas, startY: 40, styles: { fontSize: 9 },
+        headStyles: { fillColor: [122, 15, 60] }, alternateRowStyles: { fillColor: [245, 245, 245] }
+    });
     doc.save("Relatorio_Encomendas_PortariaPRO.pdf");
 }
 
 /* COMUNICADOS */
-
-let comunicados =
-JSON.parse(localStorage.getItem("comunicados")) || [];
-
+let comunicados = JSON.parse(localStorage.getItem("comunicados")) || [];
 function salvarComunicado(){
-
 comunicados.unshift({
-
-tipo:tipoComunicado.value,
-titulo:tituloComunicado.value,
-data:dataComunicado.value,
-hora:horaComunicado.value,
-local:localComunicado.value,
-mensagem:mensagemComunicado.value,
-status:"Em andamento"
-
+tipo:tipoComunicado.value, titulo:tituloComunicado.value, data:dataComunicado.value, hora:horaComunicado.value, local:localComunicado.value, mensagem:mensagemComunicado.value, status:"Em andamento"
 });
-
-localStorage.setItem(
-"comunicados",
-JSON.stringify(comunicados)
-);
-
+localStorage.setItem("comunicados",JSON.stringify(comunicados));
 mostrarComunicados();
-
 }
-
 function mostrarComunicados(){
-
 listaComunicados.innerHTML="";
-
 comunicados.forEach((c,index)=>{
-
 listaComunicados.innerHTML += `
-
 <div class="card">
-
-<h3>${c.tipo}</h3>
-
-<div class="badge">
-${c.status}
-</div>
-
-<p><b>${c.titulo}</b></p>
-
-<p>📅 ${c.data}</p>
-
-<p>🕒 ${c.hora}</p>
-
-<p>📍 ${c.local}</p>
-
-<p>${c.mensagem}</p>
-
+<h3>${c.tipo}</h3><div class="badge">${c.status}</div><p><b>${c.titulo}</b></p><p>📅 ${c.data}</p><p>🕒 ${c.hora}</p><p>📍 ${c.local}</p><p>${c.mensagem}</p>
 <div class="acoes">
-
-<button class="btn-acao finalizado"
-onclick="finalizarComunicado(${index})">
-✅ Resolvido
-</button>
-
-<button class="btn-acao excluir"
-onclick="excluirComunicado(${index})">
-🗑️ Excluir
-</button>
-
+<button class="btn-acao finalizado" onclick="finalizarComunicado(${index})">✅ Resolvido</button>
+<button class="btn-acao excluir" onclick="excluirComunicado(${index})">🗑️ Excluir</button>
 </div>
-
 </div>
-
 `;
-
 });
-
 }
-
 function finalizarComunicado(index){
-
-comunicados[index].status =
-"Finalizado";
-
-localStorage.setItem(
-"comunicados",
-JSON.stringify(comunicados)
-);
-
+comunicados[index].status = "Finalizado";
+localStorage.setItem("comunicados",JSON.stringify(comunicados));
 mostrarComunicados();
-
 }
-
 function excluirComunicado(index){
-
 if(!confirm("Excluir comunicado?")) return;
-
 comunicados.splice(index,1);
-
-localStorage.setItem(
-"comunicados",
-JSON.stringify(comunicados)
-);
-
+localStorage.setItem("comunicados",JSON.stringify(comunicados));
 mostrarComunicados();
-
 }
 
 /* INICIAR */
-
 mostrarMoradores();
 mostrarVeiculos();
 mostrarReservas();
-mostrarEncomendas();
+mostrarEncomendas(); // Alterado para renderizar normalmente sem filtro ao carregar
 mostrarComunicados();
-
 </script>
 
 </body>
