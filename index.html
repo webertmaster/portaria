@@ -320,7 +320,6 @@ function mostrarEncomendas(filtroData = ""){
             if(p.length === 3) dataExibicao = `${p[2]}/${p[1]}/${p[0]}`;
         }
 
-        // AQUI ESTÃO AS DUAS OPÇÕES DE IMPRESSÃO (PADRÃO E SÓ QR) PARA TODAS AS ENCOMENDAS
         listaEncomendas.innerHTML += `
         <div class="card">
             <h3>📦 ${e.transportadora}</h3>
@@ -353,7 +352,7 @@ function marcarEntregue(index){ encomendas[index].status = "Entregue"; localStor
 function excluirEncomenda(index){ if(confirm("Deseja excluir esta encomenda?")) { encomendas.splice(index,1); localStorage.setItem("encomendas",JSON.stringify(encomendas)); filtrarEncomendas(); } }
 function avisarWhatsapp(index){ let msg = `Olá ${encomendas[index].morador}, sua encomenda chegou na portaria.`; window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`); }
 
-/* IMPRIMIR ETIQUETA PADRÃO COM DADOS E QR CODE PEQUENO */
+/* IMPRIMIR ETIQUETA PADRÃO COM DADOS (SEM QR CODE) */
 function imprimirEtiqueta(index){
     let e = encomendas[index];
     let janela = window.open("", "", "width=350,height=500");
@@ -364,20 +363,17 @@ function imprimirEtiqueta(index){
             h1 { margin: 5px 0; font-size: 32px; border-bottom: 2px solid #000; padding-bottom: 5px;}
             h2 { margin: 10px 0 5px 0; font-size: 20px; }
             p { margin: 5px 0; font-size: 16px; }
-            canvas { margin-top: 15px; }
-            .rodape { font-size: 10px; margin-top: 10px; color: #555; }
+            .rodape { font-size: 10px; margin-top: 20px; color: #555; }
         </style>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"><\/script>
         </head><body>
-            <h1>AP ${e.apto}</h1><h2>${e.morador}</h2>
-            <p><b>Transp:</b> ${e.transportadora}</p><p><b>Vols:</b> ${e.volumes || "1"}</p>
-            <canvas id="qr"></canvas><p class="rodape">ID: ${e.id || "Antigo"}</p>
+            <h1>AP ${e.apto}</h1>
+            <h2>${e.morador}</h2>
+            <p><b>Transp:</b> ${e.transportadora}</p>
+            <p><b>Vols:</b> ${e.volumes || "1"}</p>
+            <p class="rodape">ID: ${e.id || "Antigo"}</p>
             <script>
-                if('${e.id}' !== 'undefined') {
-                    let linkSistema = window.location.href.split('?')[0] + "?baixar=${e.id}";
-                    new QRious({ element: document.getElementById('qr'), value: linkSistema, size: 150, level: 'H' });
-                }
-                setTimeout(() => { window.print(); window.close(); }, 500);
+                window.onafterprint = function() { window.close(); };
+                setTimeout(() => { window.print(); }, 500);
             <\/script>
         </body></html>
     `);
@@ -406,7 +402,9 @@ function imprimirSoQRCode(index){
                     let linkSistema = window.location.href.split('?')[0] + "?baixar=${e.id}";
                     new QRious({ element: document.getElementById('qr'), value: linkSistema, size: 220, level: 'H' });
                 }
-                setTimeout(() => { window.print(); window.close(); }, 500);
+                
+                window.onafterprint = function() { window.close(); };
+                setTimeout(() => { window.print(); }, 500);
             <\/script>
         </body></html>
     `);
