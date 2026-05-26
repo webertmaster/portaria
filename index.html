@@ -277,8 +277,8 @@ function limparAssinaturaEncomenda(){
 /* MORADORES */
 let moradores = JSON.parse(localStorage.getItem("moradores")) || [];
 function salvarMoradores(){ localStorage.setItem("moradores",JSON.stringify(moradores)); }
-function addMorador(){ moradores.push({ nome:nome.value, apto:apto.value, secretaria:secretaria.value, visitantes:visitantes.value }); salvarMoradores(); mostrarMoradores(); nome.value=''; apto.value=''; secretaria.value=''; visitantes.value=''; }
-function mostrarMoradores(){ listaMoradores.innerHTML=""; moradores.forEach((m,index)=>{ listaMoradores.innerHTML += `<div class="card"><h3>${m.nome}</h3><p>🏢 ${m.apto}</p><p>👩‍💼 ${m.secretaria}</p><p>👥 ${m.visitantes}</p><div class="acoes"><button class="btn-acao editar" onclick="editarMorador(${index})">✏️ Editar</button><button class="btn-acao excluir" onclick="excluirMorador(${index})">🗑️ Excluir</button></div></div>`; }); }
+function addMorador(){ moradores.push({ nome:document.getElementById('nome').value, apto:document.getElementById('apto').value, secretaria:document.getElementById('secretaria').value, visitantes:document.getElementById('visitantes').value }); salvarMoradores(); mostrarMoradores(); document.getElementById('nome').value=''; document.getElementById('apto').value=''; document.getElementById('secretaria').value=''; document.getElementById('visitantes').value=''; }
+function mostrarMoradores(){ let listaMoradores = document.getElementById('listaMoradores'); listaMoradores.innerHTML=""; moradores.forEach((m,index)=>{ listaMoradores.innerHTML += `<div class="card"><h3>${m.nome}</h3><p>🏢 ${m.apto}</p><p>👩‍💼 ${m.secretaria}</p><p>👥 ${m.visitantes}</p><div class="acoes"><button class="btn-acao editar" onclick="editarMorador(${index})">✏️ Editar</button><button class="btn-acao excluir" onclick="excluirMorador(${index})">🗑️ Excluir</button></div></div>`; }); }
 function editarMorador(index){ let novoNome = prompt("Nome:", moradores[index].nome); if(novoNome) moradores[index].nome = novoNome; let novoApto = prompt("Apartamento:", moradores[index].apto); if(novoApto) moradores[index].apto = novoApto; salvarMoradores(); mostrarMoradores(); }
 function excluirMorador(index){ if(confirm("Excluir morador?")) { moradores.splice(index,1); salvarMoradores(); mostrarMoradores(); } }
 
@@ -296,13 +296,13 @@ function gerarRelatorioMoradores() {
 /* VEICULOS */
 let veiculos = JSON.parse(localStorage.getItem("veiculos")) || [];
 function salvarVeiculos(){ localStorage.setItem("veiculos",JSON.stringify(veiculos)); }
-function addVeiculo(){ veiculos.push({ morador:veiMorador.value, modelo:veiModelo.value, placa:veiPlaca.value, cor:veiCor.value, vaga:veiVaga.value }); salvarVeiculos(); mostrarVeiculos(); veiMorador.value=''; veiModelo.value=''; veiPlaca.value=''; veiCor.value=''; veiVaga.value=''; }
-function mostrarVeiculos(){ listaVeiculos.innerHTML=""; veiculos.forEach((v,index)=>{ listaVeiculos.innerHTML += `<div class="card"><h3>${v.modelo}</h3><p>🚘 ${v.placa}</p><p>👤 ${v.morador}</p><p>🎨 ${v.cor}</p><p>🅿️ ${v.vaga}</p></div>`; }); }
+function addVeiculo(){ veiculos.push({ morador:document.getElementById('veiMorador').value, modelo:document.getElementById('veiModelo').value, placa:document.getElementById('veiPlaca').value, cor:document.getElementById('veiCor').value, vaga:document.getElementById('veiVaga').value }); salvarVeiculos(); mostrarVeiculos(); document.getElementById('veiMorador').value=''; document.getElementById('veiModelo').value=''; document.getElementById('veiPlaca').value=''; document.getElementById('veiCor').value=''; document.getElementById('veiVaga').value=''; }
+function mostrarVeiculos(){ let listaVeiculos = document.getElementById('listaVeiculos'); listaVeiculos.innerHTML=""; veiculos.forEach((v,index)=>{ listaVeiculos.innerHTML += `<div class="card"><h3>${v.modelo}</h3><p>🚘 ${v.placa}</p><p>👤 ${v.morador}</p><p>🎨 ${v.cor}</p><p>🅿️ ${v.vaga}</p></div>`; }); }
 
 /* RESERVAS */
 let reservas = JSON.parse(localStorage.getItem("reservas")) || [];
-function salvarReserva(){ reservas.push({ tipo:tipoReserva.value, data:dataReserva.value, hora:horaReserva.value, responsavel:responsavel.value }); localStorage.setItem("reservas",JSON.stringify(reservas)); mostrarReservas(); }
-function mostrarReservas(){ listaReservas.innerHTML=""; reservas.forEach((r,index)=>{ listaReservas.innerHTML += `<div class="card"><h3>${r.tipo}</h3><p>📅 ${r.data}</p><p>🕒 ${r.hora}</p><p>👤 ${r.responsavel}</p><div class="acoes"><button class="btn-acao editar" onclick="editarReserva(${index})">✏️ Editar</button><button class="btn-acao excluir" onclick="excluirReserva(${index})">🗑️ Cancelar</button></div></div>`; }); }
+function salvarReserva(){ reservas.push({ tipo:document.getElementById('tipoReserva').value, data:document.getElementById('dataReserva').value, hora:document.getElementById('horaReserva').value, responsavel:document.getElementById('responsavel').value }); localStorage.setItem("reservas",JSON.stringify(reservas)); mostrarReservas(); }
+function mostrarReservas(){ let listaReservas = document.getElementById('listaReservas'); listaReservas.innerHTML=""; reservas.forEach((r,index)=>{ listaReservas.innerHTML += `<div class="card"><h3>${r.tipo}</h3><p>📅 ${r.data}</p><p>🕒 ${r.hora}</p><p>👤 ${r.responsavel}</p><div class="acoes"><button class="btn-acao editar" onclick="editarReserva(${index})">✏️ Editar</button><button class="btn-acao excluir" onclick="excluirReserva(${index})">🗑️ Cancelar</button></div></div>`; }); }
 function editarReserva(index){ let r = prompt("Responsável:",reservas[index].responsavel); if(r) reservas[index].responsavel = r; localStorage.setItem("reservas",JSON.stringify(reservas)); mostrarReservas(); }
 function excluirReserva(index){ if(confirm("Cancelar reserva?")) { reservas.splice(index,1); localStorage.setItem("reservas",JSON.stringify(reservas)); mostrarReservas(); } }
 
@@ -498,11 +498,11 @@ function criarEncomenda(foto){
     
     encomendas.push({ 
         id: idUnico, 
-        morador:encMorador.value, 
-        apto:encApto.value, 
-        transportadora:encTransportadora.value, 
-        codigo:encCodigo.value, 
-        volumes:encVolumes.value, 
+        morador:document.getElementById('encMorador').value, 
+        apto:document.getElementById('encApto').value, 
+        transportadora:document.getElementById('encTransportadora').value, 
+        codigo:document.getElementById('encCodigo').value, 
+        volumes:document.getElementById('encVolumes').value, 
         foto, 
         assinatura: encomendaCanvas.canvas.toDataURL(), 
         status:"Pendente", 
@@ -511,11 +511,12 @@ function criarEncomenda(foto){
     });
     
     localStorage.setItem("encomendas",JSON.stringify(encomendas));
-    encMorador.value=''; encApto.value=''; encTransportadora.value=''; encCodigo.value=''; encVolumes.value=''; document.getElementById("encFoto").value='';
+    document.getElementById('encMorador').value=''; document.getElementById('encApto').value=''; document.getElementById('encTransportadora').value=''; document.getElementById('encCodigo').value=''; document.getElementById('encVolumes').value=''; document.getElementById("encFoto").value='';
     mostrarEncomendas(); limparAssinaturaEncomenda(); 
 }
 
 function mostrarEncomendas(filtroData = ""){
+    let listaEncomendas = document.getElementById('listaEncomendas');
     listaEncomendas.innerHTML="";
     encomendas.forEach((e,index)=>{
         if(filtroData && e.dataChegada !== filtroData) return;
@@ -552,40 +553,42 @@ function marcarEntregue(index){ encomendas[index].status = "Entregue"; localStor
 function excluirEncomenda(index){ if(confirm("Deseja excluir esta encomenda?")) { encomendas.splice(index,1); localStorage.setItem("encomendas",JSON.stringify(encomendas)); filtrarEncomendas(); } }
 function avisarWhatsappEncomenda(index){ let msg = `Olá ${encomendas[index].morador}, sua encomenda chegou na portaria.`; window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`); }
 
-/* IMPRESSÃO COM DATA E HORA + BOTÃO ANTI-BLOQUEIO */
+/* IMPRESSÃO PERFEITA E BLINDADA CONTRA ERROS DO NAVEGADOR */
 function imprimirEtiqueta(index){
     let e = encomendas[index]; 
     let janela = window.open("", "", "width=350,height=500");
     
     let dataFormatada = "";
-    if(e.dataChegada) { let p = e.dataChegada.split('-'); dataFormatada = `${p[2]}/${p[1]}/${p[0]}`; }
+    if(e.dataChegada) { let p = e.dataChegada.split('-'); dataFormatada = p[2] + '/' + p[1] + '/' + p[0]; }
     let horaFormatada = e.horaChegada ? e.horaChegada : "";
+    let vol = e.volumes || "1";
+    let ident = e.id || "Antigo";
 
     janela.document.write(`
         <html><head><title>Etiqueta Padrão</title>
         <style>
-            body { font-family: Arial, sans-serif; text-align: center; padding: 10px; margin: 0; } 
-            h1 { margin: 5px 0; font-size: 32px; border-bottom: 2px solid #000; padding-bottom: 5px;} 
-            h2 { margin: 10px 0 5px 0; font-size: 20px; } 
-            p { margin: 5px 0; font-size: 16px; } 
-            .rodape { font-size: 10px; margin-top: 20px; color: #555; }
-            .btn-imprimir { margin-top: 30px; padding: 12px 20px; background: #000; color: #fff; border: none; border-radius: 8px; font-size: 16px; cursor: pointer; font-weight: bold; width: 80%;}
-            @media print { .btn-imprimir { display: none !important; } }
+            body{font-family:Arial,sans-serif;text-align:center;padding:10px;margin:0;}
+            h1{margin:5px 0;font-size:32px;border-bottom:2px solid #000;padding-bottom:5px;}
+            h2{margin:10px 0 5px 0;font-size:20px;}
+            p{margin:5px 0;font-size:16px;}
+            .rodape{font-size:10px;margin-top:20px;color:#555;}
+            .btn-imprimir{margin-top:30px;padding:12px 20px;background:#000;color:#fff;border:none;border-radius:8px;font-size:16px;cursor:pointer;font-weight:bold;width:80%;}
+            @media print{.btn-imprimir{display:none !important;}}
         </style>
         </head><body>
             <h1>AP ${e.apto}</h1>
             <h2>${e.morador}</h2>
             <p><b>Transp:</b> ${e.transportadora}</p>
-            <p><b>Vols:</b> ${e.volumes || "1"}</p>
+            <p><b>Vols:</b> ${vol}</p>
             <p style="font-size: 14px; margin-top: 15px;">📅 ${dataFormatada} às ${horaFormatada}</p>
-            <p class="rodape">ID: ${e.id || "Antigo"}</p>
+            <p class="rodape">ID: ${ident}</p>
             
             <button class="btn-imprimir" onclick="window.print()">🖨️ Imprimir Etiqueta</button>
-            <p style="font-size: 11px; color: #888; margin-top: 5px;" class="btn-imprimir">Se a janela não fechar, pode fechar manualmente após imprimir.</p>
+            <p style="font-size: 11px; color: #888; margin-top: 5px;" class="btn-imprimir">Feche a janela após imprimir.</p>
 
             <script>
                 window.onload = function() { window.print(); };
-                window.onafterprint = function() { window.close(); }; 
+                window.onafterprint = function() { window.close(); };
             <\/script>
         </body></html>
     `);
@@ -593,27 +596,36 @@ function imprimirEtiqueta(index){
 }
 
 function imprimirSoQRCode(index){
-    let e = encomendas[index]; let janela = window.open("", "", "width=300,height=380");
+    let e = encomendas[index]; 
+    let janela = window.open("", "", "width=300,height=380");
+    let ident = e.id || "Antigo";
+    
+    // Gera a imagem do QR Code ANTES de abrir a janela de impressão
+    let qrImgTag = "";
+    if(e.id && e.id !== "undefined") { 
+        let linkSistema = window.location.href.split("?")[0] + "?baixar=" + e.id; 
+        let tempCanvas = document.createElement("canvas");
+        new QRious({ element: tempCanvas, value: linkSistema, size: 200, level: "H" });
+        qrImgTag = `<img src="${tempCanvas.toDataURL()}" style="margin-bottom: 5px;">`;
+    }
+
     janela.document.write(`
         <html><head><title>Etiqueta QR Code</title>
         <style>
-            body { font-family: Arial, sans-serif; text-align: center; padding: 0; margin: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh;} 
-            canvas { margin-bottom: 5px; } 
-            .rodape { font-size: 18px; font-weight: bold; margin: 0; } 
-            .sub-rodape { font-size: 12px; color: #555; margin-top: 3px; }
-            .btn-imprimir { margin-top: 20px; padding: 10px 20px; background: #000; color: #fff; border: none; border-radius: 8px; font-size: 14px; cursor: pointer; font-weight: bold;}
-            @media print { .btn-imprimir { display: none !important; } }
+            body{font-family:Arial,sans-serif;text-align:center;padding:0;margin:0;display:flex;flex-direction:column;align-items:center;justify-content:center;height:100vh;}
+            .rodape{font-size:18px;font-weight:bold;margin:0;}
+            .sub-rodape{font-size:12px;color:#555;margin-top:3px;}
+            .btn-imprimir{margin-top:20px;padding:10px 20px;background:#000;color:#fff;border:none;border-radius:8px;font-size:14px;cursor:pointer;font-weight:bold;}
+            @media print{.btn-imprimir{display:none !important;}}
         </style>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"><\/script>
         </head><body>
-            <canvas id="qr"></canvas>
+            ${qrImgTag}
             <p class="rodape">AP ${e.apto}</p>
-            <p class="sub-rodape">ID: ${e.id || "Antigo"}</p>
+            <p class="sub-rodape">ID: ${ident}</p>
             
             <button class="btn-imprimir" onclick="window.print()">🖨️ Imprimir</button>
 
             <script>
-                if('${e.id}' !== 'undefined') { let linkSistema = window.location.href.split('?')[0] + "?baixar=${e.id}"; new QRious({ element: document.getElementById('qr'), value: linkSistema, size: 200, level: 'H' }); } 
                 window.onload = function() { window.print(); };
                 window.onafterprint = function() { window.close(); };
             <\/script>
@@ -655,7 +667,7 @@ let comunicados = JSON.parse(localStorage.getItem("comunicados")) || [];
 function salvarComunicado(){ comunicados.unshift({ tipo:document.getElementById('tipoComunicado').value, titulo:document.getElementById('tituloComunicado').value, data:document.getElementById('dataComunicado').value, hora:document.getElementById('horaComunicado').value, local:document.getElementById('localComunicado').value, mensagem:document.getElementById('mensagemComunicado').value, status:"Em andamento" }); localStorage.setItem("comunicados",JSON.stringify(comunicados)); mostrarComunicados(); 
     document.getElementById('tituloComunicado').value = ''; document.getElementById('localComunicado').value = ''; document.getElementById('mensagemComunicado').value = '';
 }
-function mostrarComunicados(){ listaComunicados.innerHTML=""; comunicados.forEach((c,index)=>{ listaComunicados.innerHTML += `<div class="card"><h3>${c.tipo}</h3><div class="badge ${c.status === 'Em andamento' ? 'status-pendente' : 'status-entregue'}">${c.status}</div><p style="margin-top: 10px;"><b>${c.titulo}</b></p><p>📅 ${c.data || ''} 🕒 ${c.hora || ''}</p><p>📍 ${c.local}</p><div style="background: #f9f9f9; padding: 10px; border-radius: 8px; margin-top: 10px; white-space: pre-wrap;">${c.mensagem}</div><div class="acoes"><button class="btn-acao finalizado" onclick="finalizarComunicado(${index})">✅ Resolvido</button><button class="btn-acao excluir" onclick="excluirComunicado(${index})">🗑️ Excluir</button></div></div>`; }); }
+function mostrarComunicados(){ let listaComunicados = document.getElementById('listaComunicados'); listaComunicados.innerHTML=""; comunicados.forEach((c,index)=>{ listaComunicados.innerHTML += `<div class="card"><h3>${c.tipo}</h3><div class="badge ${c.status === 'Em andamento' ? 'status-pendente' : 'status-entregue'}">${c.status}</div><p style="margin-top: 10px;"><b>${c.titulo}</b></p><p>📅 ${c.data || ''} 🕒 ${c.hora || ''}</p><p>📍 ${c.local}</p><div style="background: #f9f9f9; padding: 10px; border-radius: 8px; margin-top: 10px; white-space: pre-wrap;">${c.mensagem}</div><div class="acoes"><button class="btn-acao finalizado" onclick="finalizarComunicado(${index})">✅ Resolvido</button><button class="btn-acao excluir" onclick="excluirComunicado(${index})">🗑️ Excluir</button></div></div>`; }); }
 function finalizarComunicado(index){ comunicados[index].status = "Finalizado"; localStorage.setItem("comunicados",JSON.stringify(comunicados)); mostrarComunicados(); }
 function excluirComunicado(index){ if(confirm("Excluir comunicado?")) { comunicados.splice(index,1); localStorage.setItem("comunicados",JSON.stringify(comunicados)); mostrarComunicados(); } }
 
