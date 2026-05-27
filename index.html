@@ -3,7 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Portaria PRO MASTER</title>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -14,44 +13,27 @@
 
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
-body { font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background: #f4f7fb; display: flex; color: #2c3e50; }
+body { font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background: #f4f7fb; display: flex; color: #2c3e50; transition: background 0.3s, color 0.3s; }
 
 /* SIDEBAR MODERNA */
-.sidebar { width: 260px; height: 100vh; background: #1e293b; position: fixed; left: 0; top: 0; padding: 30px 20px; overflow: auto; color: white; box-shadow: 4px 0 15px rgba(0,0,0,0.05); }
+.sidebar { width: 260px; height: 100vh; background: #1e293b; position: fixed; left: 0; top: 0; padding: 30px 20px; overflow: auto; color: white; box-shadow: 4px 0 15px rgba(0,0,0,0.05); z-index: 100; transition: background 0.3s; }
 .logo { text-align: center; margin-bottom: 40px; }
 .logo-icon { width: 70px; height: 70px; background: linear-gradient(135deg, #3b82f6, #2563eb); border-radius: 16px; display: flex; align-items: center; justify-content: center; margin: auto; font-size: 22px; font-weight: bold; color: white; box-shadow: 0 4px 10px rgba(37, 99, 235, 0.3); }
 .logo h2 { margin-top: 15px; font-size: 20px; font-weight: 600; letter-spacing: 1px; color: #f8fafc; }
 
 /* MENU SEM EMOJIS E COM EFEITO PREMIUM */
-.menu button { width: 100%; padding: 14px 20px; border: none; border-radius: 10px; margin-bottom: 8px; background: transparent; color: #94a3b8; cursor: pointer; text-align: left; font-size: 15px; font-weight: 500; transition: all 0.3s ease; border-left: 4px solid transparent; }
+.menu-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: #64748b; margin-bottom: 12px; padding-left: 20px; }
+.menu button { width: 100%; padding: 14px 20px; border: none; border-radius: 10px; margin-bottom: 8px; background: transparent; color: #94a3b8; cursor: pointer; text-align: left; font-size: 15px; font-weight: 500; transition: all 0.3s ease; border-left: 4px solid transparent; display: flex; align-items: center; }
+.menu button i { margin-right: 12px; width: 20px; text-align: center; font-size: 16px; }
 .menu button:hover { background: rgba(255, 255, 255, 0.05); color: #ffffff; border-left: 4px solid #3b82f6; transform: translateX(4px); }
-
-/* Estilo do título MENU em cima dos botões */
-.menu-label {
-    font-size: 11px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 1.5px;
-    color: #64748b;
-    margin-bottom: 12px;
-    padding-left: 20px;
-}
-
-/* Garante que o ícone fique alinhado e com espaço do texto */
-.menu button i {
-    margin-right: 12px;
-    width: 20px;
-    text-align: center;
-    font-size: 16px;
-}
 
 /* CONTENT & CARDS CLEAN */
 .content { margin-left: 260px; padding: 40px; width: 100%; max-width: 1400px; margin-right: auto; }
-.box { background: #ffffff; padding: 25px; border-radius: 16px; margin-bottom: 25px; box-shadow: 0 4px 20px rgba(0,0,0,0.03); border: 1px solid #e2e8f0; }
-.card { background: #ffffff; padding: 20px; border-radius: 12px; margin-top: 15px; box-shadow: 0 2px 10px rgba(0,0,0,0.04); border: 1px solid #f1f5f9; transition: transform 0.2s ease; }
+.box { background: #ffffff; padding: 25px; border-radius: 16px; margin-bottom: 25px; box-shadow: 0 4px 20px rgba(0,0,0,0.03); border: 1px solid #e2e8f0; transition: background 0.3s, border 0.3s; }
+.card { background: #ffffff; padding: 20px; border-radius: 12px; margin-top: 15px; box-shadow: 0 2px 10px rgba(0,0,0,0.04); border: 1px solid #f1f5f9; transition: transform 0.2s ease, background 0.3s, border 0.3s; }
 .card:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0,0,0,0.08); }
-.card h3 { color: #0f172a; margin-bottom: 12px; font-size: 18px; }
-.card p { color: #475569; font-size: 14px; margin-bottom: 6px; line-height: 1.5; }
+.card h3 { color: #0f172a; margin-bottom: 12px; font-size: 18px; transition: color 0.3s; }
+.card p { color: #475569; font-size: 14px; margin-bottom: 6px; line-height: 1.5; transition: color 0.3s; }
 
 /* INPUTS MINIMALISTAS */
 input, select, textarea { width: 100%; padding: 14px 16px; margin-top: 12px; border-radius: 10px; border: 1px solid #cbd5e1; font-size: 15px; background: #f8fafc; transition: all 0.3s; color: #334155; }
@@ -88,22 +70,38 @@ textarea { min-height: 100px; resize: vertical; }
 .ativa { display: block; }
 canvas { width: 100%; height: 200px; background: #f8fafc; border: 2px dashed #cbd5e1; border-radius: 12px; margin-top: 10px; touch-action: none; cursor: crosshair; }
 
-/* ANIMAÇÃO SUAVE DE TRANSIÇÃO DE TELA */
-@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-/* ESTATISTICAS OCORRENCIAS */
-.stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 25px; }
-.stat-card { background: white; padding: 20px; border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; font-size: 15px; color: #64748b; border: 1px solid #e2e8f0; transition: transform 0.2s; }
+/* ESTILOS DA DASHBOARD */
+.dash-header { display: flex; justify-content: space-between; align-items: center; background: white; padding: 25px 30px; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.03); border: 1px solid #e2e8f0; transition: background 0.3s, border 0.3s; }
+.btn-dark { background: #1e293b; color: #f8fafc; border: none; width: 45px; height: 45px; border-radius: 12px; cursor: pointer; font-size: 18px; transition: 0.3s; }
+.btn-dark:hover { transform: scale(1.05); }
+.stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin-bottom: 25px; }
+.stat-card { background: white; padding: 20px; border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; font-size: 15px; color: #64748b; border: 1px solid #e2e8f0; transition: transform 0.2s, background 0.3s, border 0.3s; }
 .stat-card:hover { transform: translateY(-3px); }
-.stat-card span { font-size: 28px; margin-top: 8px; font-weight: 800; color: #0f172a; }
+.stat-card span { font-size: 32px; margin-top: 8px; font-weight: 800; color: #0f172a; transition: color 0.3s; }
+
+/* DARK MODE MÁGICO */
+body.dark-mode { background: #0f172a; color: #f8fafc; }
+body.dark-mode .content h2, body.dark-mode .content h3, body.dark-mode .content p, body.dark-mode .card h3, body.dark-mode .card p { color: #f8fafc; }
+body.dark-mode .box, body.dark-mode .card, body.dark-mode .dash-header, body.dark-mode .stat-card { background: #1e293b; border-color: #334155; color: white; box-shadow: none; }
+body.dark-mode .stat-card span { color: #f8fafc; }
+body.dark-mode input, body.dark-mode select, body.dark-mode textarea { background: #0f172a; color: white; border-color: #475569; }
+body.dark-mode .badge { background: rgba(255,255,255,0.1); }
+body.dark-mode .btn-dark { background: #f8fafc; color: #1e293b; }
+body.dark-mode canvas { background: #0f172a; border-color: #475569; }
+
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
 /* RESPONSIVO */
 @media(max-width: 800px) {
     .sidebar { width: 80px; padding: 20px 10px; }
     .logo h2 { display: none; }
     .logo-icon { width: 50px; height: 50px; font-size: 16px; }
-    .menu button { padding: 15px 0; text-align: center; font-size: 12px; display: flex; flex-direction: column; align-items: center; }
+    .menu-label { display: none; }
+    .menu button { padding: 15px 0; text-align: center; font-size: 12px; flex-direction: column; align-items: center; border-left: none; border-bottom: 4px solid transparent; }
+    .menu button:hover { border-left: none; border-bottom: 4px solid #3b82f6; transform: translateY(-4px); }
+    .menu button i { margin-right: 0; margin-bottom: 5px; font-size: 20px; }
     .content { margin-left: 80px; padding: 20px; }
+    .dash-header { flex-direction: column; gap: 15px; text-align: center; }
 }
 
 .filtro-container { display: flex; gap: 10px; align-items: center; margin-top: 15px; flex-wrap: wrap;}
@@ -119,10 +117,9 @@ canvas { width: 100%; height: 200px; background: #f8fafc; border: 2px dashed #cb
         <div class="logo-icon">PRO</div>
         <h2>Portaria</h2>
     </div>
-    
     <div class="menu-label">Menu</div>
-    
     <div class="menu">
+        <button onclick="trocarTela('dashboard')" style="background: rgba(59, 130, 246, 0.1); border-left-color: #3b82f6; color: #fff;"><i class="fa-solid fa-house"></i> Início</button>
         <button onclick="trocarTela('moradores')"><i class="fa-solid fa-users"></i> Moradores</button>
         <button onclick="trocarTela('veiculos')"><i class="fa-solid fa-car"></i> Veículos</button>
         <button onclick="trocarTela('reservas')"><i class="fa-solid fa-calendar-check"></i> Reservas</button>
@@ -134,7 +131,55 @@ canvas { width: 100%; height: 200px; background: #f8fafc; border: 2px dashed #cb
 
 <div class="content">
 
-<div id="moradores" class="tela ativa">
+<div id="dashboard" class="tela ativa">
+    <div class="dash-header">
+        <div>
+            <h2 id="saudacao">Olá, Webert 👋</h2>
+            <p style="color: #64748b; font-weight: 600; margin-top: 5px;">Portaria PRO MASTER</p>
+        </div>
+        <div style="display: flex; gap: 15px; align-items: center;">
+            <h2 id="relogio" style="font-size: 28px; letter-spacing: 2px;">00:00:00</h2>
+            <button class="btn-dark" onclick="toggleDarkMode()" title="Modo Noturno"><i class="fa-solid fa-moon"></i></button>
+        </div>
+    </div>
+
+    <h3 style="margin: 25px 0 15px 0; color: #475569; font-size: 16px; text-transform: uppercase;">Visão Geral do Turno</h3>
+    
+    <div class="stats-grid">
+        <div class="stat-card" id="card-dash-encomendas" style="border-bottom: 4px solid #3b82f6;">
+            <i class="fa-solid fa-box-open" style="font-size: 28px; color: #3b82f6; margin-bottom: 10px;"></i>
+            <span id="dash-encomendas">0</span>
+            <p style="font-weight: bold; margin-top: 5px;">Encomendas Pendentes</p>
+            <div id="detalhes-encomendas" style="font-size: 13px; margin-top: 15px; text-align: left; width: 100%; background: rgba(0,0,0,0.03); padding: 10px; border-radius: 8px;"></div>
+        </div>
+
+        <div class="stat-card" style="border-bottom: 4px solid #f59e0b;">
+            <i class="fa-solid fa-triangle-exclamation" style="font-size: 28px; color: #f59e0b; margin-bottom: 10px;"></i>
+            <span id="dash-ocorrencias">0</span>
+            <p style="font-weight: bold; margin-top: 5px;">Ocorrências em Aberto</p>
+        </div>
+
+        <div class="stat-card" style="border-bottom: 4px solid #10b981;">
+            <i class="fa-solid fa-calendar-check" style="font-size: 28px; color: #10b981; margin-bottom: 10px;"></i>
+            <span id="dash-reservas">0</span>
+            <p style="font-weight: bold; margin-top: 5px;">Reservas Hoje</p>
+        </div>
+
+        <div class="stat-card" style="border-bottom: 4px solid #64748b;">
+            <i class="fa-solid fa-car" style="font-size: 28px; color: #64748b; margin-bottom: 10px;"></i>
+            <span id="dash-veiculos">0</span>
+            <p style="font-weight: bold; margin-top: 5px;">Veículos Cadastrados</p>
+        </div>
+        
+        <div class="stat-card" style="border-bottom: 4px solid #8b5cf6;">
+            <i class="fa-solid fa-users" style="font-size: 28px; color: #8b5cf6; margin-bottom: 10px;"></i>
+            <span id="dash-moradores">0</span>
+            <p style="font-weight: bold; margin-top: 5px;">Moradores Registrados</p>
+        </div>
+    </div>
+</div>
+
+<div id="moradores" class="tela">
 <div class="box">
 <h2>👤 Cadastro de Moradores</h2>
 <input id="nome" placeholder="Nome">
@@ -177,11 +222,11 @@ canvas { width: 100%; height: 200px; background: #f8fafc; border: 2px dashed #cb
 </div>
 
 <div id="ocorrencias" class="tela">
-    <div class="stats-grid">
-        <div class="stat-card" style="border-bottom: 4px solid #e53935;">🔴 Urgentes <span id="stat-urgente">0</span></div>
-        <div class="stat-card" style="border-bottom: 4px solid #ff9800;">🟡 Em Aberto <span id="stat-aberto">0</span></div>
-        <div class="stat-card" style="border-bottom: 4px solid #28a745;">🟢 Resolvidas <span id="stat-resolvida">0</span></div>
-        <div class="stat-card" style="border-bottom: 4px solid #1976d2;">📅 Hoje <span id="stat-hoje">0</span></div>
+    <div class="stats-grid" style="grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); margin-bottom: 20px;">
+        <div class="stat-card" style="border-bottom: 4px solid #e53935; padding: 10px;">🔴 Urgentes <span id="stat-urgente" style="font-size: 20px;">0</span></div>
+        <div class="stat-card" style="border-bottom: 4px solid #ff9800; padding: 10px;">🟡 Em Aberto <span id="stat-aberto" style="font-size: 20px;">0</span></div>
+        <div class="stat-card" style="border-bottom: 4px solid #28a745; padding: 10px;">🟢 Resolvidas <span id="stat-resolvida" style="font-size: 20px;">0</span></div>
+        <div class="stat-card" style="border-bottom: 4px solid #1976d2; padding: 10px;">📅 Hoje <span id="stat-hoje" style="font-size: 20px;">0</span></div>
     </div>
     <div class="box" style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
         <input type="text" id="pesquisaOcorrencia" placeholder="🔍 Pesquisar por apto, tipo ou palavra-chave..." onkeyup="pesquisarOcorrencias()" style="margin-top:0; flex: 2; min-width: 250px;">
@@ -191,7 +236,7 @@ canvas { width: 100%; height: 200px; background: #f8fafc; border: 2px dashed #cb
     <div class="box" id="form-ocorrencia" style="display: none; border-left: 5px solid #e53935;">
         <div style="display: flex; justify-content: space-between; align-items: center;">
             <h2>🚨 Registrar Ocorrência</h2>
-            <button onclick="toggleFormOcorrencia()" style="background: none; border: none; font-size: 20px; cursor: pointer;">❌</button>
+            <button onclick="toggleFormOcorrencia()" style="background: none; border: none; font-size: 20px; cursor: pointer; color: inherit;">❌</button>
         </div>
         <select id="ocoTipo">
             <option value="" disabled selected>🏷️ Selecione o Tipo</option>
@@ -218,8 +263,8 @@ canvas { width: 100%; height: 200px; background: #f8fafc; border: 2px dashed #cb
             <option value="Alta">🔴 Prioridade: Alta (Urgente)</option>
         </select>
         <textarea id="ocoDescricao" placeholder="📄 Descreva os detalhes da ocorrência..."></textarea>
-        <p style="margin-top:10px; font-size: 14px; color: #555;">📷 Anexar Foto (Opcional)</p>
-        <input type="file" id="ocoFoto" accept="image/*">
+        <p style="margin-top:10px; font-size: 14px; color: inherit;">📷 Anexar Foto (Opcional)</p>
+        <input type="file" id="ocoFoto" accept="image/*" style="color: inherit;">
         <button class="btn" onclick="salvarOcorrencia()">💾 Salvar Ocorrência</button>
     </div>
     <div id="listaOcorrencias"></div>
@@ -227,7 +272,7 @@ canvas { width: 100%; height: 200px; background: #f8fafc; border: 2px dashed #cb
 
 <div id="encomendas" class="tela">
 
-<div class="box" style="background:#e8f5e9; text-align: center;">
+<div class="box" style="background: rgba(40, 167, 69, 0.1); border-color: #28a745; text-align: center;">
     <h2>📷 Baixa Rápida por QR Code</h2>
     <p style="font-size: 14px; margin-bottom: 10px;">Use a câmera para ler a etiqueta e confirmar a entrega.</p>
     <button class="btn" style="background:#28a745; width: auto; padding: 10px 20px;" onclick="iniciarLeitorQR()">Abrir Câmera do Sistema</button>
@@ -243,21 +288,21 @@ canvas { width: 100%; height: 200px; background: #f8fafc; border: 2px dashed #cb
 <input id="encCodigo" placeholder="Código/Rastreio">
 <input id="encVolumes" placeholder="Volumes">
 <input id="encPorteiro" placeholder="Porteiro que recebeu">
-<input type="file" id="encFoto" accept="image/*">
+<input type="file" id="encFoto" accept="image/*" style="color: inherit;">
 <p style="margin-top:15px;">✍️ Assinatura de Recebimento</p>
 <canvas id="canvasEncomenda"></canvas>
-<button class="btn" onclick="limparAssinaturaEncomenda()">Limpar Assinatura</button>
+<button class="btn" style="background: #64748b;" onclick="limparAssinaturaEncomenda()">Limpar Assinatura</button>
 <button class="btn" onclick="salvarEncomenda()">Cadastrar Encomenda</button>
 </div>
 
-<div class="box" style="background:#f1f4f8;">
+<div class="box" style="background: rgba(59, 130, 246, 0.05);">
 <h2>🔍 Histórico de Encomendas</h2>
-<p style="font-size: 14px; color: #555; margin-top: 5px;">Selecione uma data para ver o histórico do dia.</p>
+<p style="font-size: 14px; margin-top: 5px;">Selecione uma data para ver o histórico do dia.</p>
 <div class="filtro-container">
     <input type="date" id="filtroDataEncomenda" onchange="filtrarEncomendas()">
     <button class="btn btn-limpar" onclick="limparFiltroEncomendas()">Limpar Filtro</button>
 </div>
-<button class="btn" style="background:#1976d2;" onclick="gerarRelatorioEncomendas()">📊 Gerar Relatório PDF</button>
+<button class="btn" style="background:#3b82f6;" onclick="gerarRelatorioEncomendas()">📊 Gerar Relatório PDF</button>
 </div>
 
 <div id="listaEncomendas"></div>
@@ -289,6 +334,21 @@ canvas { width: 100%; height: 200px; background: #f8fafc; border: 2px dashed #cb
 function trocarTela(id){
     document.querySelectorAll(".tela").forEach(t=>t.classList.remove("ativa"));
     document.getElementById(id).classList.add("ativa");
+    
+    // Altera o estilo do menu ativo
+    document.querySelectorAll(".menu button").forEach(b => {
+        b.style.background = "transparent";
+        b.style.borderLeftColor = "transparent";
+        b.style.color = "#94a3b8";
+    });
+    let btnAtivo = Array.from(document.querySelectorAll(".menu button")).find(b => b.getAttribute("onclick").includes(id));
+    if(btnAtivo) {
+        btnAtivo.style.background = "rgba(59, 130, 246, 0.1)";
+        btnAtivo.style.borderLeftColor = "#3b82f6";
+        btnAtivo.style.color = "#fff";
+    }
+
+    if(id === 'dashboard') atualizarDashboard();
 }
 
 /* CONFIGURAÇÃO DO CANVAS DE ASSINATURA */
@@ -299,9 +359,9 @@ function configurarCanvas(canvasId){
     let desenhando = false;
     canvas.addEventListener("mousedown",(e)=>{ desenhando = true; ctx.beginPath(); ctx.moveTo(e.offsetX,e.offsetY); });
     canvas.addEventListener("mouseup",()=>{ desenhando = false; });
-    canvas.addEventListener("mousemove",(e)=>{ if(!desenhando) return; ctx.lineWidth = 2; ctx.lineCap = "round"; ctx.lineTo(e.offsetX,e.offsetY); ctx.stroke(); });
+    canvas.addEventListener("mousemove",(e)=>{ if(!desenhando) return; ctx.lineWidth = 2; ctx.lineCap = "round"; ctx.strokeStyle = document.body.classList.contains('dark-mode') ? "#fff" : "#000"; ctx.lineTo(e.offsetX,e.offsetY); ctx.stroke(); });
     canvas.addEventListener("touchstart",(e)=>{ e.preventDefault(); desenhando = true; let rect = canvas.getBoundingClientRect(); ctx.beginPath(); ctx.moveTo(e.touches[0].clientX - rect.left, e.touches[0].clientY - rect.top); });
-    canvas.addEventListener("touchmove",(e)=>{ if(!desenhando) return; e.preventDefault(); let rect = canvas.getBoundingClientRect(); ctx.lineWidth = 2; ctx.lineCap = "round"; ctx.lineTo(e.touches[0].clientX - rect.left, e.touches[0].clientY - rect.top); ctx.stroke(); });
+    canvas.addEventListener("touchmove",(e)=>{ if(!desenhando) return; e.preventDefault(); let rect = canvas.getBoundingClientRect(); ctx.lineWidth = 2; ctx.lineCap = "round"; ctx.strokeStyle = document.body.classList.contains('dark-mode') ? "#fff" : "#000"; ctx.lineTo(e.touches[0].clientX - rect.left, e.touches[0].clientY - rect.top); ctx.stroke(); });
     canvas.addEventListener("touchend",()=>{ desenhando = false; });
     return { canvas, ctx };
 }
@@ -313,7 +373,7 @@ function limparAssinaturaEncomenda(){
 
 /* MORADORES */
 let moradores = JSON.parse(localStorage.getItem("moradores")) || [];
-function salvarMoradores(){ localStorage.setItem("moradores",JSON.stringify(moradores)); }
+function salvarMoradores(){ localStorage.setItem("moradores",JSON.stringify(moradores)); atualizarDashboard(); }
 function addMorador(){ moradores.push({ nome:document.getElementById('nome').value, apto:document.getElementById('apto').value, secretaria:document.getElementById('secretaria').value, visitantes:document.getElementById('visitantes').value }); salvarMoradores(); mostrarMoradores(); document.getElementById('nome').value=''; document.getElementById('apto').value=''; document.getElementById('secretaria').value=''; document.getElementById('visitantes').value=''; }
 function mostrarMoradores(){ let listaMoradores = document.getElementById('listaMoradores'); listaMoradores.innerHTML=""; moradores.forEach((m,index)=>{ listaMoradores.innerHTML += `<div class="card"><h3>${m.nome}</h3><p>🏢 ${m.apto}</p><p>👩‍💼 ${m.secretaria}</p><p>👥 ${m.visitantes}</p><div class="acoes"><button class="btn-acao editar" onclick="editarMorador(${index})">✏️ Editar</button><button class="btn-acao excluir" onclick="excluirMorador(${index})">🗑️ Excluir</button></div></div>`; }); }
 function editarMorador(index){ let novoNome = prompt("Nome:", moradores[index].nome); if(novoNome) moradores[index].nome = novoNome; let novoApto = prompt("Apartamento:", moradores[index].apto); if(novoApto) moradores[index].apto = novoApto; salvarMoradores(); mostrarMoradores(); }
@@ -322,26 +382,28 @@ function excluirMorador(index){ if(confirm("Excluir morador?")) { moradores.spli
 function gerarRelatorioMoradores() {
     if (moradores.length === 0) return alert("Não há moradores cadastrados.");
     const { jsPDF } = window.jspdf; const doc = new jsPDF();
-    doc.setFontSize(18); doc.setTextColor(122, 15, 60); doc.text("Relatório de Moradores", 14, 20);
+    doc.setFontSize(18); doc.setTextColor(15, 23, 42); doc.text("Relatório de Moradores", 14, 20);
     doc.setFontSize(10); doc.setTextColor(100); doc.text(`Gerado em: ${new Date().toLocaleString('pt-BR')}`, 14, 28);
     const colunas = ["Nome", "Apto", "Secretária", "Visitantes/Autorizados"];
     const linhas = moradores.map(m => [m.nome || "-", m.apto || "-", m.secretaria || "-", m.visitantes || "-"]);
-    doc.autoTable({ head: [colunas], body: linhas, startY: 35, headStyles: { fillColor: [122, 15, 60] } });
+    doc.autoTable({ head: [colunas], body: linhas, startY: 35, headStyles: { fillColor: [59, 130, 246] } });
     doc.save("Relatorio_Moradores.pdf");
 }
 
 /* VEICULOS */
 let veiculos = JSON.parse(localStorage.getItem("veiculos")) || [];
-function salvarVeiculos(){ localStorage.setItem("veiculos",JSON.stringify(veiculos)); }
+function salvarVeiculos(){ localStorage.setItem("veiculos",JSON.stringify(veiculos)); atualizarDashboard(); }
 function addVeiculo(){ veiculos.push({ morador:document.getElementById('veiMorador').value, modelo:document.getElementById('veiModelo').value, placa:document.getElementById('veiPlaca').value, cor:document.getElementById('veiCor').value, vaga:document.getElementById('veiVaga').value }); salvarVeiculos(); mostrarVeiculos(); document.getElementById('veiMorador').value=''; document.getElementById('veiModelo').value=''; document.getElementById('veiPlaca').value=''; document.getElementById('veiCor').value=''; document.getElementById('veiVaga').value=''; }
-function mostrarVeiculos(){ let listaVeiculos = document.getElementById('listaVeiculos'); listaVeiculos.innerHTML=""; veiculos.forEach((v,index)=>{ listaVeiculos.innerHTML += `<div class="card"><h3>${v.modelo}</h3><p>🚘 ${v.placa}</p><p>👤 ${v.morador}</p><p>🎨 ${v.cor}</p><p>🅿️ ${v.vaga}</p></div>`; }); }
+function mostrarVeiculos(){ let listaVeiculos = document.getElementById('listaVeiculos'); listaVeiculos.innerHTML=""; veiculos.forEach((v,index)=>{ listaVeiculos.innerHTML += `<div class="card"><h3>${v.modelo}</h3><p>🚘 ${v.placa}</p><p>👤 ${v.morador}</p><p>🎨 ${v.cor}</p><p>🅿️ ${v.vaga}</p><div class="acoes"><button class="btn-acao excluir" onclick="excluirVeiculo(${index})">🗑️ Excluir</button></div></div>`; }); }
+function excluirVeiculo(index){ if(confirm("Excluir veículo?")) { veiculos.splice(index,1); salvarVeiculos(); mostrarVeiculos(); } }
 
 /* RESERVAS */
 let reservas = JSON.parse(localStorage.getItem("reservas")) || [];
-function salvarReserva(){ reservas.push({ tipo:document.getElementById('tipoReserva').value, data:document.getElementById('dataReserva').value, hora:document.getElementById('horaReserva').value, responsavel:document.getElementById('responsavel').value }); localStorage.setItem("reservas",JSON.stringify(reservas)); mostrarReservas(); }
-function mostrarReservas(){ let listaReservas = document.getElementById('listaReservas'); listaReservas.innerHTML=""; reservas.forEach((r,index)=>{ listaReservas.innerHTML += `<div class="card"><h3>${r.tipo}</h3><p>📅 ${r.data}</p><p>🕒 ${r.hora}</p><p>👤 ${r.responsavel}</p><div class="acoes"><button class="btn-acao editar" onclick="editarReserva(${index})">✏️ Editar</button><button class="btn-acao excluir" onclick="excluirReserva(${index})">🗑️ Cancelar</button></div></div>`; }); }
-function editarReserva(index){ let r = prompt("Responsável:",reservas[index].responsavel); if(r) reservas[index].responsavel = r; localStorage.setItem("reservas",JSON.stringify(reservas)); mostrarReservas(); }
-function excluirReserva(index){ if(confirm("Cancelar reserva?")) { reservas.splice(index,1); localStorage.setItem("reservas",JSON.stringify(reservas)); mostrarReservas(); } }
+function salvarReservasBase(){ localStorage.setItem("reservas",JSON.stringify(reservas)); atualizarDashboard(); }
+function salvarReserva(){ reservas.push({ tipo:document.getElementById('tipoReserva').value, data:document.getElementById('dataReserva').value, hora:document.getElementById('horaReserva').value, responsavel:document.getElementById('responsavel').value }); salvarReservasBase(); mostrarReservas(); document.getElementById('dataReserva').value=''; document.getElementById('horaReserva').value=''; document.getElementById('responsavel').value='';}
+function mostrarReservas(){ let listaReservas = document.getElementById('listaReservas'); listaReservas.innerHTML=""; reservas.forEach((r,index)=>{ listaReservas.innerHTML += `<div class="card"><h3>${r.tipo}</h3><p>📅 ${r.data ? r.data.split('-').reverse().join('/') : ''}</p><p>🕒 ${r.hora}</p><p>👤 ${r.responsavel}</p><div class="acoes"><button class="btn-acao editar" onclick="editarReserva(${index})">✏️ Editar</button><button class="btn-acao excluir" onclick="excluirReserva(${index})">🗑️ Cancelar</button></div></div>`; }); }
+function editarReserva(index){ let r = prompt("Responsável:",reservas[index].responsavel); if(r) reservas[index].responsavel = r; salvarReservasBase(); mostrarReservas(); }
+function excluirReserva(index){ if(confirm("Cancelar reserva?")) { reservas.splice(index,1); salvarReservasBase(); mostrarReservas(); } }
 
 /* =========================================================================
    🚨 MÓDULO OCORRÊNCIAS
@@ -408,6 +470,7 @@ function finalizarSalvamentoOcorrencia(fotoBase64) {
     
     toggleFormOcorrencia();
     mostrarOcorrencias();
+    atualizarDashboard();
     
     if(nova.prioridade === "Alta") { alert("⚠️ ATENÇÃO: Ocorrência URGENTE registrada!"); }
 }
@@ -451,7 +514,7 @@ function mostrarOcorrencias(filtro = "") {
         if(o.prioridade === "Alta" && o.status !== "Resolvida") classeStatus = "status-urgente";
 
         let p = o.data.split('-');
-        let dataFormatada = `${p[2]}/${p[1]}/${p[0]}`;
+        let dataFormatada = p.length === 3 ? `${p[2]}/${p[1]}/${p[0]}` : o.data;
 
         lista.innerHTML += `
         <div class="card" style="${o.prioridade === 'Alta' && o.status !== 'Resolvida' ? 'border-left: 5px solid #e53935;' : ''}">
@@ -464,7 +527,7 @@ function mostrarOcorrencias(filtro = "") {
             ${o.morador !== "Não identificado" ? `<p>👤 <b>Envolvido:</b> ${o.morador}</p>` : ''}
             <p>🕒 <b>Registro:</b> ${dataFormatada} às ${o.hora}</p>
             <p>👮 <b>Registrado por:</b> ${o.registradoPor}</p>
-            <div style="background: #f9f9f9; padding: 10px; border-radius: 8px; border-left: 3px solid #ccc; margin-top: 10px; font-style: italic;">"${o.descricao}"</div>
+            <div style="background: rgba(0,0,0,0.03); padding: 10px; border-radius: 8px; border-left: 3px solid #cbd5e1; margin-top: 10px; font-style: italic;">"${o.descricao}"</div>
             ${o.foto ? `<img src="${o.foto}" class="foto">` : ""}
             <div class="acoes">
                 <button class="btn-acao editar" onclick="mudarStatusOcorrencia(${index})">🔄 Atualizar Status</button>
@@ -480,11 +543,11 @@ function mostrarOcorrencias(filtro = "") {
 function mudarStatusOcorrencia(index) {
     let atual = ocorrencias[index].status;
     let novo = prompt(`Status atual: ${atual}\n\nDigite o novo status (Ex: Em aberto, Em andamento, Resolvida):`, atual);
-    if(novo && novo !== atual) { ocorrencias[index].status = novo; localStorage.setItem("ocorrencias", JSON.stringify(ocorrencias)); mostrarOcorrencias(document.getElementById("pesquisaOcorrencia").value); }
+    if(novo && novo !== atual) { ocorrencias[index].status = novo; localStorage.setItem("ocorrencias", JSON.stringify(ocorrencias)); mostrarOcorrencias(document.getElementById("pesquisaOcorrencia").value); atualizarDashboard(); }
 }
 
 function excluirOcorrencia(index) {
-    if(confirm("Deseja realmente apagar esta ocorrência do histórico?")) { ocorrencias.splice(index, 1); localStorage.setItem("ocorrencias", JSON.stringify(ocorrencias)); mostrarOcorrencias(document.getElementById("pesquisaOcorrencia").value); }
+    if(confirm("Deseja realmente apagar esta ocorrência do histórico?")) { ocorrencias.splice(index, 1); localStorage.setItem("ocorrencias", JSON.stringify(ocorrencias)); mostrarOcorrencias(document.getElementById("pesquisaOcorrencia").value); atualizarDashboard(); }
 }
 
 function transformarEmComunicado(index) {
@@ -507,11 +570,11 @@ function enviarWhatsappOcorrencia(index) {
 function gerarRelatorioOcorrencias() {
     if (ocorrencias.length === 0) return alert("Não há ocorrências registradas.");
     const { jsPDF } = window.jspdf; const doc = new jsPDF();
-    doc.setFontSize(18); doc.setTextColor(122, 15, 60); doc.text("Livro de Ocorrências da Portaria", 14, 20);
+    doc.setFontSize(18); doc.setTextColor(15, 23, 42); doc.text("Livro de Ocorrências da Portaria", 14, 20);
     doc.setFontSize(10); doc.setTextColor(100); doc.text(`Gerado em: ${new Date().toLocaleString('pt-BR')}`, 14, 28);
     const colunas = ["ID / Data", "Tipo", "Local", "Prioridade", "Status"];
-    const linhas = ocorrencias.map(o => { let p = o.data.split('-'); return [ `${o.id}\n${p[2]}/${p[1]} ${o.hora}`, o.tipo, o.apto, o.prioridade, o.status ]; });
-    doc.autoTable({ head: [colunas], body: linhas, startY: 35, headStyles: { fillColor: [122, 15, 60] }, styles: { cellPadding: 4 } });
+    const linhas = ocorrencias.map(o => { let p = o.data.split('-'); return [ `${o.id}\n${p.length===3 ? p[2]+'/'+p[1] : o.data} ${o.hora}`, o.tipo, o.apto, o.prioridade, o.status ]; });
+    doc.autoTable({ head: [colunas], body: linhas, startY: 35, headStyles: { fillColor: [59, 130, 246] }, styles: { cellPadding: 4 } });
     doc.save("Diario_Ocorrencias.pdf");
 }
 
@@ -540,7 +603,7 @@ function criarEncomenda(foto){
         transportadora:document.getElementById('encTransportadora').value, 
         codigo:document.getElementById('encCodigo').value, 
         volumes:document.getElementById('encVolumes').value, 
-        porteiro:document.getElementById('encPorteiro').value, // <-- AQUI INCLUI O PORTEIRO
+        porteiro:document.getElementById('encPorteiro').value,
         foto, 
         assinatura: encomendaCanvas.canvas.toDataURL(), 
         status:"Pendente", 
@@ -549,14 +612,8 @@ function criarEncomenda(foto){
     });
     
     localStorage.setItem("encomendas",JSON.stringify(encomendas));
-    document.getElementById('encMorador').value=''; 
-    document.getElementById('encApto').value=''; 
-    document.getElementById('encTransportadora').value=''; 
-    document.getElementById('encCodigo').value=''; 
-    document.getElementById('encVolumes').value=''; 
-    document.getElementById('encPorteiro').value=''; // <-- AQUI LIMPA O CAMPO DO PORTEIRO
-    document.getElementById("encFoto").value='';
-    mostrarEncomendas(); limparAssinaturaEncomenda(); 
+    document.getElementById('encMorador').value=''; document.getElementById('encApto').value=''; document.getElementById('encTransportadora').value=''; document.getElementById('encCodigo').value=''; document.getElementById('encVolumes').value=''; document.getElementById('encPorteiro').value=''; document.getElementById("encFoto").value='';
+    mostrarEncomendas(); limparAssinaturaEncomenda(); atualizarDashboard();
 }
 
 function mostrarEncomendas(filtroData = ""){
@@ -573,7 +630,8 @@ function mostrarEncomendas(filtroData = ""){
             <div class="badge ${e.status==="Pendente" ? "status-pendente" : "status-entregue"}">${e.status}</div>
             <p>👤 <b>Morador:</b> ${e.morador}</p>
             <p>🏢 <b>Apto:</b> ${e.apto}</p>
-            <p>👮 <b>Recebido por:</b> ${e.porteiro || "N/A"}</p> <p>📅 <b>Chegada:</b> <b>${dataExibicao} ${e.horaChegada ? `às ${e.horaChegada}` : ''}</b></p>
+            <p>👮 <b>Recebido por:</b> ${e.porteiro || "N/A"}</p>
+            <p>📅 <b>Chegada:</b> <b>${dataExibicao} ${e.horaChegada ? `às ${e.horaChegada}` : ''}</b></p>
             <p>📌 <b>Código:</b> ${e.codigo}</p>
             <p>📦 <b>Volumes:</b> ${e.volumes}</p>
             <p style="font-size:12px; color:#999;">ID: ${e.id || "Antigo"}</p>
@@ -593,15 +651,14 @@ function mostrarEncomendas(filtroData = ""){
 
 function filtrarEncomendas() { mostrarEncomendas(document.getElementById("filtroDataEncomenda").value); }
 function limparFiltroEncomendas() { document.getElementById("filtroDataEncomenda").value = ""; mostrarEncomendas(); }
-function marcarEntregue(index){ encomendas[index].status = "Entregue"; localStorage.setItem("encomendas",JSON.stringify(encomendas)); filtrarEncomendas(); }
-function excluirEncomenda(index){ if(confirm("Deseja excluir esta encomenda?")) { encomendas.splice(index,1); localStorage.setItem("encomendas",JSON.stringify(encomendas)); filtrarEncomendas(); } }
+function marcarEntregue(index){ encomendas[index].status = "Entregue"; localStorage.setItem("encomendas",JSON.stringify(encomendas)); filtrarEncomendas(); atualizarDashboard(); }
+function excluirEncomenda(index){ if(confirm("Deseja excluir esta encomenda?")) { encomendas.splice(index,1); localStorage.setItem("encomendas",JSON.stringify(encomendas)); filtrarEncomendas(); atualizarDashboard(); } }
 function avisarWhatsappEncomenda(index){ let msg = `Olá ${encomendas[index].morador}, sua encomenda chegou na portaria.`; window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`); }
 
-/* IMPRESSÃO PERFEITA E BLINDADA CONTRA ERROS DO NAVEGADOR */
+/* IMPRESSÃO PERFEITA */
 function imprimirEtiqueta(index){
     let e = encomendas[index]; 
     let janela = window.open("", "", "width=350,height=500");
-    
     let dataFormatada = "";
     if(e.dataChegada) { let p = e.dataChegada.split('-'); dataFormatada = p[2] + '/' + p[1] + '/' + p[0]; }
     let horaFormatada = e.horaChegada ? e.horaChegada : "";
@@ -626,14 +683,9 @@ function imprimirEtiqueta(index){
             <p><b>Vols:</b> ${vol}</p>
             <p style="font-size: 14px; margin-top: 15px;">📅 ${dataFormatada} às ${horaFormatada}</p>
             <p class="rodape">ID: ${ident}</p>
-            
             <button class="btn-imprimir" onclick="window.print()">🖨️ Imprimir Etiqueta</button>
             <p style="font-size: 11px; color: #888; margin-top: 5px;" class="btn-imprimir">Feche a janela após imprimir.</p>
-
-            <script>
-                window.onload = function() { window.print(); };
-                window.onafterprint = function() { window.close(); };
-            <\/script>
+            <script> window.onload = function() { window.print(); }; window.onafterprint = function() { window.close(); }; <\/script>
         </body></html>
     `);
     janela.document.close();
@@ -643,8 +695,6 @@ function imprimirSoQRCode(index){
     let e = encomendas[index]; 
     let janela = window.open("", "", "width=300,height=380");
     let ident = e.id || "Antigo";
-    
-    // Gera a imagem do QR Code ANTES de abrir a janela de impressão
     let qrImgTag = "";
     if(e.id && e.id !== "undefined") { 
         let linkSistema = window.location.href.split("?")[0] + "?baixar=" + e.id; 
@@ -666,13 +716,8 @@ function imprimirSoQRCode(index){
             ${qrImgTag}
             <p class="rodape">AP ${e.apto}</p>
             <p class="sub-rodape">ID: ${ident}</p>
-            
             <button class="btn-imprimir" onclick="window.print()">🖨️ Imprimir</button>
-
-            <script>
-                window.onload = function() { window.print(); };
-                window.onafterprint = function() { window.close(); };
-            <\/script>
+            <script> window.onload = function() { window.print(); }; window.onafterprint = function() { window.close(); }; <\/script>
         </body></html>
     `);
     janela.document.close();
@@ -682,10 +727,10 @@ function gerarRelatorioEncomendas() {
     let dataFiltro = document.getElementById("filtroDataEncomenda").value; let encs = dataFiltro ? encomendas.filter(e => e.dataChegada === dataFiltro) : encomendas;
     if (encs.length === 0) return alert("Não há encomendas para esta data.");
     const { jsPDF } = window.jspdf; const doc = new jsPDF();
-    doc.setFontSize(18); doc.setTextColor(122, 15, 60); doc.text("Relatório de Encomendas", 14, 20); doc.setFontSize(10); doc.setTextColor(100); doc.text(`Gerado em: ${new Date().toLocaleString('pt-BR')}`, 14, 28);
+    doc.setFontSize(18); doc.setTextColor(15, 23, 42); doc.text("Relatório de Encomendas", 14, 20); doc.setFontSize(10); doc.setTextColor(100); doc.text(`Gerado em: ${new Date().toLocaleString('pt-BR')}`, 14, 28);
     const colunas = ["Data / Hora", "Morador", "Apto", "Transportadora", "Status"];
     const linhas = encs.map(e => [e.dataChegada ? `${e.dataChegada.split('-').reverse().join('/')}\n${e.horaChegada||''}` : "-", e.morador || "-", e.apto || "-", e.transportadora || "-", e.status || "-"]);
-    doc.autoTable({ head: [colunas], body: linhas, startY: 35, headStyles: { fillColor: [122, 15, 60] } });
+    doc.autoTable({ head: [colunas], body: linhas, startY: 35, headStyles: { fillColor: [59, 130, 246] } });
     doc.save("Relatorio_Encomendas.pdf");
 }
 
@@ -694,7 +739,7 @@ function confirmarEntregaPorID(id) {
     if(index === -1) return alert("❌ Encomenda não encontrada!");
     let e = encomendas[index];
     if(e.status === "Entregue") return alert(`A encomenda do Apto ${e.apto} já consta como ENTREGUE!`);
-    if(confirm(`📦 CONFIRMAÇÃO DE ENTREGA 📦\n\nMorador: ${e.morador}\nApto: ${e.apto}\nTransp: ${e.transportadora}\n\nConfirmar entrega?`)) { encomendas[index].status = "Entregue"; localStorage.setItem("encomendas", JSON.stringify(encomendas)); mostrarEncomendas(); alert("✅ Entrega registrada!"); }
+    if(confirm(`📦 CONFIRMAÇÃO DE ENTREGA 📦\n\nMorador: ${e.morador}\nApto: ${e.apto}\nTransp: ${e.transportadora}\n\nConfirmar entrega?`)) { encomendas[index].status = "Entregue"; localStorage.setItem("encomendas", JSON.stringify(encomendas)); mostrarEncomendas(); atualizarDashboard(); alert("✅ Entrega registrada!"); }
 }
 
 window.addEventListener('load', () => {
@@ -711,12 +756,81 @@ let comunicados = JSON.parse(localStorage.getItem("comunicados")) || [];
 function salvarComunicado(){ comunicados.unshift({ tipo:document.getElementById('tipoComunicado').value, titulo:document.getElementById('tituloComunicado').value, data:document.getElementById('dataComunicado').value, hora:document.getElementById('horaComunicado').value, local:document.getElementById('localComunicado').value, mensagem:document.getElementById('mensagemComunicado').value, status:"Em andamento" }); localStorage.setItem("comunicados",JSON.stringify(comunicados)); mostrarComunicados(); 
     document.getElementById('tituloComunicado').value = ''; document.getElementById('localComunicado').value = ''; document.getElementById('mensagemComunicado').value = '';
 }
-function mostrarComunicados(){ let listaComunicados = document.getElementById('listaComunicados'); listaComunicados.innerHTML=""; comunicados.forEach((c,index)=>{ listaComunicados.innerHTML += `<div class="card"><h3>${c.tipo}</h3><div class="badge ${c.status === 'Em andamento' ? 'status-pendente' : 'status-entregue'}">${c.status}</div><p style="margin-top: 10px;"><b>${c.titulo}</b></p><p>📅 ${c.data || ''} 🕒 ${c.hora || ''}</p><p>📍 ${c.local}</p><div style="background: #f9f9f9; padding: 10px; border-radius: 8px; margin-top: 10px; white-space: pre-wrap;">${c.mensagem}</div><div class="acoes"><button class="btn-acao finalizado" onclick="finalizarComunicado(${index})">✅ Resolvido</button><button class="btn-acao excluir" onclick="excluirComunicado(${index})">🗑️ Excluir</button></div></div>`; }); }
+function mostrarComunicados(){ let listaComunicados = document.getElementById('listaComunicados'); listaComunicados.innerHTML=""; comunicados.forEach((c,index)=>{ listaComunicados.innerHTML += `<div class="card"><h3>${c.tipo}</h3><div class="badge ${c.status === 'Em andamento' ? 'status-pendente' : 'status-entregue'}">${c.status}</div><p style="margin-top: 10px;"><b>${c.titulo}</b></p><p>📅 ${c.data ? c.data.split('-').reverse().join('/') : ''} 🕒 ${c.hora || ''}</p><p>📍 ${c.local}</p><div style="background: rgba(0,0,0,0.03); padding: 10px; border-radius: 8px; margin-top: 10px; white-space: pre-wrap;">${c.mensagem}</div><div class="acoes"><button class="btn-acao finalizado" onclick="finalizarComunicado(${index})">✅ Resolvido</button><button class="btn-acao excluir" onclick="excluirComunicado(${index})">🗑️ Excluir</button></div></div>`; }); }
 function finalizarComunicado(index){ comunicados[index].status = "Finalizado"; localStorage.setItem("comunicados",JSON.stringify(comunicados)); mostrarComunicados(); }
 function excluirComunicado(index){ if(confirm("Excluir comunicado?")) { comunicados.splice(index,1); localStorage.setItem("comunicados",JSON.stringify(comunicados)); mostrarComunicados(); } }
 
-/* INICIAR */
+/* =========================================
+   MOTOR DA DASHBOARD E DARK MODE
+   ========================================= */
+
+function iniciarRelogio() {
+    setInterval(() => {
+        let agora = new Date();
+        document.getElementById("relogio").innerText = agora.toLocaleTimeString('pt-BR');
+        
+        let hora = agora.getHours();
+        let saudacao = "Boa noite";
+        if(hora >= 5 && hora < 12) saudacao = "Bom dia";
+        else if(hora >= 12 && hora < 18) saudacao = "Boa tarde";
+        document.getElementById("saudacao").innerText = `${saudacao}, Webert 👋`;
+    }, 1000);
+}
+
+function atualizarDashboard() {
+    let abertas = ocorrencias.filter(o => o.status !== "Resolvida" && o.status !== "Finalizado").length;
+    document.getElementById("dash-ocorrencias").innerText = abertas;
+
+    document.getElementById("dash-veiculos").innerText = veiculos.length;
+    document.getElementById("dash-moradores").innerText = moradores.length;
+
+    let dataHoje = new Date().toISOString().split('T')[0];
+    let resHoje = reservas.filter(r => r.data === dataHoje).length;
+    document.getElementById("dash-reservas").innerText = resHoje;
+
+    let pendentes = encomendas.filter(e => e.status === "Pendente");
+    document.getElementById("dash-encomendas").innerText = pendentes.length;
+
+    let verde = 0, amarelo = 0, vermelho = 0;
+    
+    pendentes.forEach(e => {
+        if(!e.dataChegada) return;
+        let dataChegada = new Date(e.dataChegada);
+        let hoje = new Date(dataHoje);
+        let diferencaDias = Math.floor((hoje - dataChegada) / (1000 * 60 * 60 * 24));
+
+        if(diferencaDias <= 2) verde++;
+        else if(diferencaDias >= 3 && diferencaDias <= 5) amarelo++;
+        else vermelho++;
+    });
+
+    let cardEnc = document.getElementById("card-dash-encomendas");
+    if(vermelho > 0) cardEnc.style.borderBottom = "4px solid #ef4444";
+    else if(amarelo > 0) cardEnc.style.borderBottom = "4px solid #f59e0b";
+    else cardEnc.style.borderBottom = "4px solid #3b82f6";
+
+    document.getElementById("detalhes-encomendas").innerHTML = `
+        <span style="color: #10b981; font-weight: bold;">🟢 Hoje/Recentes: ${verde}</span><br>
+        <span style="color: #f59e0b; font-weight: bold;">🟡 3 a 5 dias: ${amarelo}</span><br>
+        <span style="color: #ef4444; font-weight: bold;">🔴 +5 dias: ${vermelho}</span>
+    `;
+}
+
+function toggleDarkMode() {
+    document.body.classList.toggle("dark-mode");
+    let icon = document.querySelector(".btn-dark i");
+    if(document.body.classList.contains("dark-mode")) {
+        icon.classList.remove("fa-moon");
+        icon.classList.add("fa-sun");
+    } else {
+        icon.classList.remove("fa-sun");
+        icon.classList.add("fa-moon");
+    }
+}
+
+/* INICIAR SISTEMA */
 mostrarMoradores(); mostrarVeiculos(); mostrarReservas(); mostrarEncomendas(); mostrarOcorrencias(); mostrarComunicados();
+iniciarRelogio(); atualizarDashboard();
 </script>
 
 </body>
