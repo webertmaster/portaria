@@ -71,13 +71,27 @@ textarea { min-height: 100px; resize: vertical; }
 canvas { width: 100%; height: 200px; background: #f8fafc; border: 2px dashed #cbd5e1; border-radius: 12px; margin-top: 10px; touch-action: none; cursor: crosshair; }
 
 /* ESTILOS DA DASHBOARD */
-.dash-header { display: flex; justify-content: space-between; align-items: center; background: white; padding: 25px 30px; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.03); border: 1px solid #e2e8f0; transition: background 0.3s, border 0.3s; }
-.btn-dark { background: #1e293b; color: #f8fafc; border: none; width: 45px; height: 45px; border-radius: 12px; cursor: pointer; font-size: 18px; transition: 0.3s; }
+.dash-header { display: flex; justify-content: space-between; align-items: center; background: white; padding: 20px 25px; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.03); border: 1px solid #e2e8f0; transition: background 0.3s, border 0.3s; }
+.btn-dark { background: #1e293b; color: #f8fafc; border: none; width: 40px; height: 40px; border-radius: 12px; cursor: pointer; font-size: 16px; transition: 0.3s; }
 .btn-dark:hover { transform: scale(1.05); }
-.stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin-bottom: 25px; }
-.stat-card { background: white; padding: 20px; border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; font-size: 15px; color: #64748b; border: 1px solid #e2e8f0; transition: transform 0.2s, background 0.3s, border 0.3s; }
+
+/* GRID MENOR E MAIS COMPACTO */
+.stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 15px; margin-bottom: 25px; }
+.stat-card { background: white; padding: 15px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; color: #64748b; border: 1px solid #e2e8f0; transition: transform 0.2s, background 0.3s, border 0.3s; }
 .stat-card:hover { transform: translateY(-3px); }
-.stat-card span { font-size: 32px; margin-top: 8px; font-weight: 800; color: #0f172a; transition: color 0.3s; }
+.stat-card i { font-size: 22px !important; margin-bottom: 8px !important; }
+.stat-card span { font-size: 24px; margin-top: 5px; font-weight: 800; color: #0f172a; transition: color 0.3s; }
+.stat-card p { font-size: 12px; font-weight: bold; margin-top: 5px; }
+
+/* ANIMAÇÕES DO PONTO PULSANTE (ENCOMENDAS) */
+@keyframes pulse-green { 0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); } 70% { box-shadow: 0 0 0 10px rgba(16, 185, 129, 0); } 100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); } }
+@keyframes pulse-yellow { 0% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.7); } 70% { box-shadow: 0 0 0 10px rgba(245, 158, 11, 0); } 100% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0); } }
+@keyframes pulse-red { 0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); } 70% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); } 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); } }
+
+.dot-status { width: 14px; height: 14px; border-radius: 50%; display: inline-block; }
+.dot-green { background: #10b981; animation: pulse-green 2s infinite; }
+.dot-yellow { background: #f59e0b; animation: pulse-yellow 2s infinite; }
+.dot-red { background: #ef4444; animation: pulse-red 2s infinite; }
 
 /* DARK MODE MÁGICO */
 body.dark-mode { background: #0f172a; color: #f8fafc; }
@@ -147,34 +161,33 @@ body.dark-mode canvas { background: #0f172a; border-color: #475569; }
     
     <div class="stats-grid">
         <div class="stat-card" id="card-dash-encomendas" style="border-bottom: 4px solid #3b82f6;">
-            <i class="fa-solid fa-box-open" style="font-size: 28px; color: #3b82f6; margin-bottom: 10px;"></i>
+            <i class="fa-solid fa-box-open" style="color: #3b82f6;"></i>
             <span id="dash-encomendas">0</span>
-            <p style="font-weight: bold; margin-top: 5px;">Encomendas Pendentes</p>
-            <div id="detalhes-encomendas" style="font-size: 13px; margin-top: 15px; text-align: left; width: 100%; background: rgba(0,0,0,0.03); padding: 10px; border-radius: 8px;"></div>
+            <p>Encomendas Pendentes</p>
         </div>
 
         <div class="stat-card" style="border-bottom: 4px solid #f59e0b;">
-            <i class="fa-solid fa-triangle-exclamation" style="font-size: 28px; color: #f59e0b; margin-bottom: 10px;"></i>
+            <i class="fa-solid fa-triangle-exclamation" style="color: #f59e0b;"></i>
             <span id="dash-ocorrencias">0</span>
-            <p style="font-weight: bold; margin-top: 5px;">Ocorrências em Aberto</p>
+            <p>Ocorrências em Aberto</p>
         </div>
 
         <div class="stat-card" style="border-bottom: 4px solid #10b981;">
-            <i class="fa-solid fa-calendar-check" style="font-size: 28px; color: #10b981; margin-bottom: 10px;"></i>
+            <i class="fa-solid fa-calendar-check" style="color: #10b981;"></i>
             <span id="dash-reservas">0</span>
-            <p style="font-weight: bold; margin-top: 5px;">Reservas Hoje</p>
+            <p>Reservas Hoje</p>
         </div>
 
         <div class="stat-card" style="border-bottom: 4px solid #64748b;">
-            <i class="fa-solid fa-car" style="font-size: 28px; color: #64748b; margin-bottom: 10px;"></i>
+            <i class="fa-solid fa-car" style="color: #64748b;"></i>
             <span id="dash-veiculos">0</span>
-            <p style="font-weight: bold; margin-top: 5px;">Veículos Cadastrados</p>
+            <p>Veículos Cadastrados</p>
         </div>
         
         <div class="stat-card" style="border-bottom: 4px solid #8b5cf6;">
-            <i class="fa-solid fa-users" style="font-size: 28px; color: #8b5cf6; margin-bottom: 10px;"></i>
+            <i class="fa-solid fa-users" style="color: #8b5cf6;"></i>
             <span id="dash-moradores">0</span>
-            <p style="font-weight: bold; margin-top: 5px;">Moradores Registrados</p>
+            <p>Moradores Registrados</p>
         </div>
     </div>
 </div>
@@ -619,14 +632,36 @@ function criarEncomenda(foto){
 function mostrarEncomendas(filtroData = ""){
     let listaEncomendas = document.getElementById('listaEncomendas');
     listaEncomendas.innerHTML="";
+    
+    let hojeCalculo = new Date();
+    hojeCalculo.setHours(0,0,0,0);
+
     encomendas.forEach((e,index)=>{
         if(filtroData && e.dataChegada !== filtroData) return;
+        
         let dataExibicao = "Sem data registrada";
-        if(e.dataChegada){ let p = e.dataChegada.split('-'); if(p.length === 3) dataExibicao = `${p[2]}/${p[1]}/${p[0]}`; }
+        let dotHtml = "";
+
+        if(e.dataChegada){ 
+            let p = e.dataChegada.split('-'); 
+            if(p.length === 3) dataExibicao = `${p[2]}/${p[1]}/${p[0]}`; 
+            
+            if(e.status === "Pendente") {
+                let dataCheg = new Date(p[0], p[1]-1, p[2]);
+                let diffDias = Math.floor((hojeCalculo - dataCheg) / (1000 * 60 * 60 * 24));
+                
+                if(diffDias <= 2) dotHtml = `<div class="dot-status dot-green" title="Recente"></div>`;
+                else if(diffDias >= 3 && diffDias <= 5) dotHtml = `<div class="dot-status dot-yellow" title="Atenção"></div>`;
+                else dotHtml = `<div class="dot-status dot-red" title="Atrasado"></div>`;
+            }
+        }
 
         listaEncomendas.innerHTML += `
         <div class="card">
-            <h3>📦 ${e.transportadora}</h3>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                <h3 style="margin-bottom: 0;">📦 ${e.transportadora}</h3>
+                ${dotHtml}
+            </div>
             <div class="badge ${e.status==="Pendente" ? "status-pendente" : "status-entregue"}">${e.status}</div>
             <p>👤 <b>Morador:</b> ${e.morador}</p>
             <p>🏢 <b>Apto:</b> ${e.apto}</p>
@@ -791,7 +826,7 @@ function atualizarDashboard() {
     let pendentes = encomendas.filter(e => e.status === "Pendente");
     document.getElementById("dash-encomendas").innerText = pendentes.length;
 
-    let verde = 0, amarelo = 0, vermelho = 0;
+    let amarelo = 0, vermelho = 0;
     
     pendentes.forEach(e => {
         if(!e.dataChegada) return;
@@ -799,21 +834,14 @@ function atualizarDashboard() {
         let hoje = new Date(dataHoje);
         let diferencaDias = Math.floor((hoje - dataChegada) / (1000 * 60 * 60 * 24));
 
-        if(diferencaDias <= 2) verde++;
-        else if(diferencaDias >= 3 && diferencaDias <= 5) amarelo++;
-        else vermelho++;
+        if(diferencaDias >= 3 && diferencaDias <= 5) amarelo++;
+        else if (diferencaDias > 5) vermelho++;
     });
 
     let cardEnc = document.getElementById("card-dash-encomendas");
     if(vermelho > 0) cardEnc.style.borderBottom = "4px solid #ef4444";
     else if(amarelo > 0) cardEnc.style.borderBottom = "4px solid #f59e0b";
     else cardEnc.style.borderBottom = "4px solid #3b82f6";
-
-    document.getElementById("detalhes-encomendas").innerHTML = `
-        <span style="color: #10b981; font-weight: bold;">🟢 Hoje/Recentes: ${verde}</span><br>
-        <span style="color: #f59e0b; font-weight: bold;">🟡 3 a 5 dias: ${amarelo}</span><br>
-        <span style="color: #ef4444; font-weight: bold;">🔴 +5 dias: ${vermelho}</span>
-    `;
 }
 
 function toggleDarkMode() {
