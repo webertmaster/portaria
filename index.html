@@ -196,10 +196,14 @@ body.dark-mode canvas { background: #0f172a; border-color: #475569; }
             <input id="funcNome" placeholder="Nome do Funcionário">
             <select id="funcCargo">
                 <option value="" disabled selected>Selecione o Cargo</option>
-                <option>Porteiro</option>
+                <option>Porteiro Diurno</option>
+                <option>Porteiro Noturno</option>
                 <option>Zelador</option>
                 <option>Auxiliar de Limpeza</option>
                 <option>Síndico</option>
+                <option>Sub síndico</option>
+                <option>Gerente</option>
+                <option>Administrador(a)</option>
             </select>
             <button class="btn" id="btnSalvarEquipe" onclick="addFuncionario()">Cadastrar Funcionário</button>
         </div>
@@ -361,8 +365,8 @@ body.dark-mode canvas { background: #0f172a; border-color: #475569; }
         </div>
         <div class="box">
             <h2>📦 Nova Encomenda</h2>
-            <input id="encMorador" placeholder="Morador">
-            <input id="encApto" placeholder="Apartamento">
+            <input id="encMorador" placeholder="Morador (Obrigatório)">
+            <input id="encApto" placeholder="Apartamento (Obrigatório)">
             <input id="encTransportadora" placeholder="Transportadora">
             <input id="encCodigo" placeholder="Código/Rastreio">
             <input id="encVolumes" placeholder="Volumes">
@@ -407,7 +411,7 @@ body.dark-mode canvas { background: #0f172a; border-color: #475569; }
 
 <script>
 /* =========================================================================
-   MÁGICA DO MENU E TELAS (CORRIGIDO)
+   MÁGICA DO MENU E TELAS 
    ========================================================================= */
 function trocarTela(id){
     document.querySelectorAll(".tela").forEach(t=>t.classList.remove("ativa"));
@@ -508,9 +512,14 @@ function mostrarEquipe() {
     });
 }
 
+function ajustarCargosAntigosEdicao(cargo) {
+    if (cargo === "Porteiro") return "Porteiro Diurno";
+    return cargo;
+}
+
 function prepararEdicaoEquipe(index) {
     document.getElementById("funcNome").value = equipe[index].nome;
-    document.getElementById("funcCargo").value = equipe[index].cargo;
+    document.getElementById("funcCargo").value = ajustarCargosAntigosEdicao(equipe[index].cargo);
     
     let btnSalvar = document.getElementById("btnSalvarEquipe");
     if(btnSalvar) btnSalvar.innerText = "💾 Salvar Alteração";
@@ -561,11 +570,11 @@ function gerarRelatorioPassagem() {
     if (listagem.length === 0) return alert("Sem dados."); const { jsPDF } = window.jspdf; const doc = new jsPDF('p', 'pt');
     doc.text("Livro de Passagem de Plantão", 40, 40); const colunas = ["Data/Hora", "Responsável", "Status", "Observações"];
     const linhas = listagem.map(p => [`${p.data.split('-').reverse().join('/')} ${p.hora}`, p.nome, `Portões: ${p.portoes?'OK':'X'}\nElev: ${p.elevadores?'OK':'X'}`, p.obs || "Nenhuma."]);
-    doc.autoTable({ head: [colunas], body: linhas, startY: 60, headStyles:{fillColor:[59,130,246]} }); doc.save("Plantao.pdf");
+    doc.autoTable({ head: [colunas], body: lines, startY: 60, headStyles:{fillColor:[59,130,246]} }); doc.save("Plantao.pdf");
 }
 
 /* =========================================================================
-   ⏰ PONTO DIGITAL E PDF A4 CORRIGIDO
+   ⏰ PONTO DIGITAL E PDF A4
    ========================================================================= */
 let pontos = JSON.parse(localStorage.getItem("pontos")) || [];
 function registrarPonto(evento) {
@@ -643,7 +652,7 @@ function addMorador(){ moradores.push({ nome:document.getElementById('nome').val
 function mostrarMoradores(){ let lista = document.getElementById('listaMoradores'); if(!lista) return; lista.innerHTML=""; moradores.forEach((m,index)=>{ lista.innerHTML += `<div class="card"><h3>${m.nome}</h3><p>🏢 AP: ${m.apto}</p><p>👩‍💼 Emp/Sec: ${m.secretaria}</p><p>👥 Autorizados: ${m.visitantes || 'Nenhum'}</p><div class="acoes"><button class="btn-acao editar" onclick="editarMorador(${index})">✏️ Editar</button><button class="btn-acao excluir" onclick="excluirMorador(${index})">🗑️ Excluir</button></div></div>`; }); }
 function editarMorador(index){ let n = prompt("Nome:", moradores[index].nome); if(n) moradores[index].nome = n; salvarMoradores(); mostrarMoradores(); }
 function excluirMorador(index){ if(confirm("Excluir morador?")) { moradores.splice(index,1); salvarMoradores(); mostrarMoradores(); } }
-function gerarRelatorioMoradores() { if (moradores.length === 0) return alert("Vazio."); const { jsPDF } = window.jspdf; const doc = new jsPDF(); doc.text("Lista de Moradores", 14, 20); const col = ["Nome", "Apto"]; const lin = moradores.map(m => [m.nome, m.apto]); doc.autoTable({ head: [col], body: lin, startY: 30 }); doc.save("Moradores.pdf"); }
+function generarRelatorioMoradores() { if (moradores.length === 0) return alert("Vazio."); const { jsPDF } = window.jspdf; const doc = new jsPDF(); doc.text("Lista de Moradores", 14, 20); const col = ["Nome", "Apto"]; const lin = moradores.map(m => [m.nome, m.apto]); doc.autoTable({ head: [col], body: lin, startY: 30 }); doc.save("Moradores.pdf"); }
 
 /* =========================================================================
    🚘 CADASTRO DE VEÍCULOS
@@ -705,10 +714,18 @@ function pesquisarOcorrencias() { let t = document.getElementById("pesquisaOcorr
 function gerarRelatorioOcorrencias() { const { jsPDF } = window.jspdf; const doc = new jsPDF(); doc.text("Histórico de Ocorrências", 14, 20); doc.save("Ocorrencias.pdf"); }
 
 /* =========================================================================
-   📦 ENCOMENDAS & GATILHOS PULSANTES
+   📦 ENCOMENDAS COM VALIDAÇÃO IMPEDINDO CADASTRO EM BRANCO
    ========================================================================= */
 let encomendas = JSON.parse(localStorage.getItem("encomendas")) || [];
 function salvarEncomenda(){
+    let morador = document.getElementById('encMorador').value.trim();
+    let apto = document.getElementById('encApto').value.trim();
+    
+    // VALIDACAO SEGURA: Impede o cadastro se morador ou apartamento estiverem vazios
+    if(!morador || !apto) {
+        return alert("⚠️ Os campos Morador e Apartamento são obrigatórios para cadastrar uma encomenda!");
+    }
+
     let fotoInput = document.getElementById("encFoto"); let arquivo = fotoInput.files[0];
     if(arquivo){ let leitor = new FileReader(); leitor.onload=function(e){ criarEncomenda(e.target.result); }; leitor.readAsDataURL(arquivo); } else { criarEncomenda(""); }
 }
@@ -733,7 +750,7 @@ function mostrarEncomendas(filtroData = ""){
             else if(diff >= 3 && diff <= 5) dotHtml = `<div class="dot-status dot-yellow"></div>`;
             else dotHtml = `<div class="dot-status dot-red"></div>`;
         }
-        lista.innerHTML += `<div class="card"><div style="display:flex; justify-content:space-between; align-items:center;"><h3>📦 ${e.transportadora}</h3>${dotHtml}</div><div class="badge ${e.status==='Pendente'?'status-pendente':'status-entregue'}">${e.status}</div><p>🏢 AP: ${e.apto} - Morador: ${e.morador}</p><p>🕒 Entrada: ${e.dataChegada.split('-').reverse().join('/')}</p>${e.foto?`<img src="${e.foto}" class="foto">`:''}<div class="acoes"><button class="btn-acao entregue" onclick="marcarEntregue(${index})">✅ Dar Baixa</button><button class="btn-acao excluir" onclick="excluirEncomenda(${index})">🗑️ Deletar</button></div></div>`;
+        lista.innerHTML += `<div class="card"><div style="display:flex; justify-content:space-between; align-items:center;"><h3>📦 ${e.transportadora || 'Não informada'}</h3>${dotHtml}</div><div class="badge ${e.status==='Pendente'?'status-pendente':'status-entregue'}">${e.status}</div><p>🏢 AP: ${e.apto} - Morador: ${e.morador}</p><p>🕒 Entrada: ${e.dataChegada.split('-').reverse().join('/')}</p>${e.foto?`<img src="${e.foto}" class="foto">`:''}<div class="acoes"><button class="btn-acao entregue" onclick="marcarEntregue(${index})">✅ Dar Baixa</button><button class="btn-acao excluir" onclick="excluirEncomenda(${index})">🗑️ Deletar</button></div></div>`;
     });
 }
 function marcarEntregue(i){ encomendas[i].status = "Entregue"; localStorage.setItem("encomendas", JSON.stringify(encomendas)); mostrarEncomendas(); atualizarDashboard(); }
