@@ -28,7 +28,7 @@ body { font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background
 .menu button:hover { background: rgba(255, 255, 255, 0.05); color: #ffffff; border-left: 4px solid #3b82f6; transform: translateX(4px); }
 
 /* CONTENT & CARDS CLEAN */
-.content { margin-left: 260px; padding: 40px; width: 100%; max-width: 1400px; margin-right: auto; }
+.content { margin-left: 260px; padding: 40px; width: 100%; max-width: 1400px; margin-right: auto; position: relative; }
 .box { background: #ffffff; padding: 25px; border-radius: 16px; margin-bottom: 25px; box-shadow: 0 4px 20px rgba(0,0,0,0.03); border: 1px solid #e2e8f0; transition: background 0.3s, border 0.3s; }
 .card { background: #ffffff; padding: 20px; border-radius: 12px; margin-top: 15px; box-shadow: 0 2px 10px rgba(0,0,0,0.04); border: 1px solid #f1f5f9; transition: transform 0.2s ease, background 0.3s, border 0.3s; }
 .card:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0,0,0,0.08); }
@@ -55,7 +55,6 @@ textarea { min-height: 100px; resize: vertical; }
 .print { background: #475569; color: #fff; }
 .qr-btn { background: #64748b; color: #fff; }
 .finalizado { background: #3b82f6; color: #fff; }
-.magico { background: linear-gradient(45deg, #8b5cf6, #3b82f6); }
 
 /* BADGES */
 .badge { display: inline-block; padding: 6px 12px; border-radius: 20px; margin-bottom: 15px; font-size: 12px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; }
@@ -86,11 +85,20 @@ canvas { width: 100%; height: 200px; background: #f8fafc; border: 2px dashed #cb
 @keyframes pulse-green { 0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); } 70% { box-shadow: 0 0 0 10px rgba(16, 185, 129, 0); } 100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); } }
 @keyframes pulse-yellow { 0% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.7); } 70% { box-shadow: 0 0 0 10px rgba(245, 158, 11, 0); } 100% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0); } }
 @keyframes pulse-red { 0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); } 70% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); } 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); } }
-
 .dot-status { width: 14px; height: 14px; border-radius: 50%; display: inline-block; }
 .dot-green { background: #10b981; animation: pulse-green 2s infinite; }
 .dot-yellow { background: #f59e0b; animation: pulse-yellow 2s infinite; }
 .dot-red { background: #ef4444; animation: pulse-red 2s infinite; }
+
+/* ESTILOS ESPECÍFICOS: GRID DE APARTAMENTOS E MODAL (MORADORES) */
+.apto-grid { display: flex; flex-wrap: wrap; gap: 15px; justify-content: center; margin-top: 20px; }
+.apto-btn { background: #e0f2fe; color: #0284c7; border: 2px solid #bae6fd; border-radius: 50%; width: 65px; height: 65px; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: bold; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+.apto-btn:hover { background: #3b82f6; color: #fff; border-color: #3b82f6; transform: scale(1.1); }
+
+.modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 1000; align-items: center; justify-content: center; backdrop-filter: blur(3px); animation: fadeIn 0.2s ease; }
+.modal-content { background: #fff; width: 90%; max-width: 400px; border-radius: 16px; padding: 25px; position: relative; box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
+.fechar-modal { position: absolute; top: 15px; right: 15px; background: none; border: none; font-size: 20px; cursor: pointer; color: #94a3b8; transition: color 0.2s; }
+.fechar-modal:hover { color: #ef4444; }
 
 /* DARK MODE MÁGICO */
 body.dark-mode { background: #0f172a; color: #f8fafc; }
@@ -101,6 +109,9 @@ body.dark-mode input, body.dark-mode select, body.dark-mode textarea { backgroun
 body.dark-mode .badge { background: rgba(255,255,255,0.1); }
 body.dark-mode .btn-dark { background: #f8fafc; color: #1e293b; }
 body.dark-mode canvas { background: #0f172a; border-color: #475569; }
+body.dark-mode .apto-btn { background: #1e293b; color: #38bdf8; border-color: #334155; }
+body.dark-mode .apto-btn:hover { background: #3b82f6; color: #fff; }
+body.dark-mode .modal-content { background: #1e293b; border: 1px solid #334155; }
 
 @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
@@ -270,19 +281,20 @@ body.dark-mode canvas { background: #0f172a; border-color: #475569; }
         <div class="box">
             <h2>👤 Cadastro de Moradores</h2>
             <input id="nome" placeholder="Nome do Morador">
-            <input id="apto" placeholder="Apartamento">
+            <input id="apto" placeholder="Apartamento (ex: 301)">
             <input id="secretaria" placeholder="Secretária / Empregada">
             <input id="visitantes" placeholder="Visitantes / Autorizados separados por vírgula">
             <button class="btn" id="btnSalvarMorador" onclick="addMorador()">Cadastrar Morador</button>
         </div>
         <div class="box" style="background: rgba(59, 130, 246, 0.05);">
-            <h2>🔍 Lista de Moradores</h2>
+            <h2>🏢 Painel de Apartamentos</h2>
             <div class="filtro-container">
                 <input type="text" id="pesquisaMorador" placeholder="🔍 Buscar por nome ou apartamento..." onkeyup="pesquisarMoradores()" style="flex: 2;">
-                <button class="btn" style="background:#1976d2; margin-top:0; width: auto;" onclick="gerarRelatorioMoradores()">📊 PDF Geral</button>
+                <button class="btn" style="background:#1976d2; margin-top:0; width: auto;" onclick="gerarRelatorioMoradores()">📊 Baixar PDF</button>
             </div>
+            
+            <div id="listaMoradores"></div>
         </div>
-        <div id="listaMoradores" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px;"></div>
     </div>
 
     <div id="veiculos" class="tela">
@@ -413,6 +425,13 @@ body.dark-mode canvas { background: #0f172a; border-color: #475569; }
         <div id="listaComunicados"></div>
     </div>
 
+    <div id="modalMorador" class="modal-overlay">
+        <div class="modal-content">
+            <button class="fechar-modal" onclick="fecharModalMorador()"><i class="fa-solid fa-xmark"></i></button>
+            <div id="conteudoModalMorador"></div>
+        </div>
+    </div>
+
 </div>
 
 <script>
@@ -474,65 +493,39 @@ function limparAssinaturaEncomenda(){ if(encomendaCanvas && encomendaCanvas.canv
 let equipe = JSON.parse(localStorage.getItem("equipe")) || [];
 let editandoIndexEquipe = -1; 
 
-function salvarEquipe() { 
-    localStorage.setItem("equipe", JSON.stringify(equipe)); 
-    atualizarSelectEquipe(); 
-}
+function salvarEquipe() { localStorage.setItem("equipe", JSON.stringify(equipe)); atualizarSelectEquipe(); }
 
 function addFuncionario() {
-    let nome = document.getElementById("funcNome").value; 
-    let cargo = document.getElementById("funcCargo").value;
+    let nome = document.getElementById("funcNome").value; let cargo = document.getElementById("funcCargo").value;
     let btnSalvar = document.getElementById("btnSalvarEquipe");
-
     if(!nome || !cargo) return alert("Preencha o nome e o cargo!");
 
     if (editandoIndexEquipe >= 0) {
-        equipe[editandoIndexEquipe].nome = nome;
-        equipe[editandoIndexEquipe].cargo = cargo;
+        equipe[editandoIndexEquipe].nome = nome; equipe[editandoIndexEquipe].cargo = cargo;
         editandoIndexEquipe = -1; 
         if(btnSalvar) btnSalvar.innerText = "Cadastrar Funcionário"; 
-        alert("✅ Funcionário atualizado com sucesso!");
+        alert("✅ Funcionário atualizado!");
     } else {
-        equipe.push({ id: Date.now(), nome, cargo }); 
-        alert("✅ Novo funcionário cadastrado!");
+        equipe.push({ id: Date.now(), nome, cargo }); alert("✅ Novo funcionário cadastrado!");
     }
     
-    salvarEquipe(); 
-    mostrarEquipe();
-    document.getElementById("funcNome").value = ""; 
-    document.getElementById("funcCargo").value = "";
+    salvarEquipe(); mostrarEquipe();
+    document.getElementById("funcNome").value = ""; document.getElementById("funcCargo").value = "";
 }
 
 function mostrarEquipe() {
     let lista = document.getElementById("listaEquipe"); if(!lista) return; lista.innerHTML = "";
     equipe.forEach((f, index) => {
-        lista.innerHTML += `
-        <div class="card" style="border-left: 4px solid #8b5cf6;">
-            <h3>${f.nome}</h3>
-            <div class="badge" style="background: rgba(139, 92, 246, 0.1); color: #8b5cf6;">${f.cargo}</div>
-            <div class="acoes">
-                <button class="btn-acao editar" onclick="prepararEdicaoEquipe(${index})">✏️ Editar</button>
-                <button class="btn-acao excluir" onclick="excluirFuncionario(${index})">🗑️ Excluir</button>
-            </div>
-        </div>`;
+        lista.innerHTML += `<div class="card" style="border-left: 4px solid #8b5cf6;"><h3>${f.nome}</h3><div class="badge" style="background: rgba(139, 92, 246, 0.1); color: #8b5cf6;">${f.cargo}</div><div class="acoes"><button class="btn-acao editar" onclick="prepararEdicaoEquipe(${index})">✏️ Editar</button><button class="btn-acao excluir" onclick="excluirFuncionario(${index})">🗑️ Excluir</button></div></div>`;
     });
 }
-
+function ajustarCargosAntigosEdicao(cargo) { if (cargo === "Porteiro") return "Porteiro Diurno"; return cargo; }
 function prepararEdicaoEquipe(index) {
-    document.getElementById("funcNome").value = equipe[index].nome;
-    document.getElementById("funcCargo").value = equipe[index].cargo;
-    let btnSalvar = document.getElementById("btnSalvarEquipe");
-    if(btnSalvar) btnSalvar.innerText = "💾 Salvar Alteração";
-    editandoIndexEquipe = index;
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    document.getElementById("funcNome").value = equipe[index].nome; document.getElementById("funcCargo").value = ajustarCargosAntigosEdicao(equipe[index].cargo);
+    let btnSalvar = document.getElementById("btnSalvarEquipe"); if(btnSalvar) btnSalvar.innerText = "💾 Salvar Alteração";
+    editandoIndexEquipe = index; window.scrollTo({ top: 0, behavior: "smooth" });
 }
-
-function excluirFuncionario(index) { 
-    if(confirm("Deseja remover este funcionário?")) { 
-        equipe.splice(index, 1); salvarEquipe(); mostrarEquipe(); 
-    } 
-}
-
+function excluirFuncionario(index) { if(confirm("Remover este funcionário?")) { equipe.splice(index, 1); salvarEquipe(); mostrarEquipe(); } }
 function atualizarSelectEquipe() {
     let selectPonto = document.getElementById("pontoNome"); let selectFiltroPDF = document.getElementById("filtroFuncionarioPonto");
     let options = '<option value="" disabled selected>Selecione o Nome</option>';
@@ -545,12 +538,10 @@ function atualizarSelectEquipe() {
    ========================================================================= */
 let passagens = JSON.parse(localStorage.getItem("passagens")) || [];
 function salvarPassagem() {
-    let nome = document.getElementById("passagemNome").value; if(!nome) return alert("Preencha seu nome!");
-    let agora = new Date();
+    let nome = document.getElementById("passagemNome").value; if(!nome) return alert("Preencha seu nome!"); let agora = new Date();
     passagens.unshift({ id: Date.now(), data: agora.toISOString().split('T')[0], hora: agora.toLocaleTimeString('pt-BR', {hour: '2-digit', minute:'2-digit'}), nome, portoes: document.getElementById("chkPortoes").checked, elevadores: document.getElementById("chkElevadores").checked, luzes: document.getElementById("chkLuzes").checked, cameras: document.getElementById("chkCameras").checked, bombas: document.getElementById("chkBombas").checked, obs: document.getElementById("passagemObs").value });
     localStorage.setItem("passagens", JSON.stringify(passagens));
-    document.getElementById("passagemNome").value = ""; document.getElementById("passagemObs").value = "";
-    document.getElementById("chkPortoes").checked = false; document.getElementById("chkElevadores").checked = false; document.getElementById("chkLuzes").checked = false; document.getElementById("chkCameras").checked = false; document.getElementById("chkBombas").checked = false;
+    document.getElementById("passagemNome").value = ""; document.getElementById("passagemObs").value = ""; document.getElementById("chkPortoes").checked = false; document.getElementById("chkElevadores").checked = false; document.getElementById("chkLuzes").checked = false; document.getElementById("chkCameras").checked = false; document.getElementById("chkBombas").checked = false;
     mostrarPassagens(); alert("✅ Plantão registrado!");
 }
 function mostrarPassagens() {
@@ -575,81 +566,54 @@ function gerarRelatorioPassagem() {
    ========================================================================= */
 let pontos = JSON.parse(localStorage.getItem("pontos")) || [];
 function registrarPonto(evento) {
-    let nome = document.getElementById("pontoNome").value; if(!nome) return alert("Selecione seu nome na lista!");
-    let agora = new Date();
+    let nome = document.getElementById("pontoNome").value; if(!nome) return alert("Selecione seu nome na lista!"); let agora = new Date();
     pontos.unshift({ id: Date.now(), nome, evento, data: agora.toISOString().split('T')[0], hora: agora.toLocaleTimeString('pt-BR', {hour: '2-digit', minute:'2-digit', second:'2-digit'}) });
     localStorage.setItem("pontos", JSON.stringify(pontos)); mostrarPontos(); alert(`Ponto de ${evento} batido com sucesso!`);
 }
 function mostrarPontos() {
-    let filtroMes = document.getElementById("filtroMesPonto").value; let filtroNome = document.getElementById("filtroFuncionarioPonto").value;
-    let lista = document.getElementById("listaPontos"); if(!lista) return; lista.innerHTML = "";
-    let filtrados = pontos;
-    if (filtroMes) filtrados = filtrados.filter(p => p.data.startsWith(filtroMes)); if (filtroNome) filtrados = filtrados.filter(p => p.nome === filtroNome);
+    let filtroMes = document.getElementById("filtroMesPonto").value; let filtroNome = document.getElementById("filtroFuncionarioPonto").value; let lista = document.getElementById("listaPontos"); if(!lista) return; lista.innerHTML = "";
+    let filtrados = pontos; if (filtroMes) filtrados = filtrados.filter(p => p.data.startsWith(filtroMes)); if (filtroNome) filtrados = filtrados.filter(p => p.nome === filtroNome);
     if(filtrados.length === 0) { lista.innerHTML = "<p style='text-align:center; padding:20px; color:#777; grid-column:1/-1;'>Sem registros.</p>"; return; }
     filtrados.forEach(p => {
         let c = p.evento === "Entrada" ? "#10b981" : p.evento === "Saída" ? "#ef4444" : "#f59e0b";
         lista.innerHTML += `<div class="card" style="text-align:center; border-top:4px solid ${c};"><h3>${p.nome}</h3><div class="badge" style="background:${c}; color:white;">${p.evento}</div><p style="font-size:18px; font-weight:bold; margin-top:10px;"><i class="fa-regular fa-clock"></i> ${p.hora}</p><p style="font-size:12px;">${p.data.split('-').reverse().join('/')}</p></div>`;
     });
 }
-
 function gerarFolhaPontoIndividual() {
     let mesFiltro = document.getElementById("filtroMesPonto").value; let nomeFiltro = document.getElementById("filtroFuncionarioPonto").value;
     if (!mesFiltro || !nomeFiltro) return alert("⚠️ Selecione o Mês e o Funcionário para gerar a folha de ponto em PDF.");
     let funcInfo = equipe.find(f => f.nome === nomeFiltro); let cargoInfo = funcInfo ? funcInfo.cargo : "Não informado";
-    const { jsPDF } = window.jspdf; const doc = new jsPDF('p', 'pt', 'a4');
-    const corCinza = [169, 169, 169]; const corAzul = [70, 130, 180]; const corTexto = [60, 60, 60];
-
+    const { jsPDF } = window.jspdf; const doc = new jsPDF('p', 'pt', 'a4'); const corCinza = [169, 169, 169]; const corAzul = [70, 130, 180]; const corTexto = [60, 60, 60];
     doc.setFontSize(28); doc.setFont("helvetica", "bold"); doc.setTextColor(corTexto[0], corTexto[1], corTexto[2]); doc.text("Folha de ponto", 40, 60);
     doc.setFontSize(16); doc.setFont("helvetica", "italic"); doc.text("Portaria PRO MASTER", 40, 80);
-
     doc.setFillColor(corCinza[0], corCinza[1], corCinza[2]); doc.roundedRect(300, 35, 250, 20, 10, 10, 'F');
     doc.setFontSize(10); doc.setFont("helvetica", "bold"); doc.setTextColor(255, 255, 255); doc.text(`Nome: ${nomeFiltro}`, 315, 49);
-
     let anoInt = parseInt(mesFiltro.split('-')[0], 10); let mesInt = parseInt(mesFiltro.split('-')[1], 10);
     let formatMes = (mesInt < 10 ? '0' + mesInt : mesInt) + "/" + anoInt;
     doc.setFillColor(corAzul[0], corAzul[1], corAzul[2]); doc.roundedRect(300, 65, 250, 20, 10, 10, 'F'); doc.text(`Mês e Ano: ${formatMes}`, 315, 79);
     doc.setFillColor(corCinza[0], corCinza[1], corCinza[2]); doc.roundedRect(300, 95, 250, 20, 10, 10, 'F'); doc.text(`Cargo: ${cargoInfo}`, 315, 109);
-
     let pontosDoMes = pontos.filter(p => p.nome === nomeFiltro && p.data.startsWith(mesFiltro));
-    let ehBissexto = (anoInt % 4 === 0 && (anoInt % 100 !== 0 || anoInt % 400 === 0));
-    let matrizMeses = [31, (ehBissexto ? 29 : 28), 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
-    let diasTotaisDoMes = matrizMeses[mesInt - 1];
-
+    let ehBissexto = (anoInt % 4 === 0 && (anoInt % 100 !== 0 || anoInt % 400 === 0)); let matrizMeses = [31, (ehBissexto ? 29 : 28), 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]; let diasTotaisDoMes = matrizMeses[mesInt - 1];
     let dadosTabela = [];
     for (let i = 1; i <= diasTotaisDoMes; i++) {
-        let diaStr = i.toString().padStart(2, '0'); let dataCompleta = `${mesFiltro}-${diaStr}`;
-        let ptDia = pontosDoMes.filter(p => p.data === dataCompleta);
-        let entrada = ptDia.find(p => p.evento === "Entrada")?.hora || "";
-        let pausa = ptDia.find(p => p.evento === "Pausa Almoço")?.hora || "";
-        let retorno = ptDia.find(p => p.evento === "Retorno Almoço")?.hora || "";
-        let saida = ptDia.find(p => p.evento === "Saída")?.hora || "";
-        let intervalo = (pausa || retorno) ? `${pausa.slice(0,5)} as ${retorno.slice(0,5)}` : "";
-        let ass = (entrada || pausa || retorno || saida) ? "ASSINADO DIGITALMENTE" : "";
-
+        let diaStr = i.toString().padStart(2, '0'); let dataCompleta = `${mesFiltro}-${diaStr}`; let ptDia = pontosDoMes.filter(p => p.data === dataCompleta);
+        let entrada = ptDia.find(p => p.evento === "Entrada")?.hora || ""; let pausa = ptDia.find(p => p.evento === "Pausa Almoço")?.hora || "";
+        let retorno = ptDia.find(p => p.evento === "Retorno Almoço")?.hora || ""; let saida = ptDia.find(p => p.evento === "Saída")?.hora || "";
+        let intervalo = (pausa || retorno) ? `${pausa.slice(0,5)} as ${retorno.slice(0,5)}` : ""; let ass = (entrada || pausa || retorno || saida) ? "ASSINADO DIGITALMENTE" : "";
         dadosTabela.push([diaStr, nomeFiltro, entrada ? entrada.slice(0,5) : "", intervalo, saida ? saida.slice(0,5) : "", ass]);
     }
-
     const colunas = ["Dia", "Nome", "Chegada", "Intervalo", "Saída", "Assinatura"];
-    doc.autoTable({
-        startY: 130, head: [colunas], body: dadosTabela, theme: 'grid',
-        headStyles: { fillColor: corCinza, textColor: [255, 255, 255], halign: 'center', fontSize: 10, fontStyle: 'bold' },
-        bodyStyles: { halign: 'center', valign: 'middle', fontSize: 9, minCellHeight: 18 },
-        columnStyles: { 0:{cellWidth:30}, 1:{cellWidth:100}, 2:{cellWidth:70}, 3:{cellWidth:90}, 4:{cellWidth:70}, 5:{cellWidth:'auto'} },
-        alternateRowStyles: { fillColor: [245, 245, 245] }
-    });
+    doc.autoTable({ startY: 130, head: [colunas], body: dadosTabela, theme: 'grid', headStyles: { fillColor: corCinza, textColor: [255, 255, 255], halign: 'center', fontSize: 10, fontStyle: 'bold' }, bodyStyles: { halign: 'center', valign: 'middle', fontSize: 9, minCellHeight: 18 }, columnStyles: { 0:{cellWidth:30}, 1:{cellWidth:100}, 2:{cellWidth:70}, 3:{cellWidth:90}, 4:{cellWidth:70}, 5:{cellWidth:'auto'} }, alternateRowStyles: { fillColor: [245, 245, 245] } });
     doc.save(`Folha_Ponto_${nomeFiltro}_${formatMes.replace('/','-')}.pdf`);
 }
 
 /* =========================================================================
-   👤 CADASTRO DE MORADORES E PESQUISA RESTAURADA
+   👤 CADASTRO DE MORADORES: BOLHAS (APP) E MODAL PREMIUM
    ========================================================================= */
 let moradores = JSON.parse(localStorage.getItem("moradores")) || [];
-let editandoIndexMorador = -1; // Variável de controle para edição
+let editandoIndexMorador = -1;
 
-function salvarMoradores(){ 
-    localStorage.setItem("moradores",JSON.stringify(moradores)); 
-    atualizarDashboard(); 
-}
+function salvarMoradores(){ localStorage.setItem("moradores",JSON.stringify(moradores)); atualizarDashboard(); }
 
 function addMorador(){ 
     let nome = document.getElementById('nome').value.trim();
@@ -661,101 +625,80 @@ function addMorador(){
     if(!nome || !apto) return alert("⚠️ Preencha pelo menos o Nome e o Apartamento!");
 
     if (editandoIndexMorador >= 0) {
-        moradores[editandoIndexMorador].nome = nome;
-        moradores[editandoIndexMorador].apto = apto;
-        moradores[editandoIndexMorador].secretaria = secretaria;
-        moradores[editandoIndexMorador].visitantes = visitantes;
-        editandoIndexMorador = -1; // Sai do modo de edição
-        if(btnSalvar) btnSalvar.innerText = "Cadastrar Morador";
-        alert("✅ Morador atualizado com sucesso!");
+        moradores[editandoIndexMorador].nome = nome; moradores[editandoIndexMorador].apto = apto;
+        moradores[editandoIndexMorador].secretaria = secretaria; moradores[editandoIndexMorador].visitantes = visitantes;
+        editandoIndexMorador = -1; if(btnSalvar) btnSalvar.innerText = "Cadastrar Morador"; alert("✅ Morador atualizado com sucesso!");
     } else {
-        moradores.push({ nome, apto, secretaria, visitantes }); 
-        alert("✅ Morador cadastrado!");
+        moradores.push({ nome, apto, secretaria, visitantes }); alert("✅ Morador cadastrado!");
     }
 
-    salvarMoradores(); 
-    mostrarMoradores(document.getElementById("pesquisaMorador").value); 
-    
-    // Limpa os campos
-    document.getElementById('nome').value=''; 
-    document.getElementById('apto').value=''; 
-    document.getElementById('secretaria').value=''; 
-    document.getElementById('visitantes').value=''; 
+    salvarMoradores(); mostrarMoradores(document.getElementById("pesquisaMorador").value); 
+    document.getElementById('nome').value=''; document.getElementById('apto').value=''; document.getElementById('secretaria').value=''; document.getElementById('visitantes').value=''; 
 }
 
-function pesquisarMoradores() {
-    let termo = document.getElementById("pesquisaMorador").value.toLowerCase();
-    mostrarMoradores(termo);
-}
+function pesquisarMoradores() { let termo = document.getElementById("pesquisaMorador").value.toLowerCase(); mostrarMoradores(termo); }
 
 function mostrarMoradores(filtro = ""){ 
     let lista = document.getElementById('listaMoradores'); if(!lista) return; lista.innerHTML=""; 
     
     if(moradores.length === 0) {
-        lista.innerHTML = "<p style='text-align:center; padding:20px; color:#777; width:100%; grid-column: 1 / -1;'>Nenhum morador cadastrado.</p>";
+        lista.innerHTML = "<p style='text-align:center; padding:20px; color:#777; width:100%;'>Nenhum apartamento cadastrado.</p>";
         return;
     }
 
-    moradores.forEach((m,index)=>{ 
+    // Ordena os apartamentos por número de forma crescente
+    let moradoresOrdenados = [...moradores].sort((a,b) => a.apto.localeCompare(b.apto, undefined, {numeric: true}));
+    
+    let gridHtml = '<div class="apto-grid">';
+    moradoresOrdenados.forEach((m)=>{ 
         let conteudoBuscavel = `${m.nome} ${m.apto}`.toLowerCase();
         if(filtro && !conteudoBuscavel.includes(filtro)) return;
-
-        // O NOVO LAYOUT DO CARD AQUI
-        lista.innerHTML += `
-        <div class="card" style="position: relative; border-top: 4px solid #3b82f6; margin-top: 0;">
-            <div style="position: absolute; top: 15px; right: 15px; background: #e0f2fe; color: #0284c7; padding: 5px 12px; border-radius: 20px; font-weight: bold; font-size: 14px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">APTO ${m.apto}</div>
-            <h3 style="margin-top: 5px; margin-bottom: 15px; padding-right: 90px; color: #0f172a;"><i class="fa-regular fa-user" style="color: #94a3b8; margin-right: 5px;"></i> ${m.nome}</h3>
-            
-            <div style="display: grid; gap: 10px; font-size: 13px; margin-bottom: 15px;">
-                <div style="background: #f8fafc; padding: 10px; border-radius: 8px; border: 1px solid #e2e8f0;">
-                    <p style="margin: 0; color: #64748b; font-weight: 700; text-transform: uppercase; font-size: 10px; letter-spacing: 0.5px;">👩‍💼 Secretária / Empregada</p>
-                    <p style="margin: 4px 0 0 0; color: #334155; font-weight: 500;">${m.secretaria || '<span style="color:#cbd5e1; font-style:italic;">Nenhuma</span>'}</p>
-                </div>
-                <div style="background: #f8fafc; padding: 10px; border-radius: 8px; border: 1px solid #e2e8f0;">
-                    <p style="margin: 0; color: #64748b; font-weight: 700; text-transform: uppercase; font-size: 10px; letter-spacing: 0.5px;">👥 Autorizados / Visitantes</p>
-                    <p style="margin: 4px 0 0 0; color: #334155; font-weight: 500; line-height: 1.4;">${m.visitantes || '<span style="color:#cbd5e1; font-style:italic;">Nenhum</span>'}</p>
-                </div>
-            </div>
-
-            <div class="acoes">
-                <button class="btn-acao editar" onclick="prepararEdicaoMorador(${index})">✏️ Editar</button>
-                <button class="btn-acao excluir" onclick="excluirMorador(${index})">🗑️ Excluir</button>
-            </div>
-        </div>`; 
+        
+        let indexOriginal = moradores.findIndex(x => x.apto === m.apto && x.nome === m.nome);
+        gridHtml += `<div class="apto-btn" onclick="abrirModalMorador(${indexOriginal})">${m.apto}</div>`;
     }); 
+    gridHtml += '</div>';
+    
+    lista.innerHTML = gridHtml;
 }
+
+function abrirModalMorador(index) {
+    let m = moradores[index]; let modal = document.getElementById('modalMorador'); let conteudo = document.getElementById('conteudoModalMorador');
+    conteudo.innerHTML = `
+        <div style="text-align: center; margin-bottom: 20px;">
+            <div style="background: #e0f2fe; color: #0284c7; width: 65px; height: 65px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 22px; font-weight: bold; margin: 0 auto 10px auto; border: 2px solid #bae6fd;">${m.apto}</div>
+            <h3 style="color: #0f172a; margin: 0; font-size: 20px;"><i class="fa-regular fa-user" style="color: #94a3b8;"></i> ${m.nome}</h3>
+        </div>
+        <div style="display: grid; gap: 10px; font-size: 13px; margin-bottom: 20px;">
+            <div style="background: #f8fafc; padding: 12px; border-radius: 8px; border: 1px solid #e2e8f0; text-align: left;">
+                <p style="margin: 0; color: #64748b; font-weight: 700; text-transform: uppercase; font-size: 10px; letter-spacing: 0.5px;">👩‍💼 Secretária / Empregada</p>
+                <p style="margin: 4px 0 0 0; color: #334155; font-weight: 500; font-size: 14px;">${m.secretaria || '<span style="color:#cbd5e1; font-style:italic;">Nenhuma</span>'}</p>
+            </div>
+            <div style="background: #f8fafc; padding: 12px; border-radius: 8px; border: 1px solid #e2e8f0; text-align: left;">
+                <p style="margin: 0; color: #64748b; font-weight: 700; text-transform: uppercase; font-size: 10px; letter-spacing: 0.5px;">👥 Autorizados / Visitantes</p>
+                <p style="margin: 4px 0 0 0; color: #334155; font-weight: 500; line-height: 1.4; font-size: 14px;">${m.visitantes || '<span style="color:#cbd5e1; font-style:italic;">Nenhum</span>'}</p>
+            </div>
+        </div>
+        <div class="acoes" style="margin-top: 10px;">
+            <button class="btn-acao editar" onclick="prepararEdicaoMorador(${index})">✏️ Editar</button>
+            <button class="btn-acao excluir" onclick="excluirMorador(${index})">🗑️ Excluir</button>
+        </div>
+    `;
+    modal.style.display = 'flex';
+}
+
+function fecharModalMorador() { document.getElementById('modalMorador').style.display = 'none'; }
 
 function prepararEdicaoMorador(index) {
-    document.getElementById("nome").value = moradores[index].nome;
-    document.getElementById("apto").value = moradores[index].apto;
-    document.getElementById("secretaria").value = moradores[index].secretaria || "";
-    document.getElementById("visitantes").value = moradores[index].visitantes || "";
-    
-    let btnSalvar = document.getElementById("btnSalvarMorador");
-    if(btnSalvar) btnSalvar.innerText = "💾 Salvar Alterações";
-    
-    editandoIndexMorador = index;
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    fecharModalMorador();
+    document.getElementById("nome").value = moradores[index].nome; document.getElementById("apto").value = moradores[index].apto;
+    document.getElementById("secretaria").value = moradores[index].secretaria || ""; document.getElementById("visitantes").value = moradores[index].visitantes || "";
+    let btnSalvar = document.getElementById("btnSalvarMorador"); if(btnSalvar) btnSalvar.innerText = "💾 Salvar Alterações";
+    editandoIndexMorador = index; window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
-function excluirMorador(index){ 
-    if(confirm("Deseja excluir este morador?")) { 
-        moradores.splice(index,1); 
-        salvarMoradores(); 
-        mostrarMoradores(document.getElementById("pesquisaMorador").value); 
-    } 
-}
-
-function gerarRelatorioMoradores() { 
-    if (moradores.length === 0) return alert("Vazio."); 
-    const { jsPDF } = window.jspdf; 
-    const doc = new jsPDF(); 
-    doc.text("Lista de Moradores", 14, 20); 
-    const col = ["Nome", "Apto", "Secretaria", "Autorizados"]; 
-    const lin = moradores.map(m => [m.nome, m.apto, m.secretaria || "-", m.visitantes || "-"]); 
-    doc.autoTable({ head: [col], body: lin, startY: 30 }); 
-    doc.save("Moradores.pdf"); 
-}
+function excluirMorador(index){ if(confirm("Deseja excluir este morador?")) { fecharModalMorador(); moradores.splice(index,1); salvarMoradores(); mostrarMoradores(document.getElementById("pesquisaMorador").value); } }
+function gerarRelatorioMoradores() { if (moradores.length === 0) return alert("Vazio."); const { jsPDF } = window.jspdf; const doc = new jsPDF(); doc.text("Lista de Moradores", 14, 20); const col = ["Nome", "Apto", "Secretaria", "Autorizados"]; const lin = moradores.map(m => [m.nome, m.apto, m.secretaria || "-", m.visitantes || "-"]); doc.autoTable({ head: [col], body: lin, startY: 30 }); doc.save("Moradores.pdf"); }
 
 /* =========================================================================
    🚘 CADASTRO DE VEÍCULOS
@@ -784,11 +727,7 @@ function salvarOcorrencia() {
     let tipo = document.getElementById("ocoTipo").value; let desc = document.getElementById("ocoDescricao").value; let port = document.getElementById("ocoPorteiro").value;
     if(!tipo || !desc || !port) return alert("Preencha Tipo, Porteiro e Detalhes!");
     let fotoInput = document.getElementById("ocoFoto"); let arquivo = fotoInput.files[0];
-    if(arquivo) {
-        let leitor = new FileReader();
-        leitor.onload = function(e){ finalizarSalvamentoOcorrencia(e.target.result, tipo, desc, port); };
-        leitor.readAsDataURL(arquivo);
-    } else { finalizarSalvamentoOcorrencia("", tipo, desc, port); }
+    if(arquivo) { let leitor = new FileReader(); leitor.onload = function(e){ finalizarSalvamentoOcorrencia(e.target.result, tipo, desc, port); }; leitor.readAsDataURL(arquivo); } else { finalizarSalvamentoOcorrencia("", tipo, desc, port); }
 }
 function finalizarSalvamentoOcorrencia(foto, tipo, desc, port) {
     ocorrencias.unshift({ id: "OC" + Date.now().toString().slice(-4), tipo, apto: document.getElementById("ocoApto").value, morador: document.getElementById("ocoMorador").value, prioridade: document.getElementById("ocoPrioridade").value, descricao: desc, foto, status: "Em aberto", data: new Date().toISOString().split('T')[0], hora: new Date().toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'}), registradoPor: port });
@@ -799,17 +738,12 @@ function mostrarOcorrencias(filtro="") {
     let urg = 0, abertos = 0, res = 0, hoje = 0; let dHoje = new Date().toISOString().split('T')[0];
     ocorrencias.forEach((o, idx) => {
         let conteudoBuscavel = `${o.tipo} ${o.apto} ${o.morador} ${o.descricao}`.toLowerCase(); if(filtro && !conteudoBuscavel.includes(filtro.toLowerCase())) return;
-        if(o.prioridade === "Alta" && o.status !== "Resolvida") urg++;
-        if(o.status === "Em aberto" || o.status === "Em andamento") abertos++;
-        if(o.status === "Resolvida") res++; if(o.data === dHoje) hoje++;
-        
+        if(o.prioridade === "Alta" && o.status !== "Resolvida") urg++; if(o.status === "Em aberto" || o.status === "Em andamento") abertos++; if(o.status === "Resolvida") res++; if(o.data === dHoje) hoje++;
         let cBadge = o.status === "Em aberto" ? "status-pendente" : "status-entregue";
         lista.innerHTML += `<div class="card" style="border-left:5px solid ${o.prioridade==='Alta'?'#e53935':'#cbd5e1'}"><h3>⚠️ ${o.tipo}</h3><span class="badge ${cBadge}">${o.status}</span><p>🏢 Local: ${o.apto || 'Área Comum'}</p><p>🕒 Hora: ${o.data.split('-').reverse().join('/')} às ${o.hora}</p><div style="background:rgba(0,0,0,0.02); padding:10px; border-radius:6px; margin:10px 0; font-style:italic;">"${o.descricao}"</div>${o.foto?`<img src="${o.foto}" class="foto">`:''}<div class="acoes"><button class="btn-acao editar" onclick="mudarStatusOco(${idx})">🔄 Status</button><button class="btn-acao excluir" onclick="excluirOco(${idx})">🗑️ Apagar</button></div></div>`;
     });
-    let sUrg = document.getElementById("stat-urgente"); if(sUrg) sUrg.innerText = urg;
-    let sAb = document.getElementById("stat-aberto"); if(sAb) sAb.innerText = abertos;
-    let sRes = document.getElementById("stat-resolvida"); if(sRes) sRes.innerText = res;
-    let sHj = document.getElementById("stat-hoje"); if(sHj) sHj.innerText = hoje;
+    let sUrg = document.getElementById("stat-urgente"); if(sUrg) sUrg.innerText = urg; let sAb = document.getElementById("stat-aberto"); if(sAb) sAb.innerText = abertos;
+    let sRes = document.getElementById("stat-resolvida"); if(sRes) sRes.innerText = res; let sHj = document.getElementById("stat-hoje"); if(sHj) sHj.innerText = hoje;
 }
 function mudarStatusOco(i) { let n = prompt("Novo status (Em aberto, Resolvida):", ocorrencias[i].status); if(n) { ocorrencias[i].status = n; localStorage.setItem("ocorrencias", JSON.stringify(ocorrencias)); mostrarOcorrencias(); } }
 function excluirOco(i) { if(confirm("Apagar?")) { ocorrencias.splice(i,1); localStorage.setItem("ocorrencias", JSON.stringify(ocorrencias)); mostrarOcorrencias(); } }
@@ -817,17 +751,12 @@ function pesquisarOcorrencias() { let t = document.getElementById("pesquisaOcorr
 function gerarRelatorioOcorrencias() { const { jsPDF } = window.jspdf; const doc = new jsPDF(); doc.text("Histórico de Ocorrências", 14, 20); doc.save("Ocorrencias.pdf"); }
 
 /* =========================================================================
-   📦 ENCOMENDAS - RESTAURADOS DETALHES E BOTÕES
+   📦 ENCOMENDAS
    ========================================================================= */
 let encomendas = JSON.parse(localStorage.getItem("encomendas")) || [];
 function salvarEncomenda(){
-    let morador = document.getElementById('encMorador').value.trim();
-    let apto = document.getElementById('encApto').value.trim();
-    
-    if(!morador || !apto) {
-        return alert("⚠️ Os campos Morador e Apartamento são obrigatórios para cadastrar uma encomenda!");
-    }
-
+    let morador = document.getElementById('encMorador').value.trim(); let apto = document.getElementById('encApto').value.trim();
+    if(!morador || !apto) return alert("⚠️ Os campos Morador e Apartamento são obrigatórios!");
     let fotoInput = document.getElementById("encFoto"); let arquivo = fotoInput.files[0];
     if(arquivo){ let leitor = new FileReader(); leitor.onload=function(e){ criarEncomenda(e.target.result); }; leitor.readAsDataURL(arquivo); } else { criarEncomenda(""); }
 }
@@ -839,47 +768,24 @@ function criarEncomenda(foto){
     mostrarEncomendas(); limparAssinaturaEncomenda(); atualizarDashboard(); alert("Encomenda cadastrada!");
 }
 function mostrarEncomendas(filtroData = ""){
-    let lista = document.getElementById('listaEncomendas'); if(!lista) return; lista.innerHTML="";
-    let hojeCalculo = new Date(); hojeCalculo.setHours(0,0,0,0);
+    let lista = document.getElementById('listaEncomendas'); if(!lista) return; lista.innerHTML=""; let hojeCalculo = new Date(); hojeCalculo.setHours(0,0,0,0);
     encomendas.forEach((e,index)=>{
         if(filtroData && e.dataChegada !== filtroData) return;
-        let dotHtml = "";
-        let dataExibicao = "Sem data";
+        let dotHtml = ""; let dataExibicao = "Sem data";
         if(e.dataChegada) {
-            let p = e.dataChegada.split('-');
-            dataExibicao = `${p[2]}/${p[1]}/${p[0]}`;
+            let p = e.dataChegada.split('-'); dataExibicao = `${p[2]}/${p[1]}/${p[0]}`;
             if(e.status === "Pendente") {
-                let dCheg = new Date(p[0], p[1]-1, p[2]);
-                let diff = Math.floor((hojeCalculo - dCheg) / (1000 * 60 * 60 * 24));
-                if(diff <= 2) dotHtml = `<div class="dot-status dot-green"></div>`;
-                else if(diff >= 3 && diff <= 5) dotHtml = `<div class="dot-status dot-yellow"></div>`;
-                else dotHtml = `<div class="dot-status dot-red"></div>`;
+                let dCheg = new Date(p[0], p[1]-1, p[2]); let diff = Math.floor((hojeCalculo - dCheg) / (1000 * 60 * 60 * 24));
+                if(diff <= 2) dotHtml = `<div class="dot-status dot-green"></div>`; else if(diff >= 3 && diff <= 5) dotHtml = `<div class="dot-status dot-yellow"></div>`; else dotHtml = `<div class="dot-status dot-red"></div>`;
             }
         }
-        
         lista.innerHTML += `
         <div class="card">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 12px;">
-                <h3 style="margin-bottom: 0;">📦 ${e.transportadora || 'Não informada'}</h3>${dotHtml}
-            </div>
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 12px;"><h3 style="margin-bottom: 0;">📦 ${e.transportadora || 'Não informada'}</h3>${dotHtml}</div>
             <div class="badge ${e.status==='Pendente'?'status-pendente':'status-entregue'}">${e.status}</div>
-            <p>👤 <b>Morador:</b> ${e.morador}</p>
-            <p>🏢 <b>Apto:</b> ${e.apto}</p>
-            <p>👮 <b>Recebido por:</b> ${e.porteiro || "N/A"}</p>
-            <p>📅 <b>Chegada:</b> <b>${dataExibicao} ${e.horaChegada ? `às ${e.horaChegada}` : ''}</b></p>
-            <p>📌 <b>Código:</b> ${e.codigo || "N/A"}</p>
-            <p>📦 <b>Volumes:</b> ${e.volumes || "N/A"}</p>
-            <p style="font-size:12px; color:#999;">ID: ${e.id || "Antigo"}</p>
-            ${e.foto?`<img src="${e.foto}" class="foto">`:''}
-            ${e.assinatura && e.assinatura !== "data:," ? `<img src="${e.assinatura}" class="foto" style="border:1px dashed #ccc;">` : ""}
-            
-            <div class="acoes">
-                <button class="btn-acao entregue" onclick="marcarEntregue(${index})">✅ Entregue</button>
-                <button class="btn-acao whats" onclick="avisarWhatsappEncomenda(${index})">📲 WhatsApp</button>
-                <button class="btn-acao print" onclick="imprimirEtiqueta(${index})">🖨️ Padrão</button>
-                <button class="btn-acao qr-btn" onclick="imprimirSoQRCode(${index})">🔳 Só QR</button>
-                <button class="btn-acao excluir" onclick="excluirEncomenda(${index})">🗑️ Excluir</button>
-            </div>
+            <p>👤 <b>Morador:</b> ${e.morador}</p><p>🏢 <b>Apto:</b> ${e.apto}</p><p>👮 <b>Recebido por:</b> ${e.porteiro || "N/A"}</p><p>📅 <b>Chegada:</b> <b>${dataExibicao} ${e.horaChegada ? `às ${e.horaChegada}` : ''}</b></p><p>📌 <b>Código:</b> ${e.codigo || "N/A"}</p><p>📦 <b>Volumes:</b> ${e.volumes || "N/A"}</p><p style="font-size:12px; color:#999;">ID: ${e.id || "Antigo"}</p>
+            ${e.foto?`<img src="${e.foto}" class="foto">`:''} ${e.assinatura && e.assinatura !== "data:," ? `<img src="${e.assinatura}" class="foto" style="border:1px dashed #ccc;">` : ""}
+            <div class="acoes"><button class="btn-acao entregue" onclick="marcarEntregue(${index})">✅ Entregue</button><button class="btn-acao whats" onclick="avisarWhatsappEncomenda(${index})">📲 WhatsApp</button><button class="btn-acao print" onclick="imprimirEtiqueta(${index})">🖨️ Padrão</button><button class="btn-acao qr-btn" onclick="imprimirSoQRCode(${index})">🔳 Só QR</button><button class="btn-acao excluir" onclick="excluirEncomenda(${index})">🗑️ Excluir</button></div>
         </div>`;
     });
 }
@@ -887,46 +793,24 @@ function marcarEntregue(i){ encomendas[i].status = "Entregue"; localStorage.setI
 function excluirEncomenda(i){ if(confirm("Deseja excluir esta encomenda?")) { encomendas.splice(i,1); localStorage.setItem("encomendas", JSON.stringify(encomendas)); mostrarEncomendas(); atualizarDashboard(); } }
 function filtrarEncomendas(){ mostrarEncomendas(document.getElementById("filtroDataEncomenda").value); }
 function limparFiltroEncomendas(){ document.getElementById("filtroDataEncomenda").value=""; mostrarEncomendas(); }
-
-function avisarWhatsappEncomenda(index){ 
-    let msg = `Olá ${encomendas[index].morador}, sua encomenda chegou na portaria.`; 
-    window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`); 
-}
-
+function avisarWhatsappEncomenda(index){ let msg = `Olá ${encomendas[index].morador}, sua encomenda chegou na portaria.`; window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`); }
 function imprimirEtiqueta(index){
-    let e = encomendas[index]; let janela = window.open("", "", "width=350,height=500");
-    let dataFormatada = ""; if(e.dataChegada) { let p = e.dataChegada.split('-'); dataFormatada = p[2] + '/' + p[1] + '/' + p[0]; }
+    let e = encomendas[index]; let janela = window.open("", "", "width=350,height=500"); let dataFormatada = ""; if(e.dataChegada) { let p = e.dataChegada.split('-'); dataFormatada = p[2] + '/' + p[1] + '/' + p[0]; }
     let horaFormatada = e.horaChegada ? e.horaChegada : ""; let vol = e.volumes || "1"; let ident = e.id || "Antigo";
     janela.document.write(`<html><head><title>Etiqueta Padrão</title><style>body{font-family:Arial,sans-serif;text-align:center;padding:10px;margin:0;} h1{margin:5px 0;font-size:32px;border-bottom:2px solid #000;padding-bottom:5px;} h2{margin:10px 0 5px 0;font-size:20px;} p{margin:5px 0;font-size:16px;} .rodape{font-size:10px;margin-top:20px;color:#555;} .btn-imprimir{margin-top:30px;padding:12px 20px;background:#000;color:#fff;border:none;border-radius:8px;font-size:16px;cursor:pointer;font-weight:bold;width:80%;} @media print{.btn-imprimir{display:none !important;}}</style></head><body><h1>AP ${e.apto}</h1><h2>${e.morador}</h2><p><b>Transp:</b> ${e.transportadora}</p><p><b>Vols:</b> ${vol}</p><p style="font-size: 14px; margin-top: 15px;">📅 ${dataFormatada} às ${horaFormatada}</p><p class="rodape">ID: ${ident}</p><button class="btn-imprimir" onclick="window.print()">🖨️ Imprimir Etiqueta</button><p style="font-size: 11px; color: #888; margin-top: 5px;" class="btn-imprimir">Feche a janela após imprimir.</p><script> window.onload = function() { window.print(); }; window.onafterprint = function() { window.close(); }; <\/script></body></html>`);
     janela.document.close();
 }
-
 function imprimirSoQRCode(index){
-    let e = encomendas[index]; let janela = window.open("", "", "width=300,height=380");
-    let ident = e.id || "Antigo"; let qrImgTag = "";
-    if(e.id && e.id !== "undefined") { 
-        let linkSistema = window.location.href.split("?")[0] + "?baixar=" + e.id; 
-        let tempCanvas = document.createElement("canvas"); 
-        new QRious({ element: tempCanvas, value: linkSistema, size: 200, level: "H" }); 
-        qrImgTag = `<img src="${tempCanvas.toDataURL()}" style="margin-bottom: 5px;">`; 
-    }
+    let e = encomendas[index]; let janela = window.open("", "", "width=300,height=380"); let ident = e.id || "Antigo"; let qrImgTag = "";
+    if(e.id && e.id !== "undefined") { let linkSistema = window.location.href.split("?")[0] + "?baixar=" + e.id; let tempCanvas = document.createElement("canvas"); new QRious({ element: tempCanvas, value: linkSistema, size: 200, level: "H" }); qrImgTag = `<img src="${tempCanvas.toDataURL()}" style="margin-bottom: 5px;">`; }
     janela.document.write(`<html><head><title>Etiqueta QR Code</title><style>body{font-family:Arial,sans-serif;text-align:center;padding:0;margin:0;display:flex;flex-direction:column;align-items:center;justify-content:center;height:100vh;} .rodape{font-size:18px;font-weight:bold;margin:0;} .sub-rodape{font-size:12px;color:#555;margin-top:3px;} .btn-imprimir{margin-top:20px;padding:10px 20px;background:#000;color:#fff;border:none;border-radius:8px;font-size:14px;cursor:pointer;font-weight:bold;} @media print{.btn-imprimir{display:none !important;}}</style></head><body>${qrImgTag}<p class="rodape">AP ${e.apto}</p><p class="sub-rodape">ID: ${ident}</p><button class="btn-imprimir" onclick="window.print()">🖨️ Imprimir</button><script> window.onload = function() { window.print(); }; window.onafterprint = function() { window.close(); }; <\/script></body></html>`);
     janela.document.close();
 }
-
 function gerarRelatorioEncomendas(){ const { jsPDF } = window.jspdf; const doc = new jsPDF(); doc.text("Relatório de Encomendas", 14, 20); doc.save("Encomendas.pdf"); }
-
-// Lógica de Leitura de QR Code e Baixa Externa
-function confirmarEntregaPorID(id) {
-    let index = encomendas.findIndex(e => e.id === id); if(index === -1) return alert("❌ Encomenda não encontrada!"); let e = encomendas[index];
-    if(e.status === "Entregue") return alert(`A encomenda do Apto ${e.apto} já consta como ENTREGUE!`);
-    if(confirm(`📦 CONFIRMAÇÃO DE ENTREGA 📦\n\nMorador: ${e.morador}\nApto: ${e.apto}\nTransp: ${e.transportadora}\n\nConfirmar entrega?`)) { encomendas[index].status = "Entregue"; localStorage.setItem("encomendas", JSON.stringify(encomendas)); mostrarEncomendas(); atualizarDashboard(); alert("✅ Entrega registrada!"); }
-}
-
+function confirmarEntregaPorID(id) { let index = encomendas.findIndex(e => e.id === id); if(index === -1) return alert("❌ Encomenda não encontrada!"); let e = encomendas[index]; if(e.status === "Entregue") return alert(`A encomenda do Apto ${e.apto} já consta como ENTREGUE!`); if(confirm(`📦 CONFIRMAÇÃO DE ENTREGA 📦\n\nMorador: ${e.morador}\nApto: ${e.apto}\nTransp: ${e.transportadora}\n\nConfirmar entrega?`)) { encomendas[index].status = "Entregue"; localStorage.setItem("encomendas", JSON.stringify(encomendas)); mostrarEncomendas(); atualizarDashboard(); alert("✅ Entrega registrada!"); } }
 let html5QrcodeScanner;
 function iniciarLeitorQR() { document.getElementById('leitor-qr').style.display = 'block'; document.getElementById('btn-fechar-leitor').style.display = 'block'; html5QrcodeScanner = new Html5QrcodeScanner("leitor-qr", { fps: 10, qrbox: {width: 250, height: 250} }, false); html5QrcodeScanner.render((text) => { fecharLeitorQR(); if(text.includes('?baixar=')){ try{ confirmarEntregaPorID(new URL(text).searchParams.get('baixar')); }catch(e){alert("Erro");} } }, () => {}); }
 function fecharLeitorQR() { if (html5QrcodeScanner) html5QrcodeScanner.clear(); document.getElementById('leitor-qr').style.display = 'none'; document.getElementById('btn-fechar-leitor').style.display = 'none'; }
-
 
 /* =========================================================================
    📢 COMUNICADOS
@@ -937,19 +821,10 @@ function salvarComunicado(){
     localStorage.setItem("comunicados", JSON.stringify(comunicados)); mostrarComunicados();
     document.getElementById('tituloComunicado').value=''; document.getElementById('mensagemComunicado').value=''; alert("Aviso publicado!");
 }
-function mostrarComunicados(){
-    let lista = document.getElementById('listaComunicados'); if(!lista) return; lista.innerHTML="";
-    comunicados.forEach(c => { lista.innerHTML += `<div class="card"><h3>📢 ${c.titulo}</h3><div class="badge status-andamento">${c.tipo}</div><p>${c.mensagem}</p></div>`; });
-}
+function mostrarComunicados(){ let lista = document.getElementById('listaComunicados'); if(!lista) return; lista.innerHTML=""; comunicados.forEach(c => { lista.innerHTML += `<div class="card"><h3>📢 ${c.titulo}</h3><div class="badge status-andamento">${c.tipo}</div><p>${c.mensagem}</p></div>`; }); }
 
 /* MOTOR DO RELÓGIO GLOBAL */
-function iniciarRelogio() {
-    setInterval(() => {
-        let agora = new Date(); document.getElementById("relogio").innerText = agora.toLocaleTimeString('pt-BR');
-        let hora = agora.getHours(); let saudacao = hora >= 18 ? "Boa noite" : hora >= 12 ? "Boa tarde" : "Bom dia";
-        document.getElementById("saudacao").innerText = `${saudacao}, Webert 👋`;
-    }, 1000);
-}
+function iniciarRelogio() { setInterval(() => { let agora = new Date(); document.getElementById("relogio").innerText = agora.toLocaleTimeString('pt-BR'); let hora = agora.getHours(); let saudacao = hora >= 18 ? "Boa noite" : hora >= 12 ? "Boa tarde" : "Bom dia"; document.getElementById("saudacao").innerText = `${saudacao}, Webert 👋`; }, 1000); }
 function atualizarDashboard() {
     let sOco = document.getElementById("dash-ocorrencias"); if(sOco) sOco.innerText = ocorrencias.length;
     let sVei = document.getElementById("dash-veiculos"); if(sVei) sVei.innerText = veiculos.length;
@@ -959,22 +834,11 @@ function atualizarDashboard() {
 }
 function toggleDarkMode() { document.body.classList.toggle("dark-mode"); }
 
-/* EXECUÇÃO OPERACIONAL INICIAL E ESCUTA DE QR CODE */
+/* EXECUÇÃO OPERACIONAL INICIAL */
 window.onload = function() {
-    mostrarEquipe(); 
-    atualizarSelectEquipe(); 
-    iniciarRelogio(); 
-    atualizarDashboard();
-    
-    // Captura se a tela foi aberta via leitura de QR Code
+    mostrarEquipe(); atualizarSelectEquipe(); mostrarMoradores(); iniciarRelogio(); atualizarDashboard();
     let idParaBaixar = new URLSearchParams(window.location.search).get('baixar'); 
-    if(idParaBaixar) { 
-        trocarTela('encomendas'); 
-        setTimeout(() => { 
-            confirmarEntregaPorID(idParaBaixar); 
-            window.history.replaceState({}, document.title, window.location.pathname); 
-        }, 600); 
-    }
+    if(idParaBaixar) { trocarTela('encomendas'); setTimeout(() => { confirmarEntregaPorID(idParaBaixar); window.history.replaceState({}, document.title, window.location.pathname); }, 600); }
 };
 </script>
 </body>
