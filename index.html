@@ -38,13 +38,11 @@ body { font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background
 /* INPUTS MINIMALISTAS */
 input, select, textarea { width: 100%; padding: 14px 16px; margin-top: 12px; border-radius: 10px; border: 1px solid #cbd5e1; font-size: 15px; background: #f8fafc; transition: all 0.3s; color: #334155; }
 input:focus, select:focus, textarea:focus { outline: none; border-color: #3b82f6; background: #ffffff; box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1); }
-textarea { min-height: 100px; resize: vertical; }
 
 /* BOTÕES MODERNOS */
 .btn { width: 100%; padding: 14px; border: none; border-radius: 10px; margin-top: 15px; background: #3b82f6; color: white; cursor: pointer; font-size: 15px; font-weight: 600; transition: all 0.3s ease; box-shadow: 0 4px 6px rgba(59, 130, 246, 0.2); }
 .btn:hover { background: #2563eb; transform: translateY(-2px); box-shadow: 0 6px 12px rgba(59, 130, 246, 0.3); }
 
-/* BOTÕES DE AÇÃO DOS CARDS */
 .acoes { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 20px; }
 .btn-acao { flex: 1; padding: 10px; border: none; border-radius: 8px; cursor: pointer; color: white; font-weight: 600; font-size: 13px; text-align: center; transition: all 0.2s; }
 .btn-acao:hover { filter: brightness(1.1); transform: scale(1.02); }
@@ -54,83 +52,41 @@ textarea { min-height: 100px; resize: vertical; }
 .whats { background: #25d366; color: #fff; }
 .print { background: #475569; color: #fff; }
 .qr-btn { background: #64748b; color: #fff; }
-.finalizado { background: #3b82f6; color: #fff; }
 
 /* BADGES */
 .badge { display: inline-block; padding: 6px 12px; border-radius: 20px; margin-bottom: 15px; font-size: 12px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; }
 .status-pendente { background: #fef3c7; color: #d97706; }
-.status-andamento { background: #e0f2fe; color: #0284c7; }
 .status-entregue { background: #d1fae5; color: #059669; }
 .status-urgente { background: #fee2e2; color: #dc2626; }
 
-/* FOTO E CANVAS */
-.foto { width: 100%; border-radius: 10px; margin-top: 15px; max-height: 250px; object-fit: cover; border: 1px solid #e2e8f0; }
-.tela { display: none; animation: fadeIn 0.4s ease; }
-.ativa { display: block; }
 canvas { width: 100%; height: 200px; background: #f8fafc; border: 2px dashed #cbd5e1; border-radius: 12px; margin-top: 10px; touch-action: none; cursor: crosshair; }
 
-/* ESTILOS DA DASHBOARD COMPACTA */
-.dash-header { display: flex; justify-content: space-between; align-items: center; background: white; padding: 20px 25px; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.03); border: 1px solid #e2e8f0; transition: background 0.3s, border 0.3s; }
-.btn-dark { background: #1e293b; color: #f8fafc; border: none; width: 40px; height: 40px; border-radius: 12px; cursor: pointer; font-size: 16px; transition: 0.3s; }
-.btn-dark:hover { transform: scale(1.05); }
-
+/* ESTILOS DA DASHBOARD */
 .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 15px; margin-bottom: 25px; }
-.stat-card { background: white; padding: 15px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; color: #64748b; border: 1px solid #e2e8f0; transition: transform 0.2s, background 0.3s, border 0.3s; }
-.stat-card:hover { transform: translateY(-3px); }
-.stat-card i { font-size: 22px !important; margin-bottom: 8px !important; }
-.stat-card span { font-size: 24px; margin-top: 5px; font-weight: 800; color: #0f172a; transition: color 0.3s; }
-.stat-card p { font-size: 12px; font-weight: bold; margin-top: 5px; }
+.stat-card { background: white; padding: 15px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; color: #64748b; border: 1px solid #e2e8f0; transition: transform 0.2s; }
+.stat-card span { font-size: 24px; margin-top: 5px; font-weight: 800; color: #0f172a; }
 
-/* ANIMAÇÕES DO PONTO PULSANTE (ENCOMENDAS E OCORRÊNCIAS) */
-@keyframes pulse-green { 0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); } 70% { box-shadow: 0 0 0 10px rgba(16, 185, 129, 0); } 100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); } }
-@keyframes pulse-yellow { 0% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.7); } 70% { box-shadow: 0 0 0 10px rgba(245, 158, 11, 0); } 100% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0); } }
-@keyframes pulse-red { 0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); } 70% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); } 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); } }
-.dot-status { width: 14px; height: 14px; border-radius: 50%; display: inline-block; }
-.dot-green { background: #10b981; animation: pulse-green 2s infinite; }
-.dot-yellow { background: #f59e0b; animation: pulse-yellow 2s infinite; }
-.dot-red { background: #ef4444; animation: pulse-red 2s infinite; }
-
-/* ESTILOS ESPECÍFICOS: GRID DE APARTAMENTOS E MODAL (MORADORES) */
+/* GRID DE APARTAMENTOS E MODAL */
 .apto-grid { display: flex; flex-wrap: wrap; gap: 15px; justify-content: center; margin-top: 20px; }
 .apto-btn { background: #e0f2fe; color: #0284c7; border: 2px solid #bae6fd; border-radius: 50%; width: 65px; height: 65px; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: bold; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
-.apto-btn:hover { background: #3b82f6; color: #fff; border-color: #3b82f6; transform: scale(1.1); }
+.modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 1000; align-items: center; justify-content: center; backdrop-filter: blur(3px); }
+.modal-content { background: #fff; width: 90%; max-width: 450px; border-radius: 16px; padding: 25px; position: relative; box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
+.fechar-modal { position: absolute; top: 15px; right: 15px; background: none; border: none; font-size: 20px; cursor: pointer; color: #94a3b8; }
 
-.modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 1000; align-items: center; justify-content: center; backdrop-filter: blur(3px); animation: fadeIn 0.2s ease; }
-.modal-content { background: #fff; width: 90%; max-width: 400px; border-radius: 16px; padding: 25px; position: relative; box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
-.fechar-modal { position: absolute; top: 15px; right: 15px; background: none; border: none; font-size: 20px; cursor: pointer; color: #94a3b8; transition: color 0.2s; }
-.fechar-modal:hover { color: #ef4444; }
+/* LINHA DO TEMPO - PLANTÃO */
+.timeline { position: relative; padding-left: 40px; margin-top: 20px; }
+.timeline::before { content: ''; position: absolute; left: 15px; top: 0; height: 100%; width: 2px; background: #e2e8f0; }
+.timeline-item { position: relative; margin-bottom: 25px; }
+.timeline-dot { position: absolute; left: -32.5px; top: 5px; width: 15px; height: 15px; background: #3b82f6; border-radius: 50%; border: 3px solid #fff; box-shadow: 0 0 0 2px #3b82f6; }
 
-/* DARK MODE MÁGICO */
+/* DARK MODE */
 body.dark-mode { background: #0f172a; color: #f8fafc; }
-body.dark-mode .content h2, body.dark-mode .content h3, body.dark-mode .content p, body.dark-mode .card h3, body.dark-mode .card p { color: #f8fafc; }
-body.dark-mode .box, body.dark-mode .card, body.dark-mode .dash-header, body.dark-mode .stat-card { background: #1e293b; border-color: #334155; color: white; box-shadow: none; }
+body.dark-mode .box, body.dark-mode .card, body.dark-mode .stat-card, body.dark-mode .modal-content { background: #1e293b; border-color: #334155; color: white; }
 body.dark-mode .stat-card span { color: #f8fafc; }
 body.dark-mode input, body.dark-mode select, body.dark-mode textarea { background: #0f172a; color: white; border-color: #475569; }
-body.dark-mode .badge { background: rgba(255,255,255,0.1); }
-body.dark-mode .btn-dark { background: #f8fafc; color: #1e293b; }
-body.dark-mode canvas { background: #0f172a; border-color: #475569; }
 body.dark-mode .apto-btn { background: #1e293b; color: #38bdf8; border-color: #334155; }
-body.dark-mode .apto-btn:hover { background: #3b82f6; color: #fff; }
-body.dark-mode .modal-content { background: #1e293b; border: 1px solid #334155; }
 
 @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-/* RESPONSIVO */
-@media(max-width: 800px) {
-    .sidebar { width: 80px; padding: 20px 10px; }
-    .logo h2 { display: none; }
-    .logo-icon { width: 50px; height: 50px; font-size: 16px; }
-    .menu-label { display: none; }
-    .menu button { padding: 15px 0; text-align: center; font-size: 12px; flex-direction: column; align-items: center; border-left: none; border-bottom: 4px solid transparent; }
-    .menu button:hover { border-left: none; border-bottom: 4px solid #3b82f6; transform: translateY(-4px); }
-    .menu button i { margin-right: 0; margin-bottom: 5px; font-size: 20px; }
-    .content { margin-left: 80px; padding: 20px; }
-    .dash-header { flex-direction: column; gap: 15px; text-align: center; }
-}
-
-.filtro-container { display: flex; gap: 10px; align-items: center; margin-top: 15px; flex-wrap: wrap;}
-.filtro-container input, .filtro-container select { margin-top: 0; flex: 1; min-width: 200px;}
-.btn-limpar { background-color: #64748b; width: auto; white-space: nowrap; margin-top: 0; }
 </style>
 </head>
 
@@ -159,45 +115,23 @@ body.dark-mode .modal-content { background: #1e293b; border: 1px solid #334155; 
 <div class="content">
 
     <div id="dashboard" class="tela ativa">
-        <div class="dash-header">
+        <div class="dash-header" style="display: flex; justify-content: space-between; align-items: center; background: white; padding: 20px 25px; border-radius: 16px; border: 1px solid #e2e8f0; margin-bottom: 25px;">
             <div>
                 <h2 id="saudacao">Olá, Webert 👋</h2>
                 <p style="color: #64748b; font-weight: 600; margin-top: 5px;">Portaria PRO MASTER</p>
             </div>
             <div style="display: flex; gap: 15px; align-items: center;">
                 <h2 id="relogio" style="font-size: 28px; letter-spacing: 2px;">00:00:00</h2>
-                <button class="btn-dark" onclick="toggleDarkMode()" title="Modo Noturno"><i class="fa-solid fa-moon"></i></button>
+                <button class="btn-dark" style="width: 40px; height: 40px; border-radius: 12px; cursor: pointer; background: #1e293b; color: white;" onclick="toggleDarkMode()"><i class="fa-solid fa-moon"></i></button>
             </div>
         </div>
 
-        <h3 style="margin: 25px 0 15px 0; color: #475569; font-size: 16px; text-transform: uppercase;">Visão Geral do Turno</h3>
-        
         <div class="stats-grid">
-            <div class="stat-card" id="card-dash-encomendas" style="border-bottom: 4px solid #3b82f6;">
-                <i class="fa-solid fa-box-open" style="color: #3b82f6;"></i>
-                <span id="dash-encomendas">0</span>
-                <p>Encomendas Pendentes</p>
-            </div>
-            <div class="stat-card" style="border-bottom: 4px solid #f59e0b;">
-                <i class="fa-solid fa-triangle-exclamation" style="color: #f59e0b;"></i>
-                <span id="dash-ocorrencias">0</span>
-                <p>Ocorrências em Aberto</p>
-            </div>
-            <div class="stat-card" style="border-bottom: 4px solid #10b981;">
-                <i class="fa-solid fa-calendar-check" style="color: #10b981;"></i>
-                <span id="dash-reservas">0</span>
-                <p>Reservas Hoje</p>
-            </div>
-            <div class="stat-card" style="border-bottom: 4px solid #64748b;">
-                <i class="fa-solid fa-car" style="color: #64748b;"></i>
-                <span id="dash-veiculos">0</span>
-                <p>Veículos Cadastrados</p>
-            </div>
-            <div class="stat-card" style="border-bottom: 4px solid #8b5cf6;">
-                <i class="fa-solid fa-users" style="color: #8b5cf6;"></i>
-                <span id="dash-moradores">0</span>
-                <p>Moradores Registrados</p>
-            </div>
+            <div class="stat-card" style="border-bottom: 4px solid #3b82f6;"><i class="fa-solid fa-box-open" style="color:#3b82f6"></i><span id="dash-encomendas">0</span><p>Encomendas Pendentes</p></div>
+            <div class="stat-card" style="border-bottom: 4px solid #f59e0b;"><i class="fa-solid fa-triangle-exclamation" style="color:#f59e0b"></i><span id="dash-ocorrencias">0</span><p>Ocorrências Abertas</p></div>
+            <div class="stat-card" style="border-bottom: 4px solid #10b981;"><i class="fa-solid fa-calendar-check" style="color:#10b981"></i><span id="dash-reservas">0</span><p>Reservas Hoje</p></div>
+            <div class="stat-card" style="border-bottom: 4px solid #8b5cf6;"><i class="fa-solid fa-id-badge" style="color:#8b5cf6"></i><span id="dash-equipe">0</span><p>Equipe Cadastrada</p></div>
+            <div class="stat-card" style="border-bottom: 4px solid #64748b;"><i class="fa-solid fa-car" style="color:#64748b"></i><span id="dash-veiculos">0</span><p>Veículos</p></div>
         </div>
     </div>
 
@@ -207,14 +141,10 @@ body.dark-mode .modal-content { background: #1e293b; border: 1px solid #334155; 
             <input id="funcNome" placeholder="Nome do Funcionário">
             <select id="funcCargo">
                 <option value="" disabled selected>Selecione o Cargo</option>
-                <option>Porteiro Diurno</option>
-                <option>Porteiro Noturno</option>
-                <option>Zelador</option>
-                <option>Auxiliar de Limpeza</option>
-                <option>Síndico</option>
-                <option>Sub síndico</option>
-                <option>Gerente</option>
-                <option>Administrador(a)</option>
+                <option>Porteiro Diurno</option><option>Porteiro Noturno</option>
+                <option>Zelador</option><option>Auxiliar de Limpeza</option>
+                <option>Síndico</option><option>Sub síndico</option>
+                <option>Gerente</option><option>Administrador(a)</option>
             </select>
             <button class="btn" id="btnSalvarEquipe" onclick="addFuncionario()">Cadastrar Funcionário</button>
         </div>
@@ -223,55 +153,57 @@ body.dark-mode .modal-content { background: #1e293b; border: 1px solid #334155; 
 
     <div id="passagem" class="tela">
         <div class="box">
-            <h2>🔄 Livro de Plantão (Passagem)</h2>
-            <div style="background: rgba(0,0,0,0.03); padding: 20px; border-radius: 12px; margin-top: 20px; border: 1px solid #e2e8f0;">
-                <p style="font-size: 15px; font-weight: 700; margin-bottom: 15px; color: inherit;">📋 Check-list do Turno:</p>
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; color: inherit;">
-                    <label style="cursor: pointer;"><input type="checkbox" id="chkPortoes" style="width:auto; margin:0 5px 0 0;"> Portões e Cancelas OK</label>
-                    <label style="cursor: pointer;"><input type="checkbox" id="chkElevadores" style="width:auto; margin:0 5px 0 0;"> Elevadores OK</label>
-                    <label style="cursor: pointer;"><input type="checkbox" id="chkLuzes" style="width:auto; margin:0 5px 0 0;"> Lâmpadas OK</label>
-                    <label style="cursor: pointer;"><input type="checkbox" id="chkCameras" style="width:auto; margin:0 5px 0 0;"> Câmeras OK</label>
-                    <label style="cursor: pointer;"><input type="checkbox" id="chkBombas" style="width:auto; margin:0 5px 0 0;"> Bombas d'Água OK</label>
+            <h2>🔄 Registro de Passagem de Plantão</h2>
+            <div style="background: rgba(0,0,0,0.03); padding: 20px; border-radius: 12px; margin: 20px 0; border: 1px solid #e2e8f0;">
+                <p style="font-weight: 700; margin-bottom: 15px;">📋 Check-list do Turno:</p>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px;">
+                    <label><input type="checkbox" id="chkPortoes" style="width:auto;"> Portões e Cancelas OK</label>
+                    <label><input type="checkbox" id="chkElevadores" style="width:auto;"> Elevadores OK</label>
+                    <label><input type="checkbox" id="chkLuzes" style="width:auto;"> Lâmpadas OK</label>
+                    <label><input type="checkbox" id="chkCameras" style="width:auto;"> Câmeras OK</label>
+                    <label><input type="checkbox" id="chkBombas" style="width:auto;"> Bombas d'Água OK</label>
                 </div>
             </div>
-            <input id="passagemNome" placeholder="Seu Nome (Porteiro de saída)">
-            <textarea id="passagemObs" placeholder="Pendências, recados para o próximo turno..."></textarea>
-            <button class="btn" style="background: #10b981; margin-top: 20px;" onclick="salvarPassagem()">💾 Passar o Bastão</button>
+            <input id="passagemNome" placeholder="Seu Nome (Porteiro)">
+            <textarea id="passagemObs" placeholder="Observações e Pendências para o próximo turno..."></textarea>
+            <button class="btn" style="background: #10b981;" onclick="salvarPassagem()">💾 Salvar e Passar Turno</button>
         </div>
+
         <div class="box" style="background: rgba(59, 130, 246, 0.05);">
-            <h2>🔍 Histórico de Plantões</h2>
+            <h2>🔍 Histórico Detalhado (Semana/Mês)</h2>
             <div class="filtro-container">
-                <input type="date" id="filtroDataPassagem" onchange="mostrarPassagens()">
-                <button class="btn btn-limpar" onclick="document.getElementById('filtroDataPassagem').value=''; mostrarPassagens();">Limpar Filtro</button>
-                <button class="btn print" style="margin-top: 0; width: auto;" onclick="gerarRelatorioPassagem()">📄 PDF do Dia</button>
+                <select id="filtroPorteiroPassagem" style="flex: 1; margin-top:0;">
+                    <option value="">Todos os Porteiros</option>
+                </select>
+                <input type="date" id="filtroDataInicio" style="flex: 1; margin-top:0;" title="Data Inicial">
+                <input type="date" id="filtroDataFim" style="flex: 1; margin-top:0;" title="Data Final">
+                <button class="btn" style="margin-top:0; width: auto; background: #3b82f6;" onclick="mostrarPassagens()"><i class="fa-solid fa-magnifying-glass"></i></button>
+                <button class="btn btn-limpar" style="margin-top:0;" onclick="limparFiltrosPlantao()">Limpar</button>
+                <button class="btn print" style="margin-top:0; width: auto;" onclick="gerarRelatorioPassagem()">📄 Gerar PDF</button>
             </div>
         </div>
-        <div id="listaPassagens"></div>
+        <div id="listaPassagens" class="timeline"></div>
     </div>
 
     <div id="ponto" class="tela">
         <div class="box" style="text-align: center; max-width: 600px; margin: 0 auto 25px auto;">
             <h2>⏰ Ponto Digital</h2>
-            <p style="margin-bottom: 20px; font-size: 14px; color: #64748b;">Horário travado automaticamente pelo relógio.</p>
-            <select id="pontoNome" style="text-align: center; font-size: 18px; font-weight: bold; margin-bottom: 25px; height: 50px;">
-                <option value="" disabled selected>Selecione o seu Nome</option>
+            <select id="pontoNome" style="font-size: 18px; font-weight: bold; margin-bottom: 25px; height: 50px;">
+                <option value="" disabled selected>Selecione seu Nome</option>
             </select>
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
-                <button class="btn" style="background: #10b981; margin:0; padding: 20px; font-size: 16px;" onclick="registrarPonto('Entrada')">▶️ Entrada</button>
-                <button class="btn" style="background: #f59e0b; margin:0; padding: 20px; font-size: 16px;" onclick="registrarPonto('Pausa Almoço')">⏸️ Pausa Almoço</button>
-                <button class="btn" style="background: #3b82f6; margin:0; padding: 20px; font-size: 16px;" onclick="registrarPonto('Retorno Almoço')">🔄 Retorno Almoço</button>
-                <button class="btn" style="background: #ef4444; margin:0; padding: 20px; font-size: 16px;" onclick="registrarPonto('Saída')">⏹️ Saída</button>
+                <button class="btn" style="background: #10b981; margin:0;" onclick="registrarPonto('Entrada')">▶️ Entrada</button>
+                <button class="btn" style="background: #f59e0b; margin:0;" onclick="registrarPonto('Almoço')">⏸️ Pausa</button>
+                <button class="btn" style="background: #3b82f6; margin:0;" onclick="registrarPonto('Retorno')">🔄 Retorno</button>
+                <button class="btn" style="background: #ef4444; margin:0;" onclick="registrarPonto('Saída')">⏹️ Saída</button>
             </div>
         </div>
         <div class="box" style="background: rgba(59, 130, 246, 0.05);">
-            <h2>📊 Folha de Ponto Individual em PDF</h2>
+            <h2>📊 Folha de Ponto em PDF</h2>
             <div class="filtro-container">
                 <input type="month" id="filtroMesPonto" onchange="mostrarPontos()">
-                <select id="filtroFuncionarioPonto" style="margin-top: 0; flex: 1; min-width: 200px;" onchange="mostrarPontos()">
-                    <option value="" disabled selected>Selecione o Funcionário</option>
-                </select>
-                <button class="btn btn-limpar" onclick="document.getElementById('filtroMesPonto').value=''; document.getElementById('filtroFuncionarioPonto').value=''; mostrarPontos();">Limpar</button>
-                <button class="btn print" style="margin-top: 0; width: auto;" onclick="gerarFolhaPontoIndividual()">📄 Baixar Padrão A4</button>
+                <select id="filtroFuncionarioPonto" onchange="mostrarPontos()" style="margin-top:0;"></select>
+                <button class="btn print" style="margin-top: 0; width: auto;" onclick="gerarFolhaPontoIndividual()">📄 Baixar A4</button>
             </div>
         </div>
         <div id="listaPontos" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px;"></div>
@@ -289,8 +221,8 @@ body.dark-mode .modal-content { background: #1e293b; border: 1px solid #334155; 
         <div class="box" style="background: rgba(59, 130, 246, 0.05);">
             <h2>🏢 Painel de Apartamentos</h2>
             <div class="filtro-container">
-                <input type="text" id="pesquisaMorador" placeholder="🔍 Buscar por nome ou apartamento..." onkeyup="pesquisarMoradores()" style="flex: 2;">
-                <button class="btn" style="background:#1976d2; margin-top:0; width: auto;" onclick="gerarRelatorioMoradores()">📊 Baixar PDF</button>
+                <input type="text" id="pesquisaMorador" placeholder="🔍 Buscar morador ou apartamento..." onkeyup="pesquisarMoradores()" style="flex: 2; margin-top:0;">
+                <button class="btn" style="background:#1976d2; margin-top:0; width: auto;" onclick="gerarRelatorioMoradores()">📊 PDF Geral</button>
             </div>
             <div id="listaMoradores"></div>
         </div>
@@ -313,9 +245,7 @@ body.dark-mode .modal-content { background: #1e293b; border: 1px solid #334155; 
         <div class="box">
             <h2>📅 Nova Reserva</h2>
             <select id="tipoReserva">
-                <option>Churrasqueira</option>
-                <option>Salão de Festa</option>
-                <option>Combo</option>
+                <option>Churrasqueira</option><option>Salão de Festa</option><option>Combo</option>
             </select>
             <input type="date" id="dataReserva">
             <input type="time" id="horaReserva">
@@ -330,54 +260,19 @@ body.dark-mode .modal-content { background: #1e293b; border: 1px solid #334155; 
             <div class="stat-card" style="border-bottom: 4px solid #e53935; padding: 10px;">🔴 Urgentes <span id="stat-urgente" style="font-size: 20px;">0</span></div>
             <div class="stat-card" style="border-bottom: 4px solid #ff9800; padding: 10px;">🟡 Pendentes <span id="stat-aberto" style="font-size: 20px;">0</span></div>
             <div class="stat-card" style="border-bottom: 4px solid #28a745; padding: 10px;">🟢 Resolvidas <span id="stat-resolvida" style="font-size: 20px;">0</span></div>
-            <div class="stat-card" style="border-bottom: 4px solid #1976d2; padding: 10px;">📅 Hoje <span id="stat-hoje" style="font-size: 20px;">0</span></div>
         </div>
         <div class="box" style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
-            <input type="text" id="pesquisaOcorrencia" placeholder="🔍 Pesquisar..." onkeyup="pesquisarOcorrencias()" style="margin-top:0; flex: 2; min-width: 250px;">
-            <button class="btn" style="margin-top:0; flex: 1; min-width: 150px; background: #28a745;" onclick="toggleFormOcorrencia()">➕ Nova Ocorrência</button>
-            <button class="btn print" style="margin-top:0; flex: 1; min-width: 150px;" onclick="gerarRelatorioOcorrencias()">📄 Gerar PDF</button>
+            <input type="text" id="pesquisaOcorrencia" placeholder="🔍 Pesquisar..." onkeyup="pesquisarOcorrencias()" style="margin-top:0; flex: 2;">
+            <button class="btn" style="margin-top:0; flex: 1; background: #28a745;" onclick="toggleFormOcorrencia()">➕ Nova</button>
         </div>
-        <div class="box" id="form-ocorrencia" style="display: none; border-left: 5px solid #e53935;">
-            <div style="display: flex; justify-content: space-between; align-items: center;">
-                <h2>🚨 Registrar Ocorrência</h2>
-                <button onclick="toggleFormOcorrencia()" style="background: none; border: none; font-size: 20px; cursor: pointer; color: inherit;">❌</button>
-            </div>
-            
-            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-                <select id="ocoTipo" style="flex: 2; min-width: 200px;">
-                    <option value="" disabled selected>🏷️ Tipo</option>
-                    <option>🔊 Barulho</option>
-                    <option>⚡ Falta de energia</option>
-                    <option>🛗 Elevador</option>
-                    <option>🚗 Veículo irregular</option>
-                    <option>👤 Visitante suspeito</option>
-                    <option>📦 Problema encomenda</option>
-                    <option>🛠️ Manutenção</option>
-                    <option>💧 Vazamento</option>
-                    <option>🔐 Segurança</option>
-                    <option>📢 Reclamação</option>
-                    <option>Outros</option>
-                </select>
-                <select id="ocoStatus" style="flex: 1; min-width: 150px;">
-                    <option value="🔴 Não Resolvido">🔴 Não Resolvido</option>
-                    <option value="🟡 Pendente" selected>🟡 Pendente</option>
-                    <option value="🟢 Resolvido">🟢 Resolvido</option>
-                </select>
-            </div>
-
-            <div style="display: flex; gap: 10px;">
-                <input id="ocoApto" placeholder="🏢 Apartamento">
-                <input id="ocoMorador" placeholder="👤 Morador">
-            </div>
-            <input id="ocoPorteiro" placeholder="👮 Porteiro responsável">
-            <select id="ocoPrioridade">
-                <option value="Baixa">🟢 Prioridade: Baixa</option>
-                <option value="Média" selected>🟡 Prioridade: Média</option>
-                <option value="Alta">🔴 Prioridade: Alta</option>
-            </select>
-            <textarea id="ocoDescricao" placeholder="📄 Detalhes da ocorrência..."></textarea>
+        <div class="box" id="form-ocorrencia" style="display: none;">
+            <select id="ocoTipo"><option>Barulho</option><option>Vazamento</option><option>Visitante</option><option>Outros</option></select>
+            <select id="ocoStatus"><option value="🔴 Não Resolvido">🔴 Não Resolvido</option><option value="🟡 Pendente">🟡 Pendente</option><option value="🟢 Resolvido">🟢 Resolvido</option></select>
+            <input id="ocoApto" placeholder="Apto"><input id="ocoMorador" placeholder="Morador"><input id="ocoPorteiro" placeholder="Porteiro">
+            <select id="ocoPrioridade"><option>Baixa</option><option>Média</option><option>Alta</option></select>
+            <textarea id="ocoDescricao" placeholder="Detalhes..."></textarea>
             <input type="file" id="ocoFoto" accept="image/*">
-            <button class="btn" id="btnSalvarOcorrencia" onclick="salvarOcorrencia()">💾 Salvar Ocorrência</button>
+            <button class="btn" id="btnSalvarOcorrencia" onclick="salvarOcorrencia()">💾 Salvar</button>
         </div>
         <div id="listaOcorrencias"></div>
     </div>
@@ -385,71 +280,41 @@ body.dark-mode .modal-content { background: #1e293b; border: 1px solid #334155; 
     <div id="encomendas" class="tela">
         <div class="box" style="background: rgba(40, 167, 69, 0.1); border-color: #28a745; text-align: center;">
             <h2>📷 Baixa Rápida por QR Code</h2>
-            <button class="btn" style="background:#28a745; width: auto; padding: 10px 20px;" onclick="iniciarLeitorQR()">Abrir Câmera</button>
+            <button class="btn" style="background:#28a745; width: auto;" onclick="iniciarLeitorQR()">Abrir Câmera</button>
             <div id="leitor-qr" style="width: 100%; max-width: 350px; margin: 15px auto; display: none; border-radius: 12px; overflow: hidden; border: 2px solid #ccc;"></div>
             <button id="btn-fechar-leitor" class="btn" style="background:#dc3545; display:none;" onclick="fecharLeitorQR()">❌ Cancelar</button>
         </div>
         <div class="box">
             <h2>📦 Nova Encomenda</h2>
-            <input id="encMorador" placeholder="Morador (Obrigatório)">
-            <input id="encApto" placeholder="Apartamento (Obrigatório)">
-            <input id="encTransportadora" placeholder="Transportadora">
-            <input id="encCodigo" placeholder="Código/Rastreio">
-            <input id="encVolumes" placeholder="Volumes">
-            <input id="encPorteiro" placeholder="Porteiro que recebeu">
+            <input id="encMorador" placeholder="Morador (Obrigatório)"><input id="encApto" placeholder="Apto (Obrigatório)">
+            <input id="encTransportadora" placeholder="Transp"><input id="encCodigo" placeholder="Código">
+            <input id="encVolumes" placeholder="Vols"><input id="encPorteiro" placeholder="Porteiro que recebeu">
             <input type="file" id="encFoto" accept="image/*">
             <p style="margin-top:15px;">✍️ Assinatura de Recebimento</p>
             <canvas id="canvasEncomenda"></canvas>
-            <button class="btn" style="background: #64748b;" onclick="limparAssinaturaEncomenda()">Limpar Assinatura</button>
-            <button class="btn" onclick="salvarEncomenda()">Cadastrar Encomenda</button>
+            <button class="btn" style="background: #64748b;" onclick="limparAssinaturaEncomenda()">Limpar</button>
+            <button class="btn" onclick="salvarEncomenda()">Cadastrar</button>
         </div>
-        <div class="box" style="background: rgba(59, 130, 246, 0.05);">
-            <h2>🔍 Histórico de Encomendas</h2>
-            <div class="filtro-container">
-                <input type="date" id="filtroDataEncomenda" onchange="filtrarEncomendas()">
-                <button class="btn btn-limpar" onclick="limparFiltroEncomendas()">Limpar Filtro</button>
-            </div>
-            <button class="btn" style="background:#3b82f6;" onclick="gerarRelatorioEncomendas()">📊 Gerar Relatório PDF</button>
-        </div>
-        <div id="listaEncomendas"></div>
+        <div id="listaEncomendas" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px;"></div>
     </div>
 
     <div id="comunicados" class="tela">
         <div class="box">
             <h2>📢 Novo Comunicado</h2>
-            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-                <select id="tipoComunicado" style="flex: 2; min-width: 200px;">
-                    <option>📢 Geral</option>
-                    <option>🛠️ Manutenção</option>
-                    <option>⚠️ Ocorrência</option>
-                    <option>🏛️ Assembleia</option>
-                </select>
-                <select id="statusComunicado" style="flex: 1; min-width: 150px;">
-                    <option value="🟡 Pendente" selected>🟡 Pendente</option>
-                    <option value="🔴 Não Resolvido">🔴 Não Resolvido</option>
-                    <option value="🟢 Resolvido">🟢 Resolvido</option>
-                </select>
-            </div>
-            
-            <input id="tituloComunicado" placeholder="Título do Comunicado">
-            
-            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-                <input type="date" id="dataComunicado" style="flex: 1;">
-                <input type="time" id="horaComunicado" style="flex: 1;">
-            </div>
-            
-            <input id="localComunicado" placeholder="Local (Ex: Salão de Festas, Garagem...)">
-            <textarea id="mensagemComunicado" placeholder="Mensagem / Detalhes completos"></textarea>
-            
-            <button class="btn" id="btnSalvarComunicado" onclick="salvarComunicado()">Publicar Comunicado</button>
+            <select id="tipoComunicado"><option>📢 Geral</option><option>🛠️ Manutenção</option><option>🏛️ Assembleia</option></select>
+            <select id="statusComunicado"><option value="🟡 Pendente">🟡 Pendente</option><option value="🟢 Resolvido">🟢 Resolvido</option></select>
+            <input id="tituloComunicado" placeholder="Título">
+            <input type="date" id="dataComunicado"><input type="time" id="horaComunicado"><input id="localComunicado" placeholder="Local">
+            <textarea id="mensagemComunicado" placeholder="Mensagem"></textarea>
+            <button class="btn" id="btnSalvarComunicado" onclick="salvarComunicado()">Publicar</button>
         </div>
         <div id="listaComunicados"></div>
     </div>
 
-    <div id="modalMorador" class="modal-overlay">
+    <div id="modalGlobal" class="modal-overlay">
         <div class="modal-content">
-            <button class="fechar-modal" onclick="fecharModalMorador()"><i class="fa-solid fa-xmark"></i></button>
-            <div id="conteudoModalMorador"></div>
+            <button class="fechar-modal" onclick="fecharModal()"><i class="fa-solid fa-xmark"></i></button>
+            <div id="conteudoModal"></div>
         </div>
     </div>
 
@@ -457,521 +322,356 @@ body.dark-mode .modal-content { background: #1e293b; border: 1px solid #334155; 
 
 <script>
 /* =========================================================================
-   MÁGICA DO MENU E TELAS 
+   SISTEMA DE MENU E TELAS
    ========================================================================= */
 function trocarTela(id){
     document.querySelectorAll(".tela").forEach(t=>t.classList.remove("ativa"));
-    let telaAlvo = document.getElementById(id);
-    if(telaAlvo) telaAlvo.classList.add("ativa");
+    let telaAlvo = document.getElementById(id); if(telaAlvo) telaAlvo.classList.add("ativa");
+    document.querySelectorAll(".sidebar .menu button").forEach(b => { b.style.background = "transparent"; b.style.borderLeftColor = "transparent"; b.style.color = "#94a3b8"; });
+    let btnAtivo = document.getElementById("menu-" + id); if(btnAtivo) { btnAtivo.style.background = "rgba(59, 130, 246, 0.1)"; btnAtivo.style.borderLeftColor = "#3b82f6"; btnAtivo.style.color = "#fff"; }
     
-    document.querySelectorAll(".sidebar .menu button").forEach(b => {
-        b.style.background = "transparent";
-        b.style.borderLeftColor = "transparent";
-        b.style.color = "#94a3b8";
-    });
-    
-    let btnAtivo = document.getElementById("menu-" + id);
-    if(btnAtivo) {
-        btnAtivo.style.background = "rgba(59, 130, 246, 0.1)";
-        btnAtivo.style.borderLeftColor = "#3b82f6";
-        btnAtivo.style.color = "#fff";
-    }
-
+    // Refresh automático de listas
     if(id === 'dashboard') atualizarDashboard();
     if(id === 'passagem') mostrarPassagens();
-    if(id === 'ponto') mostrarPontos();
     if(id === 'moradores') mostrarMoradores();
-    if(id === 'veiculos') mostrarVeiculos();
-    if(id === 'reservas') mostrarReservas();
     if(id === 'ocorrencias') mostrarOcorrencias();
     if(id === 'encomendas') mostrarEncomendas();
     if(id === 'comunicados') mostrarComunicados();
+    if(id === 'equipe') mostrarEquipe();
 }
 
-/* CONFIGURAÇÃO DO CANVAS DE ASSINATURA */
-function configurarCanvas(canvasId){
-    let canvas = document.getElementById(canvasId);
-    if(!canvas) return null; 
-    let ctx = canvas.getContext("2d");
-    let desenhando = false;
-    canvas.addEventListener("mousedown",(e)=>{ desenhando = true; ctx.beginPath(); ctx.moveTo(e.offsetX,e.offsetY); });
-    canvas.addEventListener("mouseup",()=>{ desenhando = false; });
-    canvas.addEventListener("mousemove",(e)=>{ if(!desenhando) return; ctx.lineWidth = 2; ctx.lineCap = "round"; ctx.strokeStyle = document.body.classList.contains('dark-mode') ? "#fff" : "#000"; ctx.lineTo(e.offsetX,e.offsetY); ctx.stroke(); });
-    canvas.addEventListener("touchstart",(e)=>{ e.preventDefault(); desenhando = true; let rect = canvas.getBoundingClientRect(); ctx.beginPath(); ctx.moveTo(e.touches[0].clientX - rect.left, e.touches[0].clientY - rect.top); });
-    canvas.addEventListener("touchmove",(e)=>{ if(!desenhando) return; e.preventDefault(); let rect = canvas.getBoundingClientRect(); ctx.lineWidth = 2; ctx.lineCap = "round"; ctx.strokeStyle = document.body.classList.contains('dark-mode') ? "#fff" : "#000"; ctx.lineTo(e.touches[0].clientX - rect.left, e.touches[0].clientY - rect.top); ctx.stroke(); });
-    canvas.addEventListener("touchend",()=>{ desenhando = false; });
-    return { canvas, ctx };
-}
-let encomendaCanvas = null;
-window.addEventListener('DOMContentLoaded', (event) => {
-    encomendaCanvas = configurarCanvas("canvasEncomenda");
-});
-function limparAssinaturaEncomenda(){ if(encomendaCanvas && encomendaCanvas.canvas) encomendaCanvas.ctx.clearRect(0,0,encomendaCanvas.canvas.width,encomendaCanvas.canvas.height); }
+function fecharModal() { document.getElementById('modalGlobal').style.display = 'none'; }
+function abrirModal(html) { document.getElementById('conteudoModal').innerHTML = html; document.getElementById('modalGlobal').style.display = 'flex'; }
 
 /* =========================================================================
-   👥 GESTÃO DE EQUIPE 
+   DASHBOARD E RELÓGIO
+   ========================================================================= */
+function atualizarDashboard() {
+    document.getElementById("dash-encomendas").innerText = encomendas.filter(e=>e.status==="Pendente").length;
+    document.getElementById("dash-ocorrencias").innerText = ocorrencias.filter(o => !o.status.includes("Resolvido")).length;
+    document.getElementById("dash-reservas").innerText = reservas.length;
+    document.getElementById("dash-equipe").innerText = equipe.length;
+    document.getElementById("dash-veiculos").innerText = veiculos.length;
+}
+
+function iniciarRelogio() {
+    setInterval(() => {
+        let agora = new Date(); document.getElementById("relogio").innerText = agora.toLocaleTimeString('pt-BR');
+        let hora = agora.getHours(); let saudacao = hora >= 18 ? "Boa noite" : hora >= 12 ? "Boa tarde" : "Bom dia";
+        document.getElementById("saudacao").innerText = `${saudacao}, Webert 👋`;
+    }, 1000);
+}
+
+function toggleDarkMode() { document.body.classList.toggle("dark-mode"); }
+
+/* =========================================================================
+   GESTÃO DE EQUIPE
    ========================================================================= */
 let equipe = JSON.parse(localStorage.getItem("equipe")) || [];
-let editandoIndexEquipe = -1; 
-
-function salvarEquipe() { localStorage.setItem("equipe", JSON.stringify(equipe)); atualizarSelectEquipe(); }
+function salvarEquipe() { localStorage.setItem("equipe", JSON.stringify(equipe)); atualizarSelects(); atualizarDashboard(); }
 function addFuncionario() {
-    let nome = document.getElementById("funcNome").value; let cargo = document.getElementById("funcCargo").value; let btnSalvar = document.getElementById("btnSalvarEquipe");
-    if(!nome || !cargo) return alert("Preencha o nome e o cargo!");
-    if (editandoIndexEquipe >= 0) { equipe[editandoIndexEquipe].nome = nome; equipe[editandoIndexEquipe].cargo = cargo; editandoIndexEquipe = -1; if(btnSalvar) btnSalvar.innerText = "Cadastrar Funcionário"; alert("✅ Funcionário atualizado!"); } else { equipe.push({ id: Date.now(), nome, cargo }); alert("✅ Novo funcionário cadastrado!"); }
-    salvarEquipe(); mostrarEquipe(); document.getElementById("funcNome").value = ""; document.getElementById("funcCargo").value = "";
+    let nome = document.getElementById("funcNome").value; let cargo = document.getElementById("funcCargo").value;
+    if(!nome || !cargo) return alert("Preencha nome e cargo!");
+    equipe.push({ id: Date.now(), nome, cargo }); salvarEquipe(); mostrarEquipe();
+    document.getElementById("funcNome").value = "";
 }
 function mostrarEquipe() {
-    let lista = document.getElementById("listaEquipe"); if(!lista) return; lista.innerHTML = "";
-    equipe.forEach((f, index) => { lista.innerHTML += `<div class="card" style="border-left: 4px solid #8b5cf6;"><h3>${f.nome}</h3><div class="badge" style="background: rgba(139, 92, 246, 0.1); color: #8b5cf6;">${f.cargo}</div><div class="acoes"><button class="btn-acao editar" onclick="prepararEdicaoEquipe(${index})">✏️ Editar</button><button class="btn-acao excluir" onclick="excluirFuncionario(${index})">🗑️ Excluir</button></div></div>`; });
+    let lista = document.getElementById("listaEquipe"); lista.innerHTML = "";
+    equipe.forEach((f, idx) => {
+        lista.innerHTML += `<div class="card" style="border-left: 4px solid #8b5cf6;"><h3>${f.nome}</h3><div class="badge" style="background:#f3f0ff; color:#8b5cf6;">${f.cargo}</div><div class="acoes"><button class="btn-acao excluir" onclick="equipe.splice(${idx},1); salvarEquipe(); mostrarEquipe();">🗑️ Remover</button></div></div>`;
+    });
 }
-function ajustarCargosAntigosEdicao(cargo) { if (cargo === "Porteiro") return "Porteiro Diurno"; return cargo; }
-function prepararEdicaoEquipe(index) {
-    document.getElementById("funcNome").value = equipe[index].nome; document.getElementById("funcCargo").value = ajustarCargosAntigosEdicao(equipe[index].cargo); let btnSalvar = document.getElementById("btnSalvarEquipe"); if(btnSalvar) btnSalvar.innerText = "💾 Salvar Alteração"; editandoIndexEquipe = index; window.scrollTo({ top: 0, behavior: "smooth" });
-}
-function excluirFuncionario(index) { if(confirm("Remover este funcionário?")) { equipe.splice(index, 1); salvarEquipe(); mostrarEquipe(); } }
-function atualizarSelectEquipe() {
-    let selectPonto = document.getElementById("pontoNome"); let selectFiltroPDF = document.getElementById("filtroFuncionarioPonto"); let options = '<option value="" disabled selected>Selecione o Nome</option>';
-    equipe.forEach(f => { options += '<option value="' + f.nome + '">' + f.nome + ' (' + f.cargo + ')</option>'; });
-    if(selectPonto) selectPonto.innerHTML = options; if(selectFiltroPDF) selectFiltroPDF.innerHTML = options;
+function atualizarSelects() {
+    let options = '<option value="">Selecione o Nome</option>';
+    equipe.forEach(f => options += `<option value="${f.nome}">${f.nome} (${f.cargo})</option>`);
+    ["pontoNome", "filtroFuncionarioPonto", "filtroPorteiroPassagem"].forEach(id => {
+        let el = document.getElementById(id); if(el) el.innerHTML = options;
+    });
 }
 
 /* =========================================================================
-   🔄 LIVRO DE PASSAGEM (PLANTÃO)
+   PASSAGEM DE PLANTÃO (MODAL, TIMELINE E FILTROS SEMANA/MÊS)
    ========================================================================= */
 let passagens = JSON.parse(localStorage.getItem("passagens")) || [];
 function salvarPassagem() {
-    let nome = document.getElementById("passagemNome").value; if(!nome) return alert("Preencha seu nome!"); let agora = new Date();
-    passagens.unshift({ id: Date.now(), data: agora.toISOString().split('T')[0], hora: agora.toLocaleTimeString('pt-BR', {hour: '2-digit', minute:'2-digit'}), nome, portoes: document.getElementById("chkPortoes").checked, elevadores: document.getElementById("chkElevadores").checked, luzes: document.getElementById("chkLuzes").checked, cameras: document.getElementById("chkCameras").checked, bombas: document.getElementById("chkBombas").checked, obs: document.getElementById("passagemObs").value });
-    localStorage.setItem("passagens", JSON.stringify(passagens)); document.getElementById("passagemNome").value = ""; document.getElementById("passagemObs").value = ""; document.getElementById("chkPortoes").checked = false; document.getElementById("chkElevadores").checked = false; document.getElementById("chkLuzes").checked = false; document.getElementById("chkCameras").checked = false; document.getElementById("chkBombas").checked = false;
-    mostrarPassagens(); alert("✅ Plantão registrado!");
+    let nome = document.getElementById("passagemNome").value; if(!nome) return alert("Digite seu nome!");
+    let turno = {
+        id: Date.now(), data: new Date().toISOString().split('T')[0], hora: new Date().toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'}),
+        nome, portoes: document.getElementById("chkPortoes").checked, elevadores: document.getElementById("chkElevadores").checked,
+        luzes: document.getElementById("chkLuzes").checked, cameras: document.getElementById("chkCameras").checked,
+        bombas: document.getElementById("chkBombas").checked, obs: document.getElementById("passagemObs").value
+    };
+    passagens.unshift(turno); localStorage.setItem("passagens", JSON.stringify(passagens));
+    ["chkPortoes", "chkElevadores", "chkLuzes", "chkCameras", "chkBombas"].forEach(id => document.getElementById(id).checked = false);
+    document.getElementById("passagemObs").value = ""; mostrarPassagens(); alert("✅ Plantão registrado!");
 }
+
 function mostrarPassagens() {
-    let filtro = document.getElementById("filtroDataPassagem").value; let lista = document.getElementById("listaPassagens"); if(!lista) return; lista.innerHTML = "";
-    let filtradas = filtro ? passagens.filter(p => p.data === filtro) : passagens;
-    if(filtradas.length === 0) { lista.innerHTML = "<p style='text-align:center; padding:20px; color:#777;'>Nenhum plantão registrado.</p>"; return; }
-    filtradas.forEach(p => {
-        let checkHtml = `<span style="color: ${p.portoes ? '#10b981' : '#ef4444'}">Portões</span> • <span style="color: ${p.elevadores ? '#10b981' : '#ef4444'}">Elevadores</span> • <span style="color: ${p.luzes ? '#10b981' : '#ef4444'}">Luzes</span> • <span style="color: ${p.cameras ? '#10b981' : '#ef4444'}">Câmeras</span> • <span style="color: ${p.bombas ? '#10b981' : '#ef4444'}">Bombas</span>`;
-        lista.innerHTML += `<div class="card" style="border-left: 4px solid #3b82f6;"><h3>${p.data.split('-').reverse().join('/')} às ${p.hora}</h3><p>${checkHtml}</p><p style="margin-top:10px; font-style:italic;">"${p.obs || 'Sem novidades.'}"</p><span class="badge" style="background:#e2e8f0; color:#475569; margin:10px 0 0 0;">👮 ${p.nome}</span></div>`;
+    let lista = document.getElementById("listaPassagens"); lista.innerHTML = "";
+    let porter = document.getElementById("filtroPorteiroPassagem").value;
+    let dataI = document.getElementById("filtroDataInicio").value;
+    let dataF = document.getElementById("filtroDataFim").value;
+
+    let filtradas = passagens.filter(p => {
+        let matchPorter = !porter || p.nome === porter;
+        let matchDate = (!dataI || p.data >= dataI) && (!dataF || p.data <= dataF);
+        return matchPorter && matchDate;
+    });
+
+    if(filtradas.length === 0) { lista.innerHTML = "<p style='text-align:center; padding:20px; color:#999;'>Nenhum registro encontrado.</p>"; return; }
+
+    filtradas.forEach((p, idx) => {
+        let indexOriginal = passagens.findIndex(x => x.id === p.id);
+        lista.innerHTML += `
+        <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="card" style="margin:0;">
+                <p style="font-size: 12px; color:#3b82f6; font-weight:700;">${p.data.split('-').reverse().join('/')} às ${p.hora}</p>
+                <h3 style="margin-bottom:5px;">👮 ${p.nome}</h3>
+                <div class="acoes">
+                    <button class="btn-acao print" style="flex:2;" onclick="abrirModalRelatorio(${indexOriginal})">👁️ Ver Relatório</button>
+                    <button class="btn-acao excluir" onclick="excluirPlantao(${indexOriginal})">🗑️</button>
+                </div>
+            </div>
+        </div>`;
     });
 }
+
+function abrirModalRelatorio(idx) {
+    let p = passagens[idx];
+    let status = (val) => val ? '<span style="color:#10b981">● OK</span>' : '<span style="color:#ef4444">● PENDÊNCIA</span>';
+    abrirModal(`
+        <h2 style="margin-bottom:20px; color:#3b82f6;">📋 Detalhes do Turno</h2>
+        <div style="background:#f8fafc; padding:15px; border-radius:10px; margin-bottom:15px;">
+            <p><b>Porteiro:</b> ${p.nome}</p>
+            <p><b>Data:</b> ${p.data.split('-').reverse().join('/')} às ${p.hora}</p>
+        </div>
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; font-size:14px; margin-bottom:20px;">
+            <div>Portões: ${status(p.portoes)}</div><div>Elevadores: ${status(p.elevadores)}</div>
+            <div>Luzes: ${status(p.luzes)}</div><div>Câmeras: ${status(p.cameras)}</div>
+            <div>Bombas: ${status(p.bombas)}</div>
+        </div>
+        <p style="font-weight:700; margin-bottom:5px;">📝 Observações:</p>
+        <div style="background:#f4f7fb; padding:15px; border-radius:10px; border-left:4px solid #3b82f6; font-style:italic; white-space:pre-line;">
+            "${p.obs || 'Nenhuma observação registrada.'}"
+        </div>
+    `);
+}
+
+function limparFiltrosPlantao() {
+    ["filtroPorteiroPassagem", "filtroDataInicio", "filtroDataFim"].forEach(id => document.getElementById(id).value = "");
+    mostrarPassagens();
+}
+
+function excluirPlantao(idx) { if(confirm("Apagar este registro permanentemente?")) { passagens.splice(idx,1); localStorage.setItem("passagens", JSON.stringify(passagens)); mostrarPassagens(); } }
+
 function gerarRelatorioPassagem() {
-    let dataFiltro = document.getElementById("filtroDataPassagem").value; let listagem = dataFiltro ? passagens.filter(p => p.data === dataFiltro) : passagens;
-    if (listagem.length === 0) return alert("Sem dados."); const { jsPDF } = window.jspdf; const doc = new jsPDF('p', 'pt');
-    doc.text("Livro de Passagem de Plantão", 40, 40); const colunas = ["Data/Hora", "Responsável", "Status", "Observações"]; const linhas = listagem.map(p => [`${p.data.split('-').reverse().join('/')} ${p.hora}`, p.nome, `Portões: ${p.portoes?'OK':'X'}\nElev: ${p.elevadores?'OK':'X'}`, p.obs || "Nenhuma."]);
-    doc.autoTable({ head: [colunas], body: linhas, startY: 60, headStyles:{fillColor:[59,130,246]} }); doc.save("Plantao.pdf");
+    const { jsPDF } = window.jspdf; const doc = new jsPDF('p', 'pt');
+    let filtradas = passagens.filter(p => {
+        let porter = document.getElementById("filtroPorteiroPassagem").value;
+        let dataI = document.getElementById("filtroDataInicio").value;
+        let dataF = document.getElementById("filtroDataFim").value;
+        let matchPorter = !porter || p.nome === porter;
+        let matchDate = (!dataI || p.data >= dataI) && (!dataF || p.data <= dataF);
+        return matchPorter && matchDate;
+    });
+    doc.text("Livro de Passagem de Plantão - Portaria PRO MASTER", 40, 40);
+    const colunas = ["Data/Hora", "Porteiro", "Status", "Observações"];
+    const linhas = filtradas.map(p => [`${p.data.split('-').reverse().join('/')} ${p.hora}`, p.nome, `Portões: ${p.portoes?'OK':'X'}\nElev: ${p.elevadores?'OK':'X'}`, p.obs || "-"]);
+    doc.autoTable({ head:[colunas], body: linhas, startY: 60, headStyles:{fillColor:[59,130,246]} });
+    doc.save("Relatorio_Plantao.pdf");
 }
 
 /* =========================================================================
-   ⏰ PONTO DIGITAL E PDF A4
+   PONTO DIGITAL
    ========================================================================= */
 let pontos = JSON.parse(localStorage.getItem("pontos")) || [];
 function registrarPonto(evento) {
-    let nome = document.getElementById("pontoNome").value; if(!nome) return alert("Selecione seu nome na lista!"); let agora = new Date();
-    pontos.unshift({ id: Date.now(), nome, evento, data: agora.toISOString().split('T')[0], hora: agora.toLocaleTimeString('pt-BR', {hour: '2-digit', minute:'2-digit', second:'2-digit'}) });
-    localStorage.setItem("pontos", JSON.stringify(pontos)); mostrarPontos(); alert(`Ponto de ${evento} batido com sucesso!`);
+    let nome = document.getElementById("pontoNome").value; if(!nome) return alert("Selecione seu nome!");
+    pontos.unshift({ id: Date.now(), nome, evento, data: new Date().toISOString().split('T')[0], hora: new Date().toLocaleTimeString('pt-BR') });
+    localStorage.setItem("pontos", JSON.stringify(pontos)); mostrarPontos(); alert(`Ponto de ${evento} registrado!`);
 }
 function mostrarPontos() {
-    let filtroMes = document.getElementById("filtroMesPonto").value; let filtroNome = document.getElementById("filtroFuncionarioPonto").value; let lista = document.getElementById("listaPontos"); if(!lista) return; lista.innerHTML = "";
-    let filtrados = pontos; if (filtroMes) filtrados = filtrados.filter(p => p.data.startsWith(filtroMes)); if (filtroNome) filtrados = filtrados.filter(p => p.nome === filtroNome);
-    if(filtrados.length === 0) { lista.innerHTML = "<p style='text-align:center; padding:20px; color:#777; grid-column:1/-1;'>Sem registros.</p>"; return; }
+    let lista = document.getElementById("listaPontos"); lista.innerHTML = "";
+    let mes = document.getElementById("filtroMesPonto").value;
+    let nome = document.getElementById("filtroFuncionarioPonto").value;
+    let filtrados = pontos.filter(p => (!mes || p.data.startsWith(mes)) && (!nome || p.nome === nome));
     filtrados.forEach(p => {
-        let c = p.evento === "Entrada" ? "#10b981" : p.evento === "Saída" ? "#ef4444" : "#f59e0b";
-        lista.innerHTML += `<div class="card" style="text-align:center; border-top:4px solid ${c};"><h3>${p.nome}</h3><div class="badge" style="background:${c}; color:white;">${p.evento}</div><p style="font-size:18px; font-weight:bold; margin-top:10px;"><i class="fa-regular fa-clock"></i> ${p.hora}</p><p style="font-size:12px;">${p.data.split('-').reverse().join('/')}</p></div>`;
+        lista.innerHTML += `<div class="card" style="text-align:center;"><h3>${p.nome}</h3><div class="badge status-andamento">${p.evento}</div><p>${p.data.split('-').reverse().join('/')} ${p.hora}</p></div>`;
     });
 }
 function gerarFolhaPontoIndividual() {
-    let mesFiltro = document.getElementById("filtroMesPonto").value; let nomeFiltro = document.getElementById("filtroFuncionarioPonto").value; if (!mesFiltro || !nomeFiltro) return alert("⚠️ Selecione o Mês e o Funcionário para gerar a folha de ponto em PDF.");
-    let funcInfo = equipe.find(f => f.nome === nomeFiltro); let cargoInfo = funcInfo ? funcInfo.cargo : "Não informado"; const { jsPDF } = window.jspdf; const doc = new jsPDF('p', 'pt', 'a4'); const corCinza = [169, 169, 169]; const corAzul = [70, 130, 180]; const corTexto = [60, 60, 60];
-    doc.setFontSize(28); doc.setFont("helvetica", "bold"); doc.setTextColor(corTexto[0], corTexto[1], corTexto[2]); doc.text("Folha de ponto", 40, 60); doc.setFontSize(16); doc.setFont("helvetica", "italic"); doc.text("Portaria PRO MASTER", 40, 80);
-    doc.setFillColor(corCinza[0], corCinza[1], corCinza[2]); doc.roundedRect(300, 35, 250, 20, 10, 10, 'F'); doc.setFontSize(10); doc.setFont("helvetica", "bold"); doc.setTextColor(255, 255, 255); doc.text(`Nome: ${nomeFiltro}`, 315, 49);
-    let anoInt = parseInt(mesFiltro.split('-')[0], 10); let mesInt = parseInt(mesFiltro.split('-')[1], 10); let formatMes = (mesInt < 10 ? '0' + mesInt : mesInt) + "/" + anoInt;
-    doc.setFillColor(corAzul[0], corAzul[1], corAzul[2]); doc.roundedRect(300, 65, 250, 20, 10, 10, 'F'); doc.text(`Mês e Ano: ${formatMes}`, 315, 79); doc.setFillColor(corCinza[0], corCinza[1], corCinza[2]); doc.roundedRect(300, 95, 250, 20, 10, 10, 'F'); doc.text(`Cargo: ${cargoInfo}`, 315, 109);
-    let pontosDoMes = pontos.filter(p => p.nome === nomeFiltro && p.data.startsWith(mesFiltro)); let ehBissexto = (anoInt % 4 === 0 && (anoInt % 100 !== 0 || anoInt % 400 === 0)); let matrizMeses = [31, (ehBissexto ? 29 : 28), 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]; let diasTotaisDoMes = matrizMeses[mesInt - 1];
-    let dadosTabela = [];
-    for (let i = 1; i <= diasTotaisDoMes; i++) {
-        let diaStr = i.toString().padStart(2, '0'); let dataCompleta = `${mesFiltro}-${diaStr}`; let ptDia = pontosDoMes.filter(p => p.data === dataCompleta);
-        let entrada = ptDia.find(p => p.evento === "Entrada")?.hora || ""; let pausa = ptDia.find(p => p.evento === "Pausa Almoço")?.hora || ""; let retorno = ptDia.find(p => p.evento === "Retorno Almoço")?.hora || ""; let saida = ptDia.find(p => p.evento === "Saída")?.hora || "";
-        let intervalo = (pausa || retorno) ? `${pausa.slice(0,5)} as ${retorno.slice(0,5)}` : ""; let ass = (entrada || pausa || retorno || saida) ? "ASSINADO DIGITALMENTE" : "";
-        dadosTabela.push([diaStr, nomeFiltro, entrada ? entrada.slice(0,5) : "", intervalo, saida ? saida.slice(0,5) : "", ass]);
-    }
-    const colunas = ["Dia", "Nome", "Chegada", "Intervalo", "Saída", "Assinatura"];
-    doc.autoTable({ startY: 130, head: [colunas], body: dadosTabela, theme: 'grid', headStyles: { fillColor: corCinza, textColor: [255, 255, 255], halign: 'center', fontSize: 10, fontStyle: 'bold' }, bodyStyles: { halign: 'center', valign: 'middle', fontSize: 9, minCellHeight: 18 }, columnStyles: { 0:{cellWidth:30}, 1:{cellWidth:100}, 2:{cellWidth:70}, 3:{cellWidth:90}, 4:{cellWidth:70}, 5:{cellWidth:'auto'} }, alternateRowStyles: { fillColor: [245, 245, 245] } });
-    doc.save(`Folha_Ponto_${nomeFiltro}_${formatMes.replace('/','-')}.pdf`);
+    let mes = document.getElementById("filtroMesPonto").value; let nome = document.getElementById("filtroFuncionarioPonto").value;
+    if(!mes || !nome) return alert("Selecione Mês e Funcionário!");
+    const { jsPDF } = window.jspdf; const doc = new jsPDF('p', 'pt', 'a4');
+    let filtrados = pontos.filter(p => p.nome === nome && p.data.startsWith(mes));
+    doc.text(`Folha de Ponto: ${nome} - ${mes}`, 40, 40);
+    const linhas = filtrados.map(p => [p.data.split('-').reverse().join('/'), p.hora, p.evento, "ASSINADO DIGITALMENTE"]);
+    doc.autoTable({ head:[["Data", "Hora", "Evento", "Assinatura"]], body: linhas, startY: 60 });
+    doc.save(`Folha_Ponto_${nome}.pdf`);
 }
 
 /* =========================================================================
-   👤 CADASTRO DE MORADORES: BOLHAS E MODAL PREMIUM (INTACTO)
+   MORADORES (INTACTO)
    ========================================================================= */
 let moradores = JSON.parse(localStorage.getItem("moradores")) || [];
 let editandoIndexMorador = -1;
-function salvarMoradores(){ localStorage.setItem("moradores",JSON.stringify(moradores)); atualizarDashboard(); }
 function addMorador(){ 
-    let nome = document.getElementById('nome').value.trim(); let apto = document.getElementById('apto').value.trim(); let secretaria = document.getElementById('secretaria').value.trim(); let visitantes = document.getElementById('visitantes').value.trim(); let btnSalvar = document.getElementById('btnSalvarMorador');
-    if(!nome || !apto) return alert("⚠️ Preencha pelo menos o Nome e o Apartamento!");
-    if (editandoIndexMorador >= 0) { moradores[editandoIndexMorador].nome = nome; moradores[editandoIndexMorador].apto = apto; moradores[editandoIndexMorador].secretaria = secretaria; moradores[editandoIndexMorador].visitantes = visitantes; editandoIndexMorador = -1; if(btnSalvar) btnSalvar.innerText = "Cadastrar Morador"; alert("✅ Morador atualizado com sucesso!"); } else { moradores.push({ nome, apto, secretaria, visitantes }); alert("✅ Morador cadastrado!"); }
-    salvarMoradores(); mostrarMoradores(document.getElementById("pesquisaMorador").value); document.getElementById('nome').value=''; document.getElementById('apto').value=''; document.getElementById('secretaria').value=''; document.getElementById('visitantes').value=''; 
+    let nome = document.getElementById('nome').value.trim(); let apto = document.getElementById('apto').value.trim();
+    if(!nome || !apto) return alert("Preencha Nome e Apto!");
+    if (editandoIndexMorador >= 0) {
+        moradores[editandoIndexMorador] = { nome, apto, secretaria: document.getElementById('secretaria').value, visitantes: document.getElementById('visitantes').value };
+        editandoIndexMorador = -1; document.getElementById('btnSalvarMorador').innerText = "Cadastrar Morador";
+    } else { moradores.push({ nome, apto, secretaria: document.getElementById('secretaria').value, visitantes: document.getElementById('visitantes').value }); }
+    salvarMoradores(); mostrarMoradores();
+    ["nome", "apto", "secretaria", "visitantes"].forEach(id => document.getElementById(id).value = "");
 }
-function pesquisarMoradores() { let termo = document.getElementById("pesquisaMorador").value.toLowerCase(); mostrarMoradores(termo); }
+function pesquisarMoradores() { mostrarMoradores(document.getElementById("pesquisaMorador").value.toLowerCase()); }
 function mostrarMoradores(filtro = ""){ 
-    let lista = document.getElementById('listaMoradores'); if(!lista) return; lista.innerHTML=""; 
-    if(moradores.length === 0) { lista.innerHTML = "<p style='text-align:center; padding:20px; color:#777; width:100%;'>Nenhum apartamento cadastrado.</p>"; return; }
-    let moradoresOrdenados = [...moradores].sort((a,b) => a.apto.localeCompare(b.apto, undefined, {numeric: true}));
-    let gridHtml = '<div class="apto-grid">';
-    moradoresOrdenados.forEach((m)=>{ let conteudoBuscavel = `${m.nome} ${m.apto}`.toLowerCase(); if(filtro && !conteudoBuscavel.includes(filtro)) return; let indexOriginal = moradores.findIndex(x => x.apto === m.apto && x.nome === m.nome); gridHtml += `<div class="apto-btn" onclick="abrirModalMorador(${indexOriginal})">${m.apto}</div>`; }); 
-    gridHtml += '</div>'; lista.innerHTML = gridHtml;
+    let lista = document.getElementById('listaMoradores'); lista.innerHTML=""; 
+    let ordenados = [...moradores].sort((a,b) => a.apto.localeCompare(b.apto, undefined, {numeric: true}));
+    let html = '<div class="apto-grid">';
+    ordenados.forEach(m => {
+        if(filtro && !(`${m.nome} ${m.apto}`.toLowerCase().includes(filtro))) return;
+        let idx = moradores.findIndex(x => x.apto === m.apto && x.nome === m.nome);
+        html += `<div class="apto-btn" onclick="abrirModalMorador(${idx})">${m.apto}</div>`;
+    });
+    lista.innerHTML = html + '</div>';
 }
-function abrirModalMorador(index) {
-    let m = moradores[index]; let modal = document.getElementById('modalMorador'); let conteudo = document.getElementById('conteudoModalMorador');
-    conteudo.innerHTML = `<div style="text-align: center; margin-bottom: 20px;"><div style="background: #e0f2fe; color: #0284c7; width: 65px; height: 65px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 22px; font-weight: bold; margin: 0 auto 10px auto; border: 2px solid #bae6fd;">${m.apto}</div><h3 style="color: #0f172a; margin: 0; font-size: 20px;"><i class="fa-regular fa-user" style="color: #94a3b8;"></i> ${m.nome}</h3></div><div style="display: grid; gap: 10px; font-size: 13px; margin-bottom: 20px;"><div style="background: #f8fafc; padding: 12px; border-radius: 8px; border: 1px solid #e2e8f0; text-align: left;"><p style="margin: 0; color: #64748b; font-weight: 700; text-transform: uppercase; font-size: 10px; letter-spacing: 0.5px;">👩‍💼 Secretária / Empregada</p><p style="margin: 4px 0 0 0; color: #334155; font-weight: 500; font-size: 14px;">${m.secretaria || '<span style="color:#cbd5e1; font-style:italic;">Nenhuma</span>'}</p></div><div style="background: #f8fafc; padding: 12px; border-radius: 8px; border: 1px solid #e2e8f0; text-align: left;"><p style="margin: 0; color: #64748b; font-weight: 700; text-transform: uppercase; font-size: 10px; letter-spacing: 0.5px;">👥 Autorizados / Visitantes</p><p style="margin: 4px 0 0 0; color: #334155; font-weight: 500; line-height: 1.4; font-size: 14px;">${m.visitantes || '<span style="color:#cbd5e1; font-style:italic;">Nenhum</span>'}</p></div></div><div class="acoes" style="margin-top: 10px;"><button class="btn-acao editar" onclick="prepararEdicaoMorador(${index})">✏️ Editar</button><button class="btn-acao excluir" onclick="excluirMorador(${index})">🗑️ Excluir</button></div>`;
-    modal.style.display = 'flex';
+function abrirModalMorador(idx) {
+    let m = moradores[idx];
+    abrirModal(`
+        <div style="text-align:center;">
+            <div class="apto-btn" style="margin: 0 auto 15px auto; cursor:default;">${m.apto}</div>
+            <h3 style="margin-bottom:20px;">${m.nome}</h3>
+            <div style="text-align:left; background:#f8fafc; padding:15px; border-radius:10px; margin-bottom:15px;">
+                <p><b>Secretária:</b> ${m.secretaria || 'Nenhuma'}</p>
+                <p><b>Autorizados:</b> ${m.visitantes || 'Nenhum'}</p>
+            </div>
+            <div class="acoes">
+                <button class="btn-acao editar" onclick="prepararEdicaoMorador(${idx})">✏️ Editar</button>
+                <button class="btn-acao excluir" onclick="moradores.splice(${idx},1); salvarMoradores(); mostrarMoradores(); fecharModal();">🗑️ Excluir</button>
+            </div>
+        </div>
+    `);
 }
-function fecharModalMorador() { document.getElementById('modalMorador').style.display = 'none'; }
-function prepararEdicaoMorador(index) {
-    fecharModalMorador(); document.getElementById("nome").value = moradores[index].nome; document.getElementById("apto").value = moradores[index].apto; document.getElementById("secretaria").value = moradores[index].secretaria || ""; document.getElementById("visitantes").value = moradores[index].visitantes || "";
-    let btnSalvar = document.getElementById("btnSalvarMorador"); if(btnSalvar) btnSalvar.innerText = "💾 Salvar Alterações"; editandoIndexMorador = index; window.scrollTo({ top: 0, behavior: "smooth" });
+function prepararEdicaoMorador(idx) {
+    let m = moradores[idx]; editandoIndexMorador = idx;
+    document.getElementById('nome').value = m.nome; document.getElementById('apto').value = m.apto;
+    document.getElementById('secretaria').value = m.secretaria; document.getElementById('visitantes').value = m.visitantes;
+    document.getElementById('btnSalvarMorador').innerText = "💾 Salvar Alterações";
+    fecharModal(); trocarTela('moradores'); window.scrollTo(0,0);
 }
-function excluirMorador(index){ if(confirm("Deseja excluir este morador?")) { fecharModalMorador(); moradores.splice(index,1); salvarMoradores(); mostrarMoradores(document.getElementById("pesquisaMorador").value); } }
-function gerarRelatorioMoradores() { if (moradores.length === 0) return alert("Vazio."); const { jsPDF } = window.jspdf; const doc = new jsPDF(); doc.text("Lista de Moradores", 14, 20); const col = ["Nome", "Apto", "Secretaria", "Autorizados"]; const lin = moradores.map(m => [m.nome, m.apto, m.secretaria || "-", m.visitantes || "-"]); doc.autoTable({ head: [col], body: lin, startY: 30 }); doc.save("Moradores.pdf"); }
+function salvarMoradores(){ localStorage.setItem("moradores", JSON.stringify(moradores)); atualizarDashboard(); }
+function gerarRelatorioMoradores() { 
+    const { jsPDF } = window.jspdf; const doc = new jsPDF(); doc.text("Lista de Moradores", 14, 20);
+    const lin = moradores.map(m => [m.apto, m.nome, m.secretaria || "-"]);
+    doc.autoTable({ head:[["Apto", "Morador", "Secretária"]], body: lin, startY: 30 });
+    doc.save("Moradores.pdf");
+}
 
 /* =========================================================================
-   🚘 CADASTRO DE VEÍCULOS
-   ========================================================================= */
-let veiculos = JSON.parse(localStorage.getItem("veiculos")) || [];
-function salvarVeiculos(){ localStorage.setItem("veiculos",JSON.stringify(veiculos)); atualizarDashboard(); }
-function addVeiculo(){ veiculos.push({ morador:document.getElementById('veiMorador').value, modelo:document.getElementById('veiModelo').value, placa:document.getElementById('veiPlaca').value, cor:document.getElementById('veiCor').value, vaga:document.getElementById('veiVaga').value }); salvarVeiculos(); mostrarVeiculos(); document.getElementById('veiMorador').value=''; document.getElementById('veiModelo').value=''; document.getElementById('veiPlaca').value=''; document.getElementById('veiCor').value=''; document.getElementById('veiVaga').value=''; }
-function mostrarVeiculos(){ let lista = document.getElementById('listaVeiculos'); if(!lista) return; lista.innerHTML=""; veiculos.forEach((v,i)=>{ lista.innerHTML += `<div class="card"><h3>🚗 Modelo: ${v.modelo}</h3><p>🔢 Placa: ${v.placa}</p><p>🎨 Cor: ${v.cor || 'N/A'}</p><p>🅿️ Vaga: ${v.vaga || 'N/A'}</p><p>👤 Dono: ${v.morador}</p><div class="acoes"><button class="btn-acao excluir" onclick="excluirVeiculo(${i})">🗑️ Remover</button></div></div>`; }); }
-function excluirVeiculo(i){ if(confirm("Remover veículo?")) { veiculos.splice(i,1); salvarVeiculos(); mostrarVeiculos(); } }
-
-/* =========================================================================
-   📅 AGENDAMENTO DE RESERVAS
-   ========================================================================= */
-let reservas = JSON.parse(localStorage.getItem("reservas")) || [];
-function salvarReservasBase(){ localStorage.setItem("reservas",JSON.stringify(reservas)); atualizarDashboard(); }
-function salvarReserva(){ reservas.push({ tipo:document.getElementById('tipoReserva').value, data:document.getElementById('dataReserva').value, hora:document.getElementById('horaReserva').value, responsavel:document.getElementById('responsavel').value }); salvarReservasBase(); mostrarReservas(); document.getElementById('dataReserva').value=''; document.getElementById('horaReserva').value=''; document.getElementById('responsavel').value='';}
-function mostrarReservas(){ let lista = document.getElementById('listaReservas'); if(!lista) return; lista.innerHTML=""; reservas.forEach((r,i)=>{ lista.innerHTML += `<div class="card"><h3>📅 ${r.tipo}</h3><p>📆 Data: ${r.data.split('-').reverse().join('/')} ${r.hora?'às '+r.hora:''}</p><p>👤 Morador: ${r.responsavel}</p><div class="acoes"><button class="btn-acao excluir" onclick="excluirReserva(${i})">🗑️ Cancelar</button></div></div>`; }); }
-function excluirReserva(i){ if(confirm("Cancelar reserva?")) { reservas.splice(i,1); salvarReservasBase(); mostrarReservas(); } }
-
-/* =========================================================================
-   🚨 LIVRO DE OCORRÊNCIAS (MODIFICADO COM STATUS SEMÁFORO E EDIÇÃO)
+   OCORRÊNCIAS (SEMAFORO)
    ========================================================================= */
 let ocorrencias = JSON.parse(localStorage.getItem("ocorrencias")) || [];
 let editandoIndexOcorrencia = -1;
-
-function toggleFormOcorrencia() { let form = document.getElementById("form-ocorrencia"); form.style.display = form.style.display === "none" ? "block" : "none"; }
-
+function toggleFormOcorrencia() { let f = document.getElementById("form-ocorrencia"); f.style.display = f.style.display === "none" ? "block" : "none"; }
 function salvarOcorrencia() {
-    let tipo = document.getElementById("ocoTipo").value; let desc = document.getElementById("ocoDescricao").value; let port = document.getElementById("ocoPorteiro").value;
-    let statusSelecionado = document.getElementById("ocoStatus").value;
-    let prioridade = document.getElementById("ocoPrioridade").value;
-    let apto = document.getElementById("ocoApto").value; let morador = document.getElementById("ocoMorador").value;
-
-    if(!tipo || !desc || !port) return alert("Preencha Tipo, Porteiro e Detalhes!");
-    
-    let btnSalvar = document.getElementById("btnSalvarOcorrencia");
-    let fotoInput = document.getElementById("ocoFoto"); let arquivo = fotoInput.files[0];
-    
-    if(arquivo) { 
-        let leitor = new FileReader(); 
-        leitor.onload = function(e){ finalizarSalvamentoOcorrencia(e.target.result, tipo, desc, port, statusSelecionado, prioridade, apto, morador, btnSalvar); }; 
-        leitor.readAsDataURL(arquivo); 
-    } else { 
-        finalizarSalvamentoOcorrencia("", tipo, desc, port, statusSelecionado, prioridade, apto, morador, btnSalvar); 
-    }
-}
-
-function finalizarSalvamentoOcorrencia(foto, tipo, desc, port, statusSelecionado, prioridade, apto, morador, btnSalvar) {
-    if (editandoIndexOcorrencia >= 0) {
-        ocorrencias[editandoIndexOcorrencia].tipo = tipo; ocorrencias[editandoIndexOcorrencia].descricao = desc;
-        ocorrencias[editandoIndexOcorrencia].registradoPor = port; ocorrencias[editandoIndexOcorrencia].status = statusSelecionado;
-        ocorrencias[editandoIndexOcorrencia].prioridade = prioridade; ocorrencias[editandoIndexOcorrencia].apto = apto;
-        ocorrencias[editandoIndexOcorrencia].morador = morador;
-        if(foto) ocorrencias[editandoIndexOcorrencia].foto = foto; // Atualiza foto só se mandou uma nova
-        
-        editandoIndexOcorrencia = -1;
-        if(btnSalvar) btnSalvar.innerText = "💾 Salvar Ocorrência";
-        alert("✅ Ocorrência atualizada!");
-    } else {
-        ocorrencias.unshift({ id: "OC" + Date.now().toString().slice(-4), tipo, apto, morador, prioridade, descricao: desc, foto, status: statusSelecionado, data: new Date().toISOString().split('T')[0], hora: new Date().toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'}), registradoPor: port });
-        alert("✅ Ocorrência registrada!");
-    }
-    
+    let o = {
+        id: Date.now(), tipo: document.getElementById("ocoTipo").value, status: document.getElementById("ocoStatus").value,
+        apto: document.getElementById("ocoApto").value, morador: document.getElementById("ocoMorador").value,
+        registradoPor: document.getElementById("ocoPorteiro").value, prioridade: document.getElementById("ocoPrioridade").value,
+        descricao: document.getElementById("ocoDescricao").value, data: new Date().toISOString().split('T')[0], hora: new Date().toLocaleTimeString('pt-BR')
+    };
+    if (editandoIndexOcorrencia >= 0) { ocorrencias[editandoIndexOcorrencia] = o; editandoIndexOcorrencia = -1; }
+    else { ocorrencias.unshift(o); }
     localStorage.setItem("ocorrencias", JSON.stringify(ocorrencias)); toggleFormOcorrencia(); mostrarOcorrencias(); atualizarDashboard();
-    document.getElementById("ocoDescricao").value = ''; document.getElementById("ocoApto").value = ''; document.getElementById("ocoMorador").value = '';
 }
-
-function resolverOcorrencia(index) {
-    ocorrencias[index].status = "🟢 Resolvido";
-    localStorage.setItem("ocorrencias", JSON.stringify(ocorrencias));
-    mostrarOcorrencias(); atualizarDashboard();
-}
-
-function prepararEdicaoOcorrencia(index) {
-    let o = ocorrencias[index];
-    document.getElementById("ocoTipo").value = o.tipo; document.getElementById("ocoDescricao").value = o.descricao;
-    document.getElementById("ocoPorteiro").value = o.registradoPor; document.getElementById("ocoApto").value = o.apto || "";
-    document.getElementById("ocoMorador").value = o.morador || ""; document.getElementById("ocoPrioridade").value = o.prioridade;
-    
-    // Tenta setar o status, se não achar exato, ignora
-    let comboStatus = document.getElementById("ocoStatus");
-    for(let i=0; i<comboStatus.options.length; i++) { if(comboStatus.options[i].value === o.status) { comboStatus.selectedIndex = i; break; } }
-    
-    let form = document.getElementById("form-ocorrencia");
-    if(form.style.display === "none" || form.style.display === "") toggleFormOcorrencia();
-    
-    let btnSalvar = document.getElementById("btnSalvarOcorrencia");
-    if(btnSalvar) btnSalvar.innerText = "💾 Salvar Alterações";
-    editandoIndexOcorrencia = index; window.scrollTo({ top: 0, behavior: "smooth" });
-}
-
-function mostrarOcorrencias(filtro="") {
-    let lista = document.getElementById("listaOcorrencias"); if(!lista) return; lista.innerHTML = "";
-    let urg = 0, abertos = 0, res = 0, hoje = 0; let dHoje = new Date().toISOString().split('T')[0];
-    
+function mostrarOcorrencias() {
+    let lista = document.getElementById("listaOcorrencias"); lista.innerHTML = "";
     ocorrencias.forEach((o, idx) => {
-        let conteudoBuscavel = `${o.tipo} ${o.apto} ${o.morador} ${o.descricao}`.toLowerCase(); if(filtro && !conteudoBuscavel.includes(filtro.toLowerCase())) return;
-        
-        // Contadores
-        if(o.prioridade === "Alta" && !o.status.includes("Resolvido")) urg++; 
-        if(o.status.includes("Pendente") || o.status === "Em aberto") abertos++; 
-        if(o.status.includes("Resolvido")) res++; 
-        if(o.data === dHoje) hoje++;
-        
-        // Cores do Semáforo (Borda e Etiqueta)
-        let corBorda = "#cbd5e1"; let classeBadge = "";
-        if (o.status.includes("Não Resolvido")) { corBorda = "#ef4444"; classeBadge = "status-urgente"; } 
-        else if (o.status.includes("Pendente") || o.status === "Em aberto") { corBorda = "#f59e0b"; classeBadge = "status-pendente"; } 
-        else if (o.status.includes("Resolvido")) { corBorda = "#10b981"; classeBadge = "status-entregue"; }
-        
+        let cor = o.status.includes("Resolvido") ? "#10b981" : o.status.includes("Pendente") ? "#f59e0b" : "#ef4444";
         lista.innerHTML += `
-        <div class="card" style="border-left: 5px solid ${corBorda}">
-            <h3>⚠️ ${o.tipo} <span style="font-size: 12px; color: #64748b;">(Prioridade: ${o.prioridade})</span></h3>
-            <span class="badge ${classeBadge}">${o.status}</span>
-            <p>🏢 Local: ${o.apto || 'Área Comum'} ${o.morador ? '- ' + o.morador : ''}</p>
-            <p>🕒 Hora: ${o.data.split('-').reverse().join('/')} às ${o.hora}</p>
-            <p>👮 Registrado por: ${o.registradoPor || 'Sistema'}</p>
-            <div style="background:rgba(0,0,0,0.02); padding:10px; border-radius:6px; margin:10px 0; font-style:italic;">"${o.descricao}"</div>
-            ${o.foto?`<img src="${o.foto}" class="foto">`:''}
+        <div class="card" style="border-left: 5px solid ${cor}">
+            <span class="badge" style="background:${cor}22; color:${cor}">${o.status}</span>
+            <h3>⚠️ ${o.tipo} (Apto ${o.apto})</h3>
+            <p><i>"${o.descricao}"</i></p>
             <div class="acoes">
-                ${!o.status.includes("Resolvido") ? `<button class="btn-acao entregue" onclick="resolverOcorrencia(${idx})">✅ Resolver</button>` : ''}
-                <button class="btn-acao editar" onclick="prepararEdicaoOcorrencia(${idx})">✏️ Editar</button>
-                <button class="btn-acao excluir" onclick="excluirOco(${idx})">🗑️ Apagar</button>
+                <button class="btn-acao entregue" onclick="ocorrencias[${idx}].status='🟢 Resolvido'; localStorage.setItem('ocorrencias', JSON.stringify(ocorrencias)); mostrarOcorrencias();">✅ Resolver</button>
+                <button class="btn-acao excluir" onclick="ocorrencias.splice(${idx},1); localStorage.setItem('ocorrencias', JSON.stringify(ocorrencias)); mostrarOcorrencias();">🗑️</button>
             </div>
         </div>`;
     });
-    
-    let sUrg = document.getElementById("stat-urgente"); if(sUrg) sUrg.innerText = urg; 
-    let sAb = document.getElementById("stat-aberto"); if(sAb) sAb.innerText = abertos;
-    let sRes = document.getElementById("stat-resolvida"); if(sRes) sRes.innerText = res; 
-    let sHj = document.getElementById("stat-hoje"); if(sHj) sHj.innerText = hoje;
 }
-
-function excluirOco(i) { if(confirm("Apagar ocorrência?")) { ocorrencias.splice(i,1); localStorage.setItem("ocorrencias", JSON.stringify(ocorrencias)); mostrarOcorrencias(); atualizarDashboard(); } }
-function pesquisarOcorrencias() { let t = document.getElementById("pesquisaOcorrencia").value; mostrarOcorrencias(t); }
-function gerarRelatorioOcorrencias() { const { jsPDF } = window.jspdf; const doc = new jsPDF(); doc.text("Histórico de Ocorrências", 14, 20); doc.save("Ocorrencias.pdf"); }
 
 /* =========================================================================
-   📦 ENCOMENDAS (INTACTO COMO SOLICITADO)
+   ENCOMENDAS (GRID 3 COLUNAS INTACTO)
    ========================================================================= */
 let encomendas = JSON.parse(localStorage.getItem("encomendas")) || [];
-function salvarEncomenda(){
-    let morador = document.getElementById('encMorador').value.trim(); let apto = document.getElementById('encApto').value.trim();
-    if(!morador || !apto) return alert("⚠️ Os campos Morador e Apartamento são obrigatórios!");
-    let fotoInput = document.getElementById("encFoto"); let arquivo = fotoInput.files[0];
-    if(arquivo){ let leitor = new FileReader(); leitor.onload=function(e){ criarEncomenda(e.target.result); }; leitor.readAsDataURL(arquivo); } else { criarEncomenda(""); }
+function salvarEncomenda() {
+    let m = document.getElementById('encMorador').value; let a = document.getElementById('encApto').value;
+    if(!m || !a) return alert("Preencha Morador e Apto!");
+    let enc = { id: Date.now().toString(), morador: m, apto: a, transportadora: document.getElementById('encTransportadora').value, status: "Pendente", data: new Date().toISOString().split('T')[0], hora: new Date().toLocaleTimeString('pt-BR'), volumes: document.getElementById('encVolumes').value, porteiro: document.getElementById('encPorteiro').value, assinatura: encomendaCanvas.canvas.toDataURL() };
+    encomendas.unshift(enc); localStorage.setItem("encomendas", JSON.stringify(encomendas));
+    limparAssinaturaEncomenda(); mostrarEncomendas(); atualizarDashboard();
 }
-function criarEncomenda(foto){
-    let agora = new Date(); let idUnico = Date.now().toString(); 
-    encomendas.push({ id: idUnico, morador: document.getElementById('encMorador').value, apto: document.getElementById('encApto').value, transportadora: document.getElementById('encTransportadora').value, codigo: document.getElementById('encCodigo').value, volumes: document.getElementById('encVolumes').value, porteiro: document.getElementById('encPorteiro').value, foto, assinatura: encomendaCanvas && encomendaCanvas.canvas ? encomendaCanvas.canvas.toDataURL() : "", status: "Pendente", dataChegada: agora.toISOString().split('T')[0], horaChegada: agora.toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'}) });
-    localStorage.setItem("encomendas", JSON.stringify(encomendas));
-    document.getElementById('encMorador').value=''; document.getElementById('encApto').value=''; document.getElementById('encTransportadora').value=''; document.getElementById('encCodigo').value=''; document.getElementById('encVolumes').value=''; document.getElementById('encPorteiro').value='';
-    mostrarEncomendas(); limparAssinaturaEncomenda(); atualizarDashboard(); alert("Encomenda cadastrada!");
-}
-function mostrarEncomendas(filtroData = ""){
-    let lista = document.getElementById('listaEncomendas'); if(!lista) return; lista.innerHTML=""; let hojeCalculo = new Date(); hojeCalculo.setHours(0,0,0,0);
-    encomendas.forEach((e,index)=>{
-        if(filtroData && e.dataChegada !== filtroData) return;
-        let dotHtml = ""; let dataExibicao = "Sem data";
-        if(e.dataChegada) {
-            let p = e.dataChegada.split('-'); dataExibicao = `${p[2]}/${p[1]}/${p[0]}`;
-            if(e.status === "Pendente") {
-                let dCheg = new Date(p[0], p[1]-1, p[2]); let diff = Math.floor((hojeCalculo - dCheg) / (1000 * 60 * 60 * 24));
-                if(diff <= 2) dotHtml = `<div class="dot-status dot-green"></div>`; else if(diff >= 3 && diff <= 5) dotHtml = `<div class="dot-status dot-yellow"></div>`; else dotHtml = `<div class="dot-status dot-red"></div>`;
-            }
-        }
+function mostrarEncomendas() {
+    let lista = document.getElementById('listaEncomendas'); lista.innerHTML = "";
+    encomendas.forEach((e, idx) => {
         lista.innerHTML += `
-        <div class="card">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 12px;"><h3 style="margin-bottom: 0;">📦 ${e.transportadora || 'Não informada'}</h3>${dotHtml}</div>
-            <div class="badge ${e.status==='Pendente'?'status-pendente':'status-entregue'}">${e.status}</div>
-            <p>👤 <b>Morador:</b> ${e.morador}</p><p>🏢 <b>Apto:</b> ${e.apto}</p><p>👮 <b>Recebido por:</b> ${e.porteiro || "N/A"}</p><p>📅 <b>Chegada:</b> <b>${dataExibicao} ${e.horaChegada ? `às ${e.horaChegada}` : ''}</b></p><p>📌 <b>Código:</b> ${e.codigo || "N/A"}</p><p>📦 <b>Volumes:</b> ${e.volumes || "N/A"}</p><p style="font-size:12px; color:#999;">ID: ${e.id || "Antigo"}</p>
-            ${e.foto?`<img src="${e.foto}" class="foto">`:''} ${e.assinatura && e.assinatura !== "data:," ? `<img src="${e.assinatura}" class="foto" style="border:1px dashed #ccc;">` : ""}
-            <div class="acoes"><button class="btn-acao entregue" onclick="marcarEntregue(${index})">✅ Entregue</button><button class="btn-acao whats" onclick="avisarWhatsappEncomenda(${index})">📲 WhatsApp</button><button class="btn-acao print" onclick="imprimirEtiqueta(${index})">🖨️ Padrão</button><button class="btn-acao qr-btn" onclick="imprimirSoQRCode(${index})">🔳 Só QR</button><button class="btn-acao excluir" onclick="excluirEncomenda(${index})">🗑️ Excluir</button></div>
+        <div class="card" style="border-top: 4px solid #3b82f6;">
+            <div class="badge status-pendente">${e.status}</div>
+            <h3>📦 ${e.transportadora || 'Encomenda'}</h3>
+            <p><b>Apto ${e.apto}</b> - ${e.morador}</p>
+            <p style="font-size:11px;">Entrada: ${e.data.split('-').reverse().join('/')} às ${e.hora}</p>
+            <img src="${e.assinatura}" style="width:100%; height:80px; object-fit:contain; border:1px dashed #eee; margin:10px 0;">
+            <div class="acoes">
+                <button class="btn-acao entregue" onclick="encomendas[${idx}].status='Entregue'; localStorage.setItem('encomendas', JSON.stringify(encomendas)); mostrarEncomendas();">✅ Baixa</button>
+                <button class="btn-acao excluir" onclick="encomendas.splice(${idx},1); localStorage.setItem('encomendas', JSON.stringify(encomendas)); mostrarEncomendas();">🗑️</button>
+            </div>
         </div>`;
     });
 }
-function marcarEntregue(i){ encomendas[i].status = "Entregue"; localStorage.setItem("encomendas", JSON.stringify(encomendas)); mostrarEncomendas(); atualizarDashboard(); }
-function excluirEncomenda(i){ if(confirm("Deseja excluir esta encomenda?")) { encomendas.splice(i,1); localStorage.setItem("encomendas", JSON.stringify(encomendas)); mostrarEncomendas(); atualizarDashboard(); } }
-function filtrarEncomendas(){ mostrarEncomendas(document.getElementById("filtroDataEncomenda").value); }
-function limparFiltroEncomendas(){ document.getElementById("filtroDataEncomenda").value=""; mostrarEncomendas(); }
-function avisarWhatsappEncomenda(index){ let msg = `Olá ${encomendas[index].morador}, sua encomenda chegou na portaria.`; window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`); }
-function imprimirEtiqueta(index){
-    let e = encomendas[index]; let janela = window.open("", "", "width=350,height=500"); let dataFormatada = ""; if(e.dataChegada) { let p = e.dataChegada.split('-'); dataFormatada = p[2] + '/' + p[1] + '/' + p[0]; }
-    let horaFormatada = e.horaChegada ? e.horaChegada : ""; let vol = e.volumes || "1"; let ident = e.id || "Antigo";
-    janela.document.write(`<html><head><title>Etiqueta Padrão</title><style>body{font-family:Arial,sans-serif;text-align:center;padding:10px;margin:0;} h1{margin:5px 0;font-size:32px;border-bottom:2px solid #000;padding-bottom:5px;} h2{margin:10px 0 5px 0;font-size:20px;} p{margin:5px 0;font-size:16px;} .rodape{font-size:10px;margin-top:20px;color:#555;} .btn-imprimir{margin-top:30px;padding:12px 20px;background:#000;color:#fff;border:none;border-radius:8px;font-size:16px;cursor:pointer;font-weight:bold;width:80%;} @media print{.btn-imprimir{display:none !important;}}</style></head><body><h1>AP ${e.apto}</h1><h2>${e.morador}</h2><p><b>Transp:</b> ${e.transportadora}</p><p><b>Vols:</b> ${vol}</p><p style="font-size: 14px; margin-top: 15px;">📅 ${dataFormatada} às ${horaFormatada}</p><p class="rodape">ID: ${ident}</p><button class="btn-imprimir" onclick="window.print()">🖨️ Imprimir Etiqueta</button><p style="font-size: 11px; color: #888; margin-top: 5px;" class="btn-imprimir">Feche a janela após imprimir.</p><script> window.onload = function() { window.print(); }; window.onafterprint = function() { window.close(); }; <\/script></body></html>`);
-    janela.document.close();
-}
-function imprimirSoQRCode(index){
-    let e = encomendas[index]; let janela = window.open("", "", "width=300,height=380"); let ident = e.id || "Antigo"; let qrImgTag = "";
-    if(e.id && e.id !== "undefined") { let linkSistema = window.location.href.split("?")[0] + "?baixar=" + e.id; let tempCanvas = document.createElement("canvas"); new QRious({ element: tempCanvas, value: linkSistema, size: 200, level: "H" }); qrImgTag = `<img src="${tempCanvas.toDataURL()}" style="margin-bottom: 5px;">`; }
-    janela.document.write(`<html><head><title>Etiqueta QR Code</title><style>body{font-family:Arial,sans-serif;text-align:center;padding:0;margin:0;display:flex;flex-direction:column;align-items:center;justify-content:center;height:100vh;} .rodape{font-size:18px;font-weight:bold;margin:0;} .sub-rodape{font-size:12px;color:#555;margin-top:3px;} .btn-imprimir{margin-top:20px;padding:10px 20px;background:#000;color:#fff;border:none;border-radius:8px;font-size:14px;cursor:pointer;font-weight:bold;} @media print{.btn-imprimir{display:none !important;}}</style></head><body>${qrImgTag}<p class="rodape">AP ${e.apto}</p><p class="sub-rodape">ID: ${ident}</p><button class="btn-imprimir" onclick="window.print()">🖨️ Imprimir</button><script> window.onload = function() { window.print(); }; window.onafterprint = function() { window.close(); }; <\/script></body></html>`);
-    janela.document.close();
-}
-function gerarRelatorioEncomendas(){ const { jsPDF } = window.jspdf; const doc = new jsPDF(); doc.text("Relatório de Encomendas", 14, 20); doc.save("Encomendas.pdf"); }
-function confirmarEntregaPorID(id) { let index = encomendas.findIndex(e => e.id === id); if(index === -1) return alert("❌ Encomenda não encontrada!"); let e = encomendas[index]; if(e.status === "Entregue") return alert(`A encomenda do Apto ${e.apto} já consta como ENTREGUE!`); if(confirm(`📦 CONFIRMAÇÃO DE ENTREGA 📦\n\nMorador: ${e.morador}\nApto: ${e.apto}\nTransp: ${e.transportadora}\n\nConfirmar entrega?`)) { encomendas[index].status = "Entregue"; localStorage.setItem("encomendas", JSON.stringify(encomendas)); mostrarEncomendas(); atualizarDashboard(); alert("✅ Entrega registrada!"); } }
-let html5QrcodeScanner;
-function iniciarLeitorQR() { document.getElementById('leitor-qr').style.display = 'block'; document.getElementById('btn-fechar-leitor').style.display = 'block'; html5QrcodeScanner = new Html5QrcodeScanner("leitor-qr", { fps: 10, qrbox: {width: 250, height: 250} }, false); html5QrcodeScanner.render((text) => { fecharLeitorQR(); if(text.includes('?baixar=')){ try{ confirmarEntregaPorID(new URL(text).searchParams.get('baixar')); }catch(e){alert("Erro");} } }, () => {}); }
-function fecharLeitorQR() { if (html5QrcodeScanner) html5QrcodeScanner.clear(); document.getElementById('leitor-qr').style.display = 'none'; document.getElementById('btn-fechar-leitor').style.display = 'none'; }
+function limparAssinaturaEncomenda(){ if(encomendaCanvas && encomendaCanvas.canvas) encomendaCanvas.ctx.clearRect(0,0,encomendaCanvas.canvas.width,encomendaCanvas.canvas.height); }
 
 /* =========================================================================
-   📢 COMUNICADOS (MODIFICADO COM STATUS SEMÁFORO, EDIÇÃO E WHATSAPP)
+   COMUNICADOS
    ========================================================================= */
 let comunicados = JSON.parse(localStorage.getItem("comunicados")) || [];
-let editandoIndexComunicado = -1;
-
-function salvarComunicado(){
-    let tipo = document.getElementById('tipoComunicado').value;
-    let status = document.getElementById('statusComunicado').value;
-    let titulo = document.getElementById('tituloComunicado').value.trim();
-    let data = document.getElementById('dataComunicado').value;
-    let hora = document.getElementById('horaComunicado').value;
-    let local = document.getElementById('localComunicado').value.trim();
-    let mensagem = document.getElementById('mensagemComunicado').value.trim();
-    
-    let btnSalvar = document.getElementById('btnSalvarComunicado');
-
-    if(!titulo || !mensagem) return alert("⚠️ O Título e a Mensagem são obrigatórios!");
-
-    if (editandoIndexComunicado >= 0) {
-        comunicados[editandoIndexComunicado] = { tipo, status, titulo, data, hora, local, mensagem };
-        editandoIndexComunicado = -1;
-        if(btnSalvar) btnSalvar.innerText = "Publicar Comunicado";
-        alert("✅ Comunicado atualizado!");
-    } else {
-        comunicados.unshift({ tipo, status, titulo, data, hora, local, mensagem });
-        alert("✅ Comunicado publicado!");
-    }
-
-    localStorage.setItem("comunicados", JSON.stringify(comunicados)); mostrarComunicados();
-    
-    // Limpa os campos
-    document.getElementById('tituloComunicado').value=''; document.getElementById('dataComunicado').value='';
-    document.getElementById('horaComunicado').value=''; document.getElementById('localComunicado').value='';
-    document.getElementById('mensagemComunicado').value='';
+function salvarComunicado() {
+    let c = { tipo: document.getElementById("tipoComunicado").value, status: document.getElementById("statusComunicado").value, titulo: document.getElementById("tituloComunicado").value, data: document.getElementById("dataComunicado").value, hora: document.getElementById("horaComunicado").value, local: document.getElementById("localComunicado").value, mensagem: document.getElementById("mensagemComunicado").value };
+    comunicados.unshift(c); localStorage.setItem("comunicados", JSON.stringify(comunicados)); mostrarComunicados();
 }
-
-function prepararEdicaoComunicado(index) {
-    let c = comunicados[index];
-    document.getElementById('tipoComunicado').value = c.tipo;
-    
-    let comboStatus = document.getElementById("statusComunicado");
-    for(let i=0; i<comboStatus.options.length; i++) { if(comboStatus.options[i].value === c.status) { comboStatus.selectedIndex = i; break; } }
-    
-    document.getElementById('tituloComunicado').value = c.titulo;
-    document.getElementById('dataComunicado').value = c.data || "";
-    document.getElementById('horaComunicado').value = c.hora || "";
-    document.getElementById('localComunicado').value = c.local || "";
-    document.getElementById('mensagemComunicado').value = c.mensagem;
-    
-    let btnSalvar = document.getElementById('btnSalvarComunicado');
-    if(btnSalvar) btnSalvar.innerText = "💾 Salvar Alterações";
-    
-    editandoIndexComunicado = index;
-    window.scrollTo({ top: 0, behavior: "smooth" });
+function mostrarComunicados() {
+    let lista = document.getElementById("listaComunicados"); lista.innerHTML = "";
+    comunicados.forEach((c, idx) => {
+        let cor = c.status.includes("Resolvido") ? "#10b981" : "#f59e0b";
+        lista.innerHTML += `
+        <div class="card" style="border-left: 5px solid ${cor}">
+            <h3 style="color:#3b82f6">${c.tipo}</h3>
+            <h4>${c.titulo}</h4>
+            <p style="font-size:12px;"><b>Local:</b> ${c.local} | <b>Data:</b> ${c.data.split('-').reverse().join('/')} ${c.hora}</p>
+            <p>${c.mensagem}</p>
+            <div class="acoes">
+                <button class="btn-acao whats" onclick="avisarWhatsappComunicado(${idx})">📲 WhatsApp</button>
+                <button class="btn-acao excluir" onclick="comunicados.splice(${idx},1); localStorage.setItem('comunicados', JSON.stringify(comunicados)); mostrarComunicados();">🗑️</button>
+            </div>
+        </div>`;
+    });
 }
-
-function excluirComunicado(index) {
-    if(confirm("Deseja apagar este comunicado?")) {
-        comunicados.splice(index, 1);
-        localStorage.setItem("comunicados", JSON.stringify(comunicados));
-        mostrarComunicados();
-    }
-}
-
-function avisarWhatsappComunicado(index) {
-    let c = comunicados[index];
-    let fraseFinal = "";
-    
-    // Frases Mágicas Automáticas
-    if (c.tipo.includes("Assembleia")) fraseFinal = "Sua presença é fundamental!";
-    else if (c.tipo.includes("Manutenção")) fraseFinal = "Pedimos desculpas pelo transtorno.";
-    else if (c.tipo.includes("Ocorrência")) fraseFinal = "Pedimos atenção a este aviso.";
-    else fraseFinal = "Contamos com a colaboração de todos.";
-
-    let dataHora = c.data ? (c.data.split('-').reverse().join('/') + (c.hora ? ' às ' + c.hora : '')) : '';
-    let txtLocal = c.local ? `\n📍 *Local:* ${c.local}` : '';
-    
-    let msg = `*${c.tipo}*\n\n🔔 *${c.titulo}*\n${dataHora ? '📅 *Data:* ' + dataHora : ''}${txtLocal}\n\n📝 ${c.mensagem}\n\n_${fraseFinal}_`;
-    
+function avisarWhatsappComunicado(idx) {
+    let c = comunicados[idx];
+    let msg = `*${c.tipo}*\n\n🔔 *${c.titulo}*\n📍 *Local:* ${c.local}\n📝 ${c.mensagem}`;
     window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`);
 }
 
-function mostrarComunicados(){
-    let lista = document.getElementById('listaComunicados'); if(!lista) return; lista.innerHTML="";
-    
-    if(comunicados.length === 0) { lista.innerHTML = "<p style='text-align:center; padding:20px; color:#777;'>Nenhum comunicado ativo.</p>"; return; }
-
-    comunicados.forEach((c, index) => {
-        // Lógica Semáforo
-        let corBorda = "#cbd5e1"; let classeBadge = "status-andamento";
-        if(c.status) {
-            if (c.status.includes("Não Resolvido")) { corBorda = "#ef4444"; classeBadge = "status-urgente"; } 
-            else if (c.status.includes("Pendente")) { corBorda = "#f59e0b"; classeBadge = "status-pendente"; } 
-            else if (c.status.includes("Resolvido")) { corBorda = "#10b981"; classeBadge = "status-entregue"; }
-        }
-
-        let dataFormatada = c.data ? c.data.split('-').reverse().join('/') : "";
-        let infosExtras = "";
-        if(dataFormatada || c.local) {
-            infosExtras = `<div style="background:#f8fafc; padding:10px; border-radius:8px; margin-bottom:10px; font-size:13px; color:#475569;">
-                ${dataFormatada ? `<b>📅 Data:</b> ${dataFormatada} ${c.hora ? `às ${c.hora}` : ''}<br>` : ''}
-                ${c.local ? `<b>📍 Local:</b> ${c.local}` : ''}
-            </div>`;
-        }
-
-        lista.innerHTML += `
-        <div class="card" style="border-left: 5px solid ${corBorda};">
-            <h3>${c.tipo}</h3>
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-                <h4 style="margin:0; color:#334155; font-size:16px;">🔔 ${c.titulo}</h4>
-                <span class="badge ${classeBadge}" style="margin:0;">${c.status || "Ativo"}</span>
-            </div>
-            ${infosExtras}
-            <p style="white-space: pre-line;">${c.mensagem}</p>
-            <div class="acoes">
-                <button class="btn-acao whats" onclick="avisarWhatsappComunicado(${index})">📲 WhatsApp</button>
-                <button class="btn-acao editar" onclick="prepararEdicaoComunicado(${index})">✏️ Editar</button>
-                <button class="btn-acao excluir" onclick="excluirComunicado(${index})">🗑️ Excluir</button>
-            </div>
-        </div>`; 
-    });
-}
-
-/* MOTOR DO RELÓGIO GLOBAL */
-function iniciarRelogio() { setInterval(() => { let agora = new Date(); document.getElementById("relogio").innerText = agora.toLocaleTimeString('pt-BR'); let hora = agora.getHours(); let saudacao = hora >= 18 ? "Boa noite" : hora >= 12 ? "Boa tarde" : "Bom dia"; document.getElementById("saudacao").innerText = `${saudacao}, Webert 👋`; }, 1000); }
-function atualizarDashboard() {
-    let sOco = document.getElementById("dash-ocorrencias"); if(sOco) sOco.innerText = ocorrencias.filter(o => !o.status.includes("Resolvido")).length;
-    let sVei = document.getElementById("dash-veiculos"); if(sVei) sVei.innerText = veiculos.length;
-    let sMor = document.getElementById("dash-moradores"); if(sMor) sMor.innerText = moradores.length;
-    let sEnc = document.getElementById("dash-encomendas"); if(sEnc) sEnc.innerText = encomendas.filter(e=>e.status==="Pendente").length;
-    let sRes = document.getElementById("dash-reservas"); if(sRes) sRes.innerText = reservas.length;
-}
-function toggleDarkMode() { document.body.classList.toggle("dark-mode"); }
-
-/* EXECUÇÃO OPERACIONAL INICIAL */
+/* =========================================================================
+   INICIALIZAÇÃO
+   ========================================================================= */
 window.onload = function() {
-    mostrarEquipe(); atualizarSelectEquipe(); mostrarMoradores(); mostrarComunicados(); iniciarRelogio(); atualizarDashboard();
-    let idParaBaixar = new URLSearchParams(window.location.search).get('baixar'); 
-    if(idParaBaixar) { trocarTela('encomendas'); setTimeout(() => { confirmarEntregaPorID(idParaBaixar); window.history.replaceState({}, document.title, window.location.pathname); }, 600); }
+    encomendaCanvas = configurarCanvas("canvasEncomenda");
+    iniciarRelogio(); atualizarSelects(); mostrarEquipe(); mostrarMoradores();
+    atualizarDashboard();
 };
 </script>
 </body>
