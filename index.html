@@ -274,7 +274,13 @@ body.dark-mode canvas { background: #0f172a; border-color: #475569; }
             <input id="secretaria" placeholder="Secretária">
             <input id="visitantes" placeholder="Visitantes separados por vírgula">
             <button class="btn" onclick="addMorador()">Cadastrar Morador</button>
-            <button class="btn" style="background:#1976d2;" onclick="gerarRelatorioMoradores()">📊 Baixar PDF de Moradores</button>
+        </div>
+        <div class="box" style="background: rgba(59, 130, 246, 0.05);">
+            <h2>🔍 Lista de Moradores</h2>
+            <div class="filtro-container">
+                <input type="text" id="pesquisaMorador" placeholder="🔍 Buscar por nome ou apartamento..." onkeyup="pesquisarMoradores()" style="flex: 2;">
+                <button class="btn" style="background:#1976d2; margin-top:0; width: auto;" onclick="gerarRelatorioMoradores()">📊 PDF Geral</button>
+            </div>
         </div>
         <div id="listaMoradores"></div>
     </div>
@@ -463,7 +469,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
 function limparAssinaturaEncomenda(){ if(encomendaCanvas && encomendaCanvas.canvas) encomendaCanvas.ctx.clearRect(0,0,encomendaCanvas.canvas.width,encomendaCanvas.canvas.height); }
 
 /* =========================================================================
-   👥 GESTÃO DE EQUIPE (EDIÇÃO BLINDADA SEM POP-UP)
+   👥 GESTÃO DE EQUIPE 
    ========================================================================= */
 let equipe = JSON.parse(localStorage.getItem("equipe")) || [];
 let editandoIndexEquipe = -1; 
@@ -512,27 +518,18 @@ function mostrarEquipe() {
     });
 }
 
-function ajustarCargosAntigosEdicao(cargo) {
-    if (cargo === "Porteiro") return "Porteiro Diurno";
-    return cargo;
-}
-
 function prepararEdicaoEquipe(index) {
     document.getElementById("funcNome").value = equipe[index].nome;
-    document.getElementById("funcCargo").value = ajustarCargosAntigosEdicao(equipe[index].cargo);
-    
+    document.getElementById("funcCargo").value = equipe[index].cargo;
     let btnSalvar = document.getElementById("btnSalvarEquipe");
     if(btnSalvar) btnSalvar.innerText = "💾 Salvar Alteração";
-    
     editandoIndexEquipe = index;
     window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
 function excluirFuncionario(index) { 
     if(confirm("Deseja remover este funcionário?")) { 
-        equipe.splice(index, 1); 
-        salvarEquipe(); 
-        mostrarEquipe(); 
+        equipe.splice(index, 1); salvarEquipe(); mostrarEquipe(); 
     } 
 }
 
@@ -570,7 +567,7 @@ function gerarRelatorioPassagem() {
     if (listagem.length === 0) return alert("Sem dados."); const { jsPDF } = window.jspdf; const doc = new jsPDF('p', 'pt');
     doc.text("Livro de Passagem de Plantão", 40, 40); const colunas = ["Data/Hora", "Responsável", "Status", "Observações"];
     const linhas = listagem.map(p => [`${p.data.split('-').reverse().join('/')} ${p.hora}`, p.nome, `Portões: ${p.portoes?'OK':'X'}\nElev: ${p.elevadores?'OK':'X'}`, p.obs || "Nenhuma."]);
-    doc.autoTable({ head: [colunas], body: lines, startY: 60, headStyles:{fillColor:[59,130,246]} }); doc.save("Plantao.pdf");
+    doc.autoTable({ head: [colunas], body: linhas, startY: 60, headStyles:{fillColor:[59,130,246]} }); doc.save("Plantao.pdf");
 }
 
 /* =========================================================================
@@ -644,15 +641,30 @@ function gerarFolhaPontoIndividual() {
 }
 
 /* =========================================================================
-   👤 CADASTRO DE MORADORES
+   👤 CADASTRO DE MORADORES E PESQUISA RESTAURADA
    ========================================================================= */
 let moradores = JSON.parse(localStorage.getItem("moradores")) || [];
 function salvarMoradores(){ localStorage.setItem("moradores",JSON.stringify(moradores)); atualizarDashboard(); }
 function addMorador(){ moradores.push({ nome:document.getElementById('nome').value, apto:document.getElementById('apto').value, secretaria:document.getElementById('secretaria').value, visitantes:document.getElementById('visitantes').value }); salvarMoradores(); mostrarMoradores(); document.getElementById('nome').value=''; document.getElementById('apto').value=''; document.getElementById('secretaria').value=''; document.getElementById('visitantes').value=''; }
-function mostrarMoradores(){ let lista = document.getElementById('listaMoradores'); if(!lista) return; lista.innerHTML=""; moradores.forEach((m,index)=>{ lista.innerHTML += `<div class="card"><h3>${m.nome}</h3><p>🏢 AP: ${m.apto}</p><p>👩‍💼 Emp/Sec: ${m.secretaria}</p><p>👥 Autorizados: ${m.visitantes || 'Nenhum'}</p><div class="acoes"><button class="btn-acao editar" onclick="editarMorador(${index})">✏️ Editar</button><button class="btn-acao excluir" onclick="excluirMorador(${index})">🗑️ Excluir</button></div></div>`; }); }
-function editarMorador(index){ let n = prompt("Nome:", moradores[index].nome); if(n) moradores[index].nome = n; salvarMoradores(); mostrarMoradores(); }
-function excluirMorador(index){ if(confirm("Excluir morador?")) { moradores.splice(index,1); salvarMoradores(); mostrarMoradores(); } }
-function generarRelatorioMoradores() { if (moradores.length === 0) return alert("Vazio."); const { jsPDF } = window.jspdf; const doc = new jsPDF(); doc.text("Lista de Moradores", 14, 20); const col = ["Nome", "Apto"]; const lin = moradores.map(m => [m.nome, m.apto]); doc.autoTable({ head: [col], body: lin, startY: 30 }); doc.save("Moradores.pdf"); }
+
+function pesquisarMoradores() {
+    let termo = document.getElementById("pesquisaMorador").value.toLowerCase();
+    mostrarMoradores(termo);
+}
+
+function mostrarMoradores(filtro = ""){ 
+    let lista = document.getElementById('listaMoradores'); if(!lista) return; lista.innerHTML=""; 
+    moradores.forEach((m,index)=>{ 
+        let conteudoBuscavel = `${m.nome} ${m.apto}`.toLowerCase();
+        if(filtro && !conteudoBuscavel.includes(filtro)) return;
+
+        lista.innerHTML += `<div class="card"><h3>${m.nome}</h3><p>🏢 AP: ${m.apto}</p><p>👩‍💼 Emp/Sec: ${m.secretaria}</p><p>👥 Autorizados: ${m.visitantes || 'Nenhum'}</p><div class="acoes"><button class="btn-acao editar" onclick="editarMorador(${index})">✏️ Editar</button><button class="btn-acao excluir" onclick="excluirMorador(${index})">🗑️ Excluir</button></div></div>`; 
+    }); 
+}
+
+function editarMorador(index){ let n = prompt("Nome:", moradores[index].nome); if(n) moradores[index].nome = n; salvarMoradores(); mostrarMoradores(document.getElementById("pesquisaMorador").value); }
+function excluirMorador(index){ if(confirm("Excluir morador?")) { moradores.splice(index,1); salvarMoradores(); mostrarMoradores(document.getElementById("pesquisaMorador").value); } }
+function gerarRelatorioMoradores() { if (moradores.length === 0) return alert("Vazio."); const { jsPDF } = window.jspdf; const doc = new jsPDF(); doc.text("Lista de Moradores", 14, 20); const col = ["Nome", "Apto"]; const lin = moradores.map(m => [m.nome, m.apto]); doc.autoTable({ head: [col], body: lin, startY: 30 }); doc.save("Moradores.pdf"); }
 
 /* =========================================================================
    🚘 CADASTRO DE VEÍCULOS
@@ -714,14 +726,13 @@ function pesquisarOcorrencias() { let t = document.getElementById("pesquisaOcorr
 function gerarRelatorioOcorrencias() { const { jsPDF } = window.jspdf; const doc = new jsPDF(); doc.text("Histórico de Ocorrências", 14, 20); doc.save("Ocorrencias.pdf"); }
 
 /* =========================================================================
-   📦 ENCOMENDAS COM VALIDAÇÃO IMPEDINDO CADASTRO EM BRANCO
+   📦 ENCOMENDAS - RESTAURADOS DETALHES E BOTÕES
    ========================================================================= */
 let encomendas = JSON.parse(localStorage.getItem("encomendas")) || [];
 function salvarEncomenda(){
     let morador = document.getElementById('encMorador').value.trim();
     let apto = document.getElementById('encApto').value.trim();
     
-    // VALIDACAO SEGURA: Impede o cadastro se morador ou apartamento estiverem vazios
     if(!morador || !apto) {
         return alert("⚠️ Os campos Morador e Apartamento são obrigatórios para cadastrar uma encomenda!");
     }
@@ -730,10 +741,10 @@ function salvarEncomenda(){
     if(arquivo){ let leitor = new FileReader(); leitor.onload=function(e){ criarEncomenda(e.target.result); }; leitor.readAsDataURL(arquivo); } else { criarEncomenda(""); }
 }
 function criarEncomenda(foto){
-    let agora = new Date();
-    encomendas.push({ id: Date.now().toString(), morador: document.getElementById('encMorador').value, apto: document.getElementById('encApto').value, transportadora: document.getElementById('encTransportadora').value, codigo: document.getElementById('encCodigo').value, volumes: document.getElementById('encVolumes').value, porteiro: document.getElementById('encPorteiro').value, foto, assinatura: encomendaCanvas && encomendaCanvas.canvas ? encomendaCanvas.canvas.toDataURL() : "", status: "Pendente", dataChegada: agora.toISOString().split('T')[0], horaChegada: agora.toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'}) });
+    let agora = new Date(); let idUnico = Date.now().toString(); 
+    encomendas.push({ id: idUnico, morador: document.getElementById('encMorador').value, apto: document.getElementById('encApto').value, transportadora: document.getElementById('encTransportadora').value, codigo: document.getElementById('encCodigo').value, volumes: document.getElementById('encVolumes').value, porteiro: document.getElementById('encPorteiro').value, foto, assinatura: encomendaCanvas && encomendaCanvas.canvas ? encomendaCanvas.canvas.toDataURL() : "", status: "Pendente", dataChegada: agora.toISOString().split('T')[0], horaChegada: agora.toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'}) });
     localStorage.setItem("encomendas", JSON.stringify(encomendas));
-    document.getElementById('encMorador').value=''; document.getElementById('encApto').value=''; document.getElementById('encTransportadora').value=''; document.getElementById('encCodigo').value=''; document.getElementById('encVolumes').value='';
+    document.getElementById('encMorador').value=''; document.getElementById('encApto').value=''; document.getElementById('encTransportadora').value=''; document.getElementById('encCodigo').value=''; document.getElementById('encVolumes').value=''; document.getElementById('encPorteiro').value='';
     mostrarEncomendas(); limparAssinaturaEncomenda(); atualizarDashboard(); alert("Encomenda cadastrada!");
 }
 function mostrarEncomendas(filtroData = ""){
@@ -742,22 +753,89 @@ function mostrarEncomendas(filtroData = ""){
     encomendas.forEach((e,index)=>{
         if(filtroData && e.dataChegada !== filtroData) return;
         let dotHtml = "";
-        if(e.dataChegada && e.status === "Pendente") {
+        let dataExibicao = "Sem data";
+        if(e.dataChegada) {
             let p = e.dataChegada.split('-');
-            let dCheg = new Date(p[0], p[1]-1, p[2]);
-            let diff = Math.floor((hojeCalculo - dCheg) / (1000 * 60 * 60 * 24));
-            if(diff <= 2) dotHtml = `<div class="dot-status dot-green"></div>`;
-            else if(diff >= 3 && diff <= 5) dotHtml = `<div class="dot-status dot-yellow"></div>`;
-            else dotHtml = `<div class="dot-status dot-red"></div>`;
+            dataExibicao = `${p[2]}/${p[1]}/${p[0]}`;
+            if(e.status === "Pendente") {
+                let dCheg = new Date(p[0], p[1]-1, p[2]);
+                let diff = Math.floor((hojeCalculo - dCheg) / (1000 * 60 * 60 * 24));
+                if(diff <= 2) dotHtml = `<div class="dot-status dot-green"></div>`;
+                else if(diff >= 3 && diff <= 5) dotHtml = `<div class="dot-status dot-yellow"></div>`;
+                else dotHtml = `<div class="dot-status dot-red"></div>`;
+            }
         }
-        lista.innerHTML += `<div class="card"><div style="display:flex; justify-content:space-between; align-items:center;"><h3>📦 ${e.transportadora || 'Não informada'}</h3>${dotHtml}</div><div class="badge ${e.status==='Pendente'?'status-pendente':'status-entregue'}">${e.status}</div><p>🏢 AP: ${e.apto} - Morador: ${e.morador}</p><p>🕒 Entrada: ${e.dataChegada.split('-').reverse().join('/')}</p>${e.foto?`<img src="${e.foto}" class="foto">`:''}<div class="acoes"><button class="btn-acao entregue" onclick="marcarEntregue(${index})">✅ Dar Baixa</button><button class="btn-acao excluir" onclick="excluirEncomenda(${index})">🗑️ Deletar</button></div></div>`;
+        
+        lista.innerHTML += `
+        <div class="card">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 12px;">
+                <h3 style="margin-bottom: 0;">📦 ${e.transportadora || 'Não informada'}</h3>${dotHtml}
+            </div>
+            <div class="badge ${e.status==='Pendente'?'status-pendente':'status-entregue'}">${e.status}</div>
+            <p>👤 <b>Morador:</b> ${e.morador}</p>
+            <p>🏢 <b>Apto:</b> ${e.apto}</p>
+            <p>👮 <b>Recebido por:</b> ${e.porteiro || "N/A"}</p>
+            <p>📅 <b>Chegada:</b> <b>${dataExibicao} ${e.horaChegada ? `às ${e.horaChegada}` : ''}</b></p>
+            <p>📌 <b>Código:</b> ${e.codigo || "N/A"}</p>
+            <p>📦 <b>Volumes:</b> ${e.volumes || "N/A"}</p>
+            <p style="font-size:12px; color:#999;">ID: ${e.id || "Antigo"}</p>
+            ${e.foto?`<img src="${e.foto}" class="foto">`:''}
+            ${e.assinatura && e.assinatura !== "data:," ? `<img src="${e.assinatura}" class="foto" style="border:1px dashed #ccc;">` : ""}
+            
+            <div class="acoes">
+                <button class="btn-acao entregue" onclick="marcarEntregue(${index})">✅ Entregue</button>
+                <button class="btn-acao whats" onclick="avisarWhatsappEncomenda(${index})">📲 WhatsApp</button>
+                <button class="btn-acao print" onclick="imprimirEtiqueta(${index})">🖨️ Padrão</button>
+                <button class="btn-acao qr-btn" onclick="imprimirSoQRCode(${index})">🔳 Só QR</button>
+                <button class="btn-acao excluir" onclick="excluirEncomenda(${index})">🗑️ Excluir</button>
+            </div>
+        </div>`;
     });
 }
 function marcarEntregue(i){ encomendas[i].status = "Entregue"; localStorage.setItem("encomendas", JSON.stringify(encomendas)); mostrarEncomendas(); atualizarDashboard(); }
-function excluirEncomenda(i){ if(confirm("Apagar?")) { encomendas.splice(i,1); localStorage.setItem("encomendas", JSON.stringify(encomendas)); mostrarEncomendas(); atualizarDashboard(); } }
+function excluirEncomenda(i){ if(confirm("Deseja excluir esta encomenda?")) { encomendas.splice(i,1); localStorage.setItem("encomendas", JSON.stringify(encomendas)); mostrarEncomendas(); atualizarDashboard(); } }
 function filtrarEncomendas(){ mostrarEncomendas(document.getElementById("filtroDataEncomenda").value); }
 function limparFiltroEncomendas(){ document.getElementById("filtroDataEncomenda").value=""; mostrarEncomendas(); }
+
+function avisarWhatsappEncomenda(index){ 
+    let msg = `Olá ${encomendas[index].morador}, sua encomenda chegou na portaria.`; 
+    window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`); 
+}
+
+function imprimirEtiqueta(index){
+    let e = encomendas[index]; let janela = window.open("", "", "width=350,height=500");
+    let dataFormatada = ""; if(e.dataChegada) { let p = e.dataChegada.split('-'); dataFormatada = p[2] + '/' + p[1] + '/' + p[0]; }
+    let horaFormatada = e.horaChegada ? e.horaChegada : ""; let vol = e.volumes || "1"; let ident = e.id || "Antigo";
+    janela.document.write(`<html><head><title>Etiqueta Padrão</title><style>body{font-family:Arial,sans-serif;text-align:center;padding:10px;margin:0;} h1{margin:5px 0;font-size:32px;border-bottom:2px solid #000;padding-bottom:5px;} h2{margin:10px 0 5px 0;font-size:20px;} p{margin:5px 0;font-size:16px;} .rodape{font-size:10px;margin-top:20px;color:#555;} .btn-imprimir{margin-top:30px;padding:12px 20px;background:#000;color:#fff;border:none;border-radius:8px;font-size:16px;cursor:pointer;font-weight:bold;width:80%;} @media print{.btn-imprimir{display:none !important;}}</style></head><body><h1>AP ${e.apto}</h1><h2>${e.morador}</h2><p><b>Transp:</b> ${e.transportadora}</p><p><b>Vols:</b> ${vol}</p><p style="font-size: 14px; margin-top: 15px;">📅 ${dataFormatada} às ${horaFormatada}</p><p class="rodape">ID: ${ident}</p><button class="btn-imprimir" onclick="window.print()">🖨️ Imprimir Etiqueta</button><p style="font-size: 11px; color: #888; margin-top: 5px;" class="btn-imprimir">Feche a janela após imprimir.</p><script> window.onload = function() { window.print(); }; window.onafterprint = function() { window.close(); }; <\/script></body></html>`);
+    janela.document.close();
+}
+
+function imprimirSoQRCode(index){
+    let e = encomendas[index]; let janela = window.open("", "", "width=300,height=380");
+    let ident = e.id || "Antigo"; let qrImgTag = "";
+    if(e.id && e.id !== "undefined") { 
+        let linkSistema = window.location.href.split("?")[0] + "?baixar=" + e.id; 
+        let tempCanvas = document.createElement("canvas"); 
+        new QRious({ element: tempCanvas, value: linkSistema, size: 200, level: "H" }); 
+        qrImgTag = `<img src="${tempCanvas.toDataURL()}" style="margin-bottom: 5px;">`; 
+    }
+    janela.document.write(`<html><head><title>Etiqueta QR Code</title><style>body{font-family:Arial,sans-serif;text-align:center;padding:0;margin:0;display:flex;flex-direction:column;align-items:center;justify-content:center;height:100vh;} .rodape{font-size:18px;font-weight:bold;margin:0;} .sub-rodape{font-size:12px;color:#555;margin-top:3px;} .btn-imprimir{margin-top:20px;padding:10px 20px;background:#000;color:#fff;border:none;border-radius:8px;font-size:14px;cursor:pointer;font-weight:bold;} @media print{.btn-imprimir{display:none !important;}}</style></head><body>${qrImgTag}<p class="rodape">AP ${e.apto}</p><p class="sub-rodape">ID: ${ident}</p><button class="btn-imprimir" onclick="window.print()">🖨️ Imprimir</button><script> window.onload = function() { window.print(); }; window.onafterprint = function() { window.close(); }; <\/script></body></html>`);
+    janela.document.close();
+}
+
 function gerarRelatorioEncomendas(){ const { jsPDF } = window.jspdf; const doc = new jsPDF(); doc.text("Relatório de Encomendas", 14, 20); doc.save("Encomendas.pdf"); }
+
+// Lógica de Leitura de QR Code e Baixa Externa
+function confirmarEntregaPorID(id) {
+    let index = encomendas.findIndex(e => e.id === id); if(index === -1) return alert("❌ Encomenda não encontrada!"); let e = encomendas[index];
+    if(e.status === "Entregue") return alert(`A encomenda do Apto ${e.apto} já consta como ENTREGUE!`);
+    if(confirm(`📦 CONFIRMAÇÃO DE ENTREGA 📦\n\nMorador: ${e.morador}\nApto: ${e.apto}\nTransp: ${e.transportadora}\n\nConfirmar entrega?`)) { encomendas[index].status = "Entregue"; localStorage.setItem("encomendas", JSON.stringify(encomendas)); mostrarEncomendas(); atualizarDashboard(); alert("✅ Entrega registrada!"); }
+}
+
+let html5QrcodeScanner;
+function iniciarLeitorQR() { document.getElementById('leitor-qr').style.display = 'block'; document.getElementById('btn-fechar-leitor').style.display = 'block'; html5QrcodeScanner = new Html5QrcodeScanner("leitor-qr", { fps: 10, qrbox: {width: 250, height: 250} }, false); html5QrcodeScanner.render((text) => { fecharLeitorQR(); if(text.includes('?baixar=')){ try{ confirmarEntregaPorID(new URL(text).searchParams.get('baixar')); }catch(e){alert("Erro");} } }, () => {}); }
+function fecharLeitorQR() { if (html5QrcodeScanner) html5QrcodeScanner.clear(); document.getElementById('leitor-qr').style.display = 'none'; document.getElementById('btn-fechar-leitor').style.display = 'none'; }
+
 
 /* =========================================================================
    📢 COMUNICADOS
@@ -790,12 +868,22 @@ function atualizarDashboard() {
 }
 function toggleDarkMode() { document.body.classList.toggle("dark-mode"); }
 
-/* EXECUÇÃO OPERACIONAL INICIAL */
+/* EXECUÇÃO OPERACIONAL INICIAL E ESCUTA DE QR CODE */
 window.onload = function() {
     mostrarEquipe(); 
     atualizarSelectEquipe(); 
     iniciarRelogio(); 
     atualizarDashboard();
+    
+    // Captura se a tela foi aberta via leitura de QR Code
+    let idParaBaixar = new URLSearchParams(window.location.search).get('baixar'); 
+    if(idParaBaixar) { 
+        trocarTela('encomendas'); 
+        setTimeout(() => { 
+            confirmarEntregaPorID(idParaBaixar); 
+            window.history.replaceState({}, document.title, window.location.pathname); 
+        }, 600); 
+    }
 };
 </script>
 </body>
