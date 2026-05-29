@@ -81,7 +81,7 @@ canvas { width: 100%; height: 200px; background: #f8fafc; border: 2px dashed #cb
 .stat-card span { font-size: 24px; margin-top: 5px; font-weight: 800; color: #0f172a; transition: color 0.3s; }
 .stat-card p { font-size: 12px; font-weight: bold; margin-top: 5px; }
 
-/* ANIMAÇÕES DO PONTO PULSANTE (ENCOMENDAS) */
+/* ANIMAÇÕES DO PONTO PULSANTE (ENCOMENDAS E OCORRÊNCIAS) */
 @keyframes pulse-green { 0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); } 70% { box-shadow: 0 0 0 10px rgba(16, 185, 129, 0); } 100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); } }
 @keyframes pulse-yellow { 0% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.7); } 70% { box-shadow: 0 0 0 10px rgba(245, 158, 11, 0); } 100% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0); } }
 @keyframes pulse-red { 0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); } 70% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); } 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); } }
@@ -292,7 +292,6 @@ body.dark-mode .modal-content { background: #1e293b; border: 1px solid #334155; 
                 <input type="text" id="pesquisaMorador" placeholder="🔍 Buscar por nome ou apartamento..." onkeyup="pesquisarMoradores()" style="flex: 2;">
                 <button class="btn" style="background:#1976d2; margin-top:0; width: auto;" onclick="gerarRelatorioMoradores()">📊 Baixar PDF</button>
             </div>
-            
             <div id="listaMoradores"></div>
         </div>
     </div>
@@ -329,7 +328,7 @@ body.dark-mode .modal-content { background: #1e293b; border: 1px solid #334155; 
     <div id="ocorrencias" class="tela">
         <div class="stats-grid" style="grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); margin-bottom: 20px;">
             <div class="stat-card" style="border-bottom: 4px solid #e53935; padding: 10px;">🔴 Urgentes <span id="stat-urgente" style="font-size: 20px;">0</span></div>
-            <div class="stat-card" style="border-bottom: 4px solid #ff9800; padding: 10px;">🟡 Em Aberto <span id="stat-aberto" style="font-size: 20px;">0</span></div>
+            <div class="stat-card" style="border-bottom: 4px solid #ff9800; padding: 10px;">🟡 Pendentes <span id="stat-aberto" style="font-size: 20px;">0</span></div>
             <div class="stat-card" style="border-bottom: 4px solid #28a745; padding: 10px;">🟢 Resolvidas <span id="stat-resolvida" style="font-size: 20px;">0</span></div>
             <div class="stat-card" style="border-bottom: 4px solid #1976d2; padding: 10px;">📅 Hoje <span id="stat-hoje" style="font-size: 20px;">0</span></div>
         </div>
@@ -343,20 +342,29 @@ body.dark-mode .modal-content { background: #1e293b; border: 1px solid #334155; 
                 <h2>🚨 Registrar Ocorrência</h2>
                 <button onclick="toggleFormOcorrencia()" style="background: none; border: none; font-size: 20px; cursor: pointer; color: inherit;">❌</button>
             </div>
-            <select id="ocoTipo">
-                <option value="" disabled selected>🏷️ Tipo</option>
-                <option>🔊 Barulho</option>
-                <option>⚡ Falta de energia</option>
-                <option>🛗 Elevador</option>
-                <option>🚗 Veículo irregular</option>
-                <option>👤 Visitante suspeito</option>
-                <option>📦 Problema encomenda</option>
-                <option>🛠️ Manutenção</option>
-                <option>💧 Vazamento</option>
-                <option>🔐 Segurança</option>
-                <option>📢 Reclamação</option>
-                <option>Outros</option>
-            </select>
+            
+            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                <select id="ocoTipo" style="flex: 2; min-width: 200px;">
+                    <option value="" disabled selected>🏷️ Tipo</option>
+                    <option>🔊 Barulho</option>
+                    <option>⚡ Falta de energia</option>
+                    <option>🛗 Elevador</option>
+                    <option>🚗 Veículo irregular</option>
+                    <option>👤 Visitante suspeito</option>
+                    <option>📦 Problema encomenda</option>
+                    <option>🛠️ Manutenção</option>
+                    <option>💧 Vazamento</option>
+                    <option>🔐 Segurança</option>
+                    <option>📢 Reclamação</option>
+                    <option>Outros</option>
+                </select>
+                <select id="ocoStatus" style="flex: 1; min-width: 150px;">
+                    <option value="🔴 Não Resolvido">🔴 Não Resolvido</option>
+                    <option value="🟡 Pendente" selected>🟡 Pendente</option>
+                    <option value="🟢 Resolvido">🟢 Resolvido</option>
+                </select>
+            </div>
+
             <div style="display: flex; gap: 10px;">
                 <input id="ocoApto" placeholder="🏢 Apartamento">
                 <input id="ocoMorador" placeholder="👤 Morador">
@@ -369,7 +377,7 @@ body.dark-mode .modal-content { background: #1e293b; border: 1px solid #334155; 
             </select>
             <textarea id="ocoDescricao" placeholder="📄 Detalhes da ocorrência..."></textarea>
             <input type="file" id="ocoFoto" accept="image/*">
-            <button class="btn" onclick="salvarOcorrencia()">💾 Salvar Ocorrência</button>
+            <button class="btn" id="btnSalvarOcorrencia" onclick="salvarOcorrencia()">💾 Salvar Ocorrência</button>
         </div>
         <div id="listaOcorrencias"></div>
     </div>
@@ -409,18 +417,31 @@ body.dark-mode .modal-content { background: #1e293b; border: 1px solid #334155; 
     <div id="comunicados" class="tela">
         <div class="box">
             <h2>📢 Novo Comunicado</h2>
-            <select id="tipoComunicado">
-                <option>📢 Geral</option>
-                <option>🛠️ Manutenção</option>
-                <option>⚠️ Ocorrência</option>
-                <option>🏛️ Assembleia</option>
-            </select>
-            <input id="tituloComunicado" placeholder="Título">
-            <input type="date" id="dataComunicado">
-            <input type="time" id="horaComunicado">
-            <input id="localComunicado" placeholder="Local">
-            <textarea id="mensagemComunicado" placeholder="Mensagem"></textarea>
-            <button class="btn" onclick="salvarComunicado()">Publicar Comunicado</button>
+            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                <select id="tipoComunicado" style="flex: 2; min-width: 200px;">
+                    <option>📢 Geral</option>
+                    <option>🛠️ Manutenção</option>
+                    <option>⚠️ Ocorrência</option>
+                    <option>🏛️ Assembleia</option>
+                </select>
+                <select id="statusComunicado" style="flex: 1; min-width: 150px;">
+                    <option value="🟡 Pendente" selected>🟡 Pendente</option>
+                    <option value="🔴 Não Resolvido">🔴 Não Resolvido</option>
+                    <option value="🟢 Resolvido">🟢 Resolvido</option>
+                </select>
+            </div>
+            
+            <input id="tituloComunicado" placeholder="Título do Comunicado">
+            
+            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                <input type="date" id="dataComunicado" style="flex: 1;">
+                <input type="time" id="horaComunicado" style="flex: 1;">
+            </div>
+            
+            <input id="localComunicado" placeholder="Local (Ex: Salão de Festas, Garagem...)">
+            <textarea id="mensagemComunicado" placeholder="Mensagem / Detalhes completos"></textarea>
+            
+            <button class="btn" id="btnSalvarComunicado" onclick="salvarComunicado()">Publicar Comunicado</button>
         </div>
         <div id="listaComunicados"></div>
     </div>
@@ -494,41 +515,23 @@ let equipe = JSON.parse(localStorage.getItem("equipe")) || [];
 let editandoIndexEquipe = -1; 
 
 function salvarEquipe() { localStorage.setItem("equipe", JSON.stringify(equipe)); atualizarSelectEquipe(); }
-
 function addFuncionario() {
-    let nome = document.getElementById("funcNome").value; let cargo = document.getElementById("funcCargo").value;
-    let btnSalvar = document.getElementById("btnSalvarEquipe");
+    let nome = document.getElementById("funcNome").value; let cargo = document.getElementById("funcCargo").value; let btnSalvar = document.getElementById("btnSalvarEquipe");
     if(!nome || !cargo) return alert("Preencha o nome e o cargo!");
-
-    if (editandoIndexEquipe >= 0) {
-        equipe[editandoIndexEquipe].nome = nome; equipe[editandoIndexEquipe].cargo = cargo;
-        editandoIndexEquipe = -1; 
-        if(btnSalvar) btnSalvar.innerText = "Cadastrar Funcionário"; 
-        alert("✅ Funcionário atualizado!");
-    } else {
-        equipe.push({ id: Date.now(), nome, cargo }); alert("✅ Novo funcionário cadastrado!");
-    }
-    
-    salvarEquipe(); mostrarEquipe();
-    document.getElementById("funcNome").value = ""; document.getElementById("funcCargo").value = "";
+    if (editandoIndexEquipe >= 0) { equipe[editandoIndexEquipe].nome = nome; equipe[editandoIndexEquipe].cargo = cargo; editandoIndexEquipe = -1; if(btnSalvar) btnSalvar.innerText = "Cadastrar Funcionário"; alert("✅ Funcionário atualizado!"); } else { equipe.push({ id: Date.now(), nome, cargo }); alert("✅ Novo funcionário cadastrado!"); }
+    salvarEquipe(); mostrarEquipe(); document.getElementById("funcNome").value = ""; document.getElementById("funcCargo").value = "";
 }
-
 function mostrarEquipe() {
     let lista = document.getElementById("listaEquipe"); if(!lista) return; lista.innerHTML = "";
-    equipe.forEach((f, index) => {
-        lista.innerHTML += `<div class="card" style="border-left: 4px solid #8b5cf6;"><h3>${f.nome}</h3><div class="badge" style="background: rgba(139, 92, 246, 0.1); color: #8b5cf6;">${f.cargo}</div><div class="acoes"><button class="btn-acao editar" onclick="prepararEdicaoEquipe(${index})">✏️ Editar</button><button class="btn-acao excluir" onclick="excluirFuncionario(${index})">🗑️ Excluir</button></div></div>`;
-    });
+    equipe.forEach((f, index) => { lista.innerHTML += `<div class="card" style="border-left: 4px solid #8b5cf6;"><h3>${f.nome}</h3><div class="badge" style="background: rgba(139, 92, 246, 0.1); color: #8b5cf6;">${f.cargo}</div><div class="acoes"><button class="btn-acao editar" onclick="prepararEdicaoEquipe(${index})">✏️ Editar</button><button class="btn-acao excluir" onclick="excluirFuncionario(${index})">🗑️ Excluir</button></div></div>`; });
 }
 function ajustarCargosAntigosEdicao(cargo) { if (cargo === "Porteiro") return "Porteiro Diurno"; return cargo; }
 function prepararEdicaoEquipe(index) {
-    document.getElementById("funcNome").value = equipe[index].nome; document.getElementById("funcCargo").value = ajustarCargosAntigosEdicao(equipe[index].cargo);
-    let btnSalvar = document.getElementById("btnSalvarEquipe"); if(btnSalvar) btnSalvar.innerText = "💾 Salvar Alteração";
-    editandoIndexEquipe = index; window.scrollTo({ top: 0, behavior: "smooth" });
+    document.getElementById("funcNome").value = equipe[index].nome; document.getElementById("funcCargo").value = ajustarCargosAntigosEdicao(equipe[index].cargo); let btnSalvar = document.getElementById("btnSalvarEquipe"); if(btnSalvar) btnSalvar.innerText = "💾 Salvar Alteração"; editandoIndexEquipe = index; window.scrollTo({ top: 0, behavior: "smooth" });
 }
 function excluirFuncionario(index) { if(confirm("Remover este funcionário?")) { equipe.splice(index, 1); salvarEquipe(); mostrarEquipe(); } }
 function atualizarSelectEquipe() {
-    let selectPonto = document.getElementById("pontoNome"); let selectFiltroPDF = document.getElementById("filtroFuncionarioPonto");
-    let options = '<option value="" disabled selected>Selecione o Nome</option>';
+    let selectPonto = document.getElementById("pontoNome"); let selectFiltroPDF = document.getElementById("filtroFuncionarioPonto"); let options = '<option value="" disabled selected>Selecione o Nome</option>';
     equipe.forEach(f => { options += '<option value="' + f.nome + '">' + f.nome + ' (' + f.cargo + ')</option>'; });
     if(selectPonto) selectPonto.innerHTML = options; if(selectFiltroPDF) selectFiltroPDF.innerHTML = options;
 }
@@ -540,8 +543,7 @@ let passagens = JSON.parse(localStorage.getItem("passagens")) || [];
 function salvarPassagem() {
     let nome = document.getElementById("passagemNome").value; if(!nome) return alert("Preencha seu nome!"); let agora = new Date();
     passagens.unshift({ id: Date.now(), data: agora.toISOString().split('T')[0], hora: agora.toLocaleTimeString('pt-BR', {hour: '2-digit', minute:'2-digit'}), nome, portoes: document.getElementById("chkPortoes").checked, elevadores: document.getElementById("chkElevadores").checked, luzes: document.getElementById("chkLuzes").checked, cameras: document.getElementById("chkCameras").checked, bombas: document.getElementById("chkBombas").checked, obs: document.getElementById("passagemObs").value });
-    localStorage.setItem("passagens", JSON.stringify(passagens));
-    document.getElementById("passagemNome").value = ""; document.getElementById("passagemObs").value = ""; document.getElementById("chkPortoes").checked = false; document.getElementById("chkElevadores").checked = false; document.getElementById("chkLuzes").checked = false; document.getElementById("chkCameras").checked = false; document.getElementById("chkBombas").checked = false;
+    localStorage.setItem("passagens", JSON.stringify(passagens)); document.getElementById("passagemNome").value = ""; document.getElementById("passagemObs").value = ""; document.getElementById("chkPortoes").checked = false; document.getElementById("chkElevadores").checked = false; document.getElementById("chkLuzes").checked = false; document.getElementById("chkCameras").checked = false; document.getElementById("chkBombas").checked = false;
     mostrarPassagens(); alert("✅ Plantão registrado!");
 }
 function mostrarPassagens() {
@@ -556,8 +558,7 @@ function mostrarPassagens() {
 function gerarRelatorioPassagem() {
     let dataFiltro = document.getElementById("filtroDataPassagem").value; let listagem = dataFiltro ? passagens.filter(p => p.data === dataFiltro) : passagens;
     if (listagem.length === 0) return alert("Sem dados."); const { jsPDF } = window.jspdf; const doc = new jsPDF('p', 'pt');
-    doc.text("Livro de Passagem de Plantão", 40, 40); const colunas = ["Data/Hora", "Responsável", "Status", "Observações"];
-    const linhas = listagem.map(p => [`${p.data.split('-').reverse().join('/')} ${p.hora}`, p.nome, `Portões: ${p.portoes?'OK':'X'}\nElev: ${p.elevadores?'OK':'X'}`, p.obs || "Nenhuma."]);
+    doc.text("Livro de Passagem de Plantão", 40, 40); const colunas = ["Data/Hora", "Responsável", "Status", "Observações"]; const linhas = listagem.map(p => [`${p.data.split('-').reverse().join('/')} ${p.hora}`, p.nome, `Portões: ${p.portoes?'OK':'X'}\nElev: ${p.elevadores?'OK':'X'}`, p.obs || "Nenhuma."]);
     doc.autoTable({ head: [colunas], body: linhas, startY: 60, headStyles:{fillColor:[59,130,246]} }); doc.save("Plantao.pdf");
 }
 
@@ -580,25 +581,17 @@ function mostrarPontos() {
     });
 }
 function gerarFolhaPontoIndividual() {
-    let mesFiltro = document.getElementById("filtroMesPonto").value; let nomeFiltro = document.getElementById("filtroFuncionarioPonto").value;
-    if (!mesFiltro || !nomeFiltro) return alert("⚠️ Selecione o Mês e o Funcionário para gerar a folha de ponto em PDF.");
-    let funcInfo = equipe.find(f => f.nome === nomeFiltro); let cargoInfo = funcInfo ? funcInfo.cargo : "Não informado";
-    const { jsPDF } = window.jspdf; const doc = new jsPDF('p', 'pt', 'a4'); const corCinza = [169, 169, 169]; const corAzul = [70, 130, 180]; const corTexto = [60, 60, 60];
-    doc.setFontSize(28); doc.setFont("helvetica", "bold"); doc.setTextColor(corTexto[0], corTexto[1], corTexto[2]); doc.text("Folha de ponto", 40, 60);
-    doc.setFontSize(16); doc.setFont("helvetica", "italic"); doc.text("Portaria PRO MASTER", 40, 80);
-    doc.setFillColor(corCinza[0], corCinza[1], corCinza[2]); doc.roundedRect(300, 35, 250, 20, 10, 10, 'F');
-    doc.setFontSize(10); doc.setFont("helvetica", "bold"); doc.setTextColor(255, 255, 255); doc.text(`Nome: ${nomeFiltro}`, 315, 49);
-    let anoInt = parseInt(mesFiltro.split('-')[0], 10); let mesInt = parseInt(mesFiltro.split('-')[1], 10);
-    let formatMes = (mesInt < 10 ? '0' + mesInt : mesInt) + "/" + anoInt;
-    doc.setFillColor(corAzul[0], corAzul[1], corAzul[2]); doc.roundedRect(300, 65, 250, 20, 10, 10, 'F'); doc.text(`Mês e Ano: ${formatMes}`, 315, 79);
-    doc.setFillColor(corCinza[0], corCinza[1], corCinza[2]); doc.roundedRect(300, 95, 250, 20, 10, 10, 'F'); doc.text(`Cargo: ${cargoInfo}`, 315, 109);
-    let pontosDoMes = pontos.filter(p => p.nome === nomeFiltro && p.data.startsWith(mesFiltro));
-    let ehBissexto = (anoInt % 4 === 0 && (anoInt % 100 !== 0 || anoInt % 400 === 0)); let matrizMeses = [31, (ehBissexto ? 29 : 28), 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]; let diasTotaisDoMes = matrizMeses[mesInt - 1];
+    let mesFiltro = document.getElementById("filtroMesPonto").value; let nomeFiltro = document.getElementById("filtroFuncionarioPonto").value; if (!mesFiltro || !nomeFiltro) return alert("⚠️ Selecione o Mês e o Funcionário para gerar a folha de ponto em PDF.");
+    let funcInfo = equipe.find(f => f.nome === nomeFiltro); let cargoInfo = funcInfo ? funcInfo.cargo : "Não informado"; const { jsPDF } = window.jspdf; const doc = new jsPDF('p', 'pt', 'a4'); const corCinza = [169, 169, 169]; const corAzul = [70, 130, 180]; const corTexto = [60, 60, 60];
+    doc.setFontSize(28); doc.setFont("helvetica", "bold"); doc.setTextColor(corTexto[0], corTexto[1], corTexto[2]); doc.text("Folha de ponto", 40, 60); doc.setFontSize(16); doc.setFont("helvetica", "italic"); doc.text("Portaria PRO MASTER", 40, 80);
+    doc.setFillColor(corCinza[0], corCinza[1], corCinza[2]); doc.roundedRect(300, 35, 250, 20, 10, 10, 'F'); doc.setFontSize(10); doc.setFont("helvetica", "bold"); doc.setTextColor(255, 255, 255); doc.text(`Nome: ${nomeFiltro}`, 315, 49);
+    let anoInt = parseInt(mesFiltro.split('-')[0], 10); let mesInt = parseInt(mesFiltro.split('-')[1], 10); let formatMes = (mesInt < 10 ? '0' + mesInt : mesInt) + "/" + anoInt;
+    doc.setFillColor(corAzul[0], corAzul[1], corAzul[2]); doc.roundedRect(300, 65, 250, 20, 10, 10, 'F'); doc.text(`Mês e Ano: ${formatMes}`, 315, 79); doc.setFillColor(corCinza[0], corCinza[1], corCinza[2]); doc.roundedRect(300, 95, 250, 20, 10, 10, 'F'); doc.text(`Cargo: ${cargoInfo}`, 315, 109);
+    let pontosDoMes = pontos.filter(p => p.nome === nomeFiltro && p.data.startsWith(mesFiltro)); let ehBissexto = (anoInt % 4 === 0 && (anoInt % 100 !== 0 || anoInt % 400 === 0)); let matrizMeses = [31, (ehBissexto ? 29 : 28), 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]; let diasTotaisDoMes = matrizMeses[mesInt - 1];
     let dadosTabela = [];
     for (let i = 1; i <= diasTotaisDoMes; i++) {
         let diaStr = i.toString().padStart(2, '0'); let dataCompleta = `${mesFiltro}-${diaStr}`; let ptDia = pontosDoMes.filter(p => p.data === dataCompleta);
-        let entrada = ptDia.find(p => p.evento === "Entrada")?.hora || ""; let pausa = ptDia.find(p => p.evento === "Pausa Almoço")?.hora || "";
-        let retorno = ptDia.find(p => p.evento === "Retorno Almoço")?.hora || ""; let saida = ptDia.find(p => p.evento === "Saída")?.hora || "";
+        let entrada = ptDia.find(p => p.evento === "Entrada")?.hora || ""; let pausa = ptDia.find(p => p.evento === "Pausa Almoço")?.hora || ""; let retorno = ptDia.find(p => p.evento === "Retorno Almoço")?.hora || ""; let saida = ptDia.find(p => p.evento === "Saída")?.hora || "";
         let intervalo = (pausa || retorno) ? `${pausa.slice(0,5)} as ${retorno.slice(0,5)}` : ""; let ass = (entrada || pausa || retorno || saida) ? "ASSINADO DIGITALMENTE" : "";
         dadosTabela.push([diaStr, nomeFiltro, entrada ? entrada.slice(0,5) : "", intervalo, saida ? saida.slice(0,5) : "", ass]);
     }
@@ -608,95 +601,36 @@ function gerarFolhaPontoIndividual() {
 }
 
 /* =========================================================================
-   👤 CADASTRO DE MORADORES: BOLHAS (APP) E MODAL PREMIUM
+   👤 CADASTRO DE MORADORES: BOLHAS E MODAL PREMIUM (INTACTO)
    ========================================================================= */
 let moradores = JSON.parse(localStorage.getItem("moradores")) || [];
 let editandoIndexMorador = -1;
-
 function salvarMoradores(){ localStorage.setItem("moradores",JSON.stringify(moradores)); atualizarDashboard(); }
-
 function addMorador(){ 
-    let nome = document.getElementById('nome').value.trim();
-    let apto = document.getElementById('apto').value.trim();
-    let secretaria = document.getElementById('secretaria').value.trim();
-    let visitantes = document.getElementById('visitantes').value.trim();
-    let btnSalvar = document.getElementById('btnSalvarMorador');
-
+    let nome = document.getElementById('nome').value.trim(); let apto = document.getElementById('apto').value.trim(); let secretaria = document.getElementById('secretaria').value.trim(); let visitantes = document.getElementById('visitantes').value.trim(); let btnSalvar = document.getElementById('btnSalvarMorador');
     if(!nome || !apto) return alert("⚠️ Preencha pelo menos o Nome e o Apartamento!");
-
-    if (editandoIndexMorador >= 0) {
-        moradores[editandoIndexMorador].nome = nome; moradores[editandoIndexMorador].apto = apto;
-        moradores[editandoIndexMorador].secretaria = secretaria; moradores[editandoIndexMorador].visitantes = visitantes;
-        editandoIndexMorador = -1; if(btnSalvar) btnSalvar.innerText = "Cadastrar Morador"; alert("✅ Morador atualizado com sucesso!");
-    } else {
-        moradores.push({ nome, apto, secretaria, visitantes }); alert("✅ Morador cadastrado!");
-    }
-
-    salvarMoradores(); mostrarMoradores(document.getElementById("pesquisaMorador").value); 
-    document.getElementById('nome').value=''; document.getElementById('apto').value=''; document.getElementById('secretaria').value=''; document.getElementById('visitantes').value=''; 
+    if (editandoIndexMorador >= 0) { moradores[editandoIndexMorador].nome = nome; moradores[editandoIndexMorador].apto = apto; moradores[editandoIndexMorador].secretaria = secretaria; moradores[editandoIndexMorador].visitantes = visitantes; editandoIndexMorador = -1; if(btnSalvar) btnSalvar.innerText = "Cadastrar Morador"; alert("✅ Morador atualizado com sucesso!"); } else { moradores.push({ nome, apto, secretaria, visitantes }); alert("✅ Morador cadastrado!"); }
+    salvarMoradores(); mostrarMoradores(document.getElementById("pesquisaMorador").value); document.getElementById('nome').value=''; document.getElementById('apto').value=''; document.getElementById('secretaria').value=''; document.getElementById('visitantes').value=''; 
 }
-
 function pesquisarMoradores() { let termo = document.getElementById("pesquisaMorador").value.toLowerCase(); mostrarMoradores(termo); }
-
 function mostrarMoradores(filtro = ""){ 
     let lista = document.getElementById('listaMoradores'); if(!lista) return; lista.innerHTML=""; 
-    
-    if(moradores.length === 0) {
-        lista.innerHTML = "<p style='text-align:center; padding:20px; color:#777; width:100%;'>Nenhum apartamento cadastrado.</p>";
-        return;
-    }
-
-    // Ordena os apartamentos por número de forma crescente
+    if(moradores.length === 0) { lista.innerHTML = "<p style='text-align:center; padding:20px; color:#777; width:100%;'>Nenhum apartamento cadastrado.</p>"; return; }
     let moradoresOrdenados = [...moradores].sort((a,b) => a.apto.localeCompare(b.apto, undefined, {numeric: true}));
-    
     let gridHtml = '<div class="apto-grid">';
-    moradoresOrdenados.forEach((m)=>{ 
-        let conteudoBuscavel = `${m.nome} ${m.apto}`.toLowerCase();
-        if(filtro && !conteudoBuscavel.includes(filtro)) return;
-        
-        let indexOriginal = moradores.findIndex(x => x.apto === m.apto && x.nome === m.nome);
-        gridHtml += `<div class="apto-btn" onclick="abrirModalMorador(${indexOriginal})">${m.apto}</div>`;
-    }); 
-    gridHtml += '</div>';
-    
-    lista.innerHTML = gridHtml;
+    moradoresOrdenados.forEach((m)=>{ let conteudoBuscavel = `${m.nome} ${m.apto}`.toLowerCase(); if(filtro && !conteudoBuscavel.includes(filtro)) return; let indexOriginal = moradores.findIndex(x => x.apto === m.apto && x.nome === m.nome); gridHtml += `<div class="apto-btn" onclick="abrirModalMorador(${indexOriginal})">${m.apto}</div>`; }); 
+    gridHtml += '</div>'; lista.innerHTML = gridHtml;
 }
-
 function abrirModalMorador(index) {
     let m = moradores[index]; let modal = document.getElementById('modalMorador'); let conteudo = document.getElementById('conteudoModalMorador');
-    conteudo.innerHTML = `
-        <div style="text-align: center; margin-bottom: 20px;">
-            <div style="background: #e0f2fe; color: #0284c7; width: 65px; height: 65px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 22px; font-weight: bold; margin: 0 auto 10px auto; border: 2px solid #bae6fd;">${m.apto}</div>
-            <h3 style="color: #0f172a; margin: 0; font-size: 20px;"><i class="fa-regular fa-user" style="color: #94a3b8;"></i> ${m.nome}</h3>
-        </div>
-        <div style="display: grid; gap: 10px; font-size: 13px; margin-bottom: 20px;">
-            <div style="background: #f8fafc; padding: 12px; border-radius: 8px; border: 1px solid #e2e8f0; text-align: left;">
-                <p style="margin: 0; color: #64748b; font-weight: 700; text-transform: uppercase; font-size: 10px; letter-spacing: 0.5px;">👩‍💼 Secretária / Empregada</p>
-                <p style="margin: 4px 0 0 0; color: #334155; font-weight: 500; font-size: 14px;">${m.secretaria || '<span style="color:#cbd5e1; font-style:italic;">Nenhuma</span>'}</p>
-            </div>
-            <div style="background: #f8fafc; padding: 12px; border-radius: 8px; border: 1px solid #e2e8f0; text-align: left;">
-                <p style="margin: 0; color: #64748b; font-weight: 700; text-transform: uppercase; font-size: 10px; letter-spacing: 0.5px;">👥 Autorizados / Visitantes</p>
-                <p style="margin: 4px 0 0 0; color: #334155; font-weight: 500; line-height: 1.4; font-size: 14px;">${m.visitantes || '<span style="color:#cbd5e1; font-style:italic;">Nenhum</span>'}</p>
-            </div>
-        </div>
-        <div class="acoes" style="margin-top: 10px;">
-            <button class="btn-acao editar" onclick="prepararEdicaoMorador(${index})">✏️ Editar</button>
-            <button class="btn-acao excluir" onclick="excluirMorador(${index})">🗑️ Excluir</button>
-        </div>
-    `;
+    conteudo.innerHTML = `<div style="text-align: center; margin-bottom: 20px;"><div style="background: #e0f2fe; color: #0284c7; width: 65px; height: 65px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 22px; font-weight: bold; margin: 0 auto 10px auto; border: 2px solid #bae6fd;">${m.apto}</div><h3 style="color: #0f172a; margin: 0; font-size: 20px;"><i class="fa-regular fa-user" style="color: #94a3b8;"></i> ${m.nome}</h3></div><div style="display: grid; gap: 10px; font-size: 13px; margin-bottom: 20px;"><div style="background: #f8fafc; padding: 12px; border-radius: 8px; border: 1px solid #e2e8f0; text-align: left;"><p style="margin: 0; color: #64748b; font-weight: 700; text-transform: uppercase; font-size: 10px; letter-spacing: 0.5px;">👩‍💼 Secretária / Empregada</p><p style="margin: 4px 0 0 0; color: #334155; font-weight: 500; font-size: 14px;">${m.secretaria || '<span style="color:#cbd5e1; font-style:italic;">Nenhuma</span>'}</p></div><div style="background: #f8fafc; padding: 12px; border-radius: 8px; border: 1px solid #e2e8f0; text-align: left;"><p style="margin: 0; color: #64748b; font-weight: 700; text-transform: uppercase; font-size: 10px; letter-spacing: 0.5px;">👥 Autorizados / Visitantes</p><p style="margin: 4px 0 0 0; color: #334155; font-weight: 500; line-height: 1.4; font-size: 14px;">${m.visitantes || '<span style="color:#cbd5e1; font-style:italic;">Nenhum</span>'}</p></div></div><div class="acoes" style="margin-top: 10px;"><button class="btn-acao editar" onclick="prepararEdicaoMorador(${index})">✏️ Editar</button><button class="btn-acao excluir" onclick="excluirMorador(${index})">🗑️ Excluir</button></div>`;
     modal.style.display = 'flex';
 }
-
 function fecharModalMorador() { document.getElementById('modalMorador').style.display = 'none'; }
-
 function prepararEdicaoMorador(index) {
-    fecharModalMorador();
-    document.getElementById("nome").value = moradores[index].nome; document.getElementById("apto").value = moradores[index].apto;
-    document.getElementById("secretaria").value = moradores[index].secretaria || ""; document.getElementById("visitantes").value = moradores[index].visitantes || "";
-    let btnSalvar = document.getElementById("btnSalvarMorador"); if(btnSalvar) btnSalvar.innerText = "💾 Salvar Alterações";
-    editandoIndexMorador = index; window.scrollTo({ top: 0, behavior: "smooth" });
+    fecharModalMorador(); document.getElementById("nome").value = moradores[index].nome; document.getElementById("apto").value = moradores[index].apto; document.getElementById("secretaria").value = moradores[index].secretaria || ""; document.getElementById("visitantes").value = moradores[index].visitantes || "";
+    let btnSalvar = document.getElementById("btnSalvarMorador"); if(btnSalvar) btnSalvar.innerText = "💾 Salvar Alterações"; editandoIndexMorador = index; window.scrollTo({ top: 0, behavior: "smooth" });
 }
-
 function excluirMorador(index){ if(confirm("Deseja excluir este morador?")) { fecharModalMorador(); moradores.splice(index,1); salvarMoradores(); mostrarMoradores(document.getElementById("pesquisaMorador").value); } }
 function gerarRelatorioMoradores() { if (moradores.length === 0) return alert("Vazio."); const { jsPDF } = window.jspdf; const doc = new jsPDF(); doc.text("Lista de Moradores", 14, 20); const col = ["Nome", "Apto", "Secretaria", "Autorizados"]; const lin = moradores.map(m => [m.nome, m.apto, m.secretaria || "-", m.visitantes || "-"]); doc.autoTable({ head: [col], body: lin, startY: 30 }); doc.save("Moradores.pdf"); }
 
@@ -719,39 +653,125 @@ function mostrarReservas(){ let lista = document.getElementById('listaReservas')
 function excluirReserva(i){ if(confirm("Cancelar reserva?")) { reservas.splice(i,1); salvarReservasBase(); mostrarReservas(); } }
 
 /* =========================================================================
-   🚨 LIVRO DE OCORRÊNCIAS
+   🚨 LIVRO DE OCORRÊNCIAS (MODIFICADO COM STATUS SEMÁFORO E EDIÇÃO)
    ========================================================================= */
 let ocorrencias = JSON.parse(localStorage.getItem("ocorrencias")) || [];
+let editandoIndexOcorrencia = -1;
+
 function toggleFormOcorrencia() { let form = document.getElementById("form-ocorrencia"); form.style.display = form.style.display === "none" ? "block" : "none"; }
+
 function salvarOcorrencia() {
     let tipo = document.getElementById("ocoTipo").value; let desc = document.getElementById("ocoDescricao").value; let port = document.getElementById("ocoPorteiro").value;
+    let statusSelecionado = document.getElementById("ocoStatus").value;
+    let prioridade = document.getElementById("ocoPrioridade").value;
+    let apto = document.getElementById("ocoApto").value; let morador = document.getElementById("ocoMorador").value;
+
     if(!tipo || !desc || !port) return alert("Preencha Tipo, Porteiro e Detalhes!");
+    
+    let btnSalvar = document.getElementById("btnSalvarOcorrencia");
     let fotoInput = document.getElementById("ocoFoto"); let arquivo = fotoInput.files[0];
-    if(arquivo) { let leitor = new FileReader(); leitor.onload = function(e){ finalizarSalvamentoOcorrencia(e.target.result, tipo, desc, port); }; leitor.readAsDataURL(arquivo); } else { finalizarSalvamentoOcorrencia("", tipo, desc, port); }
+    
+    if(arquivo) { 
+        let leitor = new FileReader(); 
+        leitor.onload = function(e){ finalizarSalvamentoOcorrencia(e.target.result, tipo, desc, port, statusSelecionado, prioridade, apto, morador, btnSalvar); }; 
+        leitor.readAsDataURL(arquivo); 
+    } else { 
+        finalizarSalvamentoOcorrencia("", tipo, desc, port, statusSelecionado, prioridade, apto, morador, btnSalvar); 
+    }
 }
-function finalizarSalvamentoOcorrencia(foto, tipo, desc, port) {
-    ocorrencias.unshift({ id: "OC" + Date.now().toString().slice(-4), tipo, apto: document.getElementById("ocoApto").value, morador: document.getElementById("ocoMorador").value, prioridade: document.getElementById("ocoPrioridade").value, descricao: desc, foto, status: "Em aberto", data: new Date().toISOString().split('T')[0], hora: new Date().toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'}), registradoPor: port });
+
+function finalizarSalvamentoOcorrencia(foto, tipo, desc, port, statusSelecionado, prioridade, apto, morador, btnSalvar) {
+    if (editandoIndexOcorrencia >= 0) {
+        ocorrencias[editandoIndexOcorrencia].tipo = tipo; ocorrencias[editandoIndexOcorrencia].descricao = desc;
+        ocorrencias[editandoIndexOcorrencia].registradoPor = port; ocorrencias[editandoIndexOcorrencia].status = statusSelecionado;
+        ocorrencias[editandoIndexOcorrencia].prioridade = prioridade; ocorrencias[editandoIndexOcorrencia].apto = apto;
+        ocorrencias[editandoIndexOcorrencia].morador = morador;
+        if(foto) ocorrencias[editandoIndexOcorrencia].foto = foto; // Atualiza foto só se mandou uma nova
+        
+        editandoIndexOcorrencia = -1;
+        if(btnSalvar) btnSalvar.innerText = "💾 Salvar Ocorrência";
+        alert("✅ Ocorrência atualizada!");
+    } else {
+        ocorrencias.unshift({ id: "OC" + Date.now().toString().slice(-4), tipo, apto, morador, prioridade, descricao: desc, foto, status: statusSelecionado, data: new Date().toISOString().split('T')[0], hora: new Date().toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'}), registradoPor: port });
+        alert("✅ Ocorrência registrada!");
+    }
+    
     localStorage.setItem("ocorrencias", JSON.stringify(ocorrencias)); toggleFormOcorrencia(); mostrarOcorrencias(); atualizarDashboard();
+    document.getElementById("ocoDescricao").value = ''; document.getElementById("ocoApto").value = ''; document.getElementById("ocoMorador").value = '';
 }
+
+function resolverOcorrencia(index) {
+    ocorrencias[index].status = "🟢 Resolvido";
+    localStorage.setItem("ocorrencias", JSON.stringify(ocorrencias));
+    mostrarOcorrencias(); atualizarDashboard();
+}
+
+function prepararEdicaoOcorrencia(index) {
+    let o = ocorrencias[index];
+    document.getElementById("ocoTipo").value = o.tipo; document.getElementById("ocoDescricao").value = o.descricao;
+    document.getElementById("ocoPorteiro").value = o.registradoPor; document.getElementById("ocoApto").value = o.apto || "";
+    document.getElementById("ocoMorador").value = o.morador || ""; document.getElementById("ocoPrioridade").value = o.prioridade;
+    
+    // Tenta setar o status, se não achar exato, ignora
+    let comboStatus = document.getElementById("ocoStatus");
+    for(let i=0; i<comboStatus.options.length; i++) { if(comboStatus.options[i].value === o.status) { comboStatus.selectedIndex = i; break; } }
+    
+    let form = document.getElementById("form-ocorrencia");
+    if(form.style.display === "none" || form.style.display === "") toggleFormOcorrencia();
+    
+    let btnSalvar = document.getElementById("btnSalvarOcorrencia");
+    if(btnSalvar) btnSalvar.innerText = "💾 Salvar Alterações";
+    editandoIndexOcorrencia = index; window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
 function mostrarOcorrencias(filtro="") {
     let lista = document.getElementById("listaOcorrencias"); if(!lista) return; lista.innerHTML = "";
     let urg = 0, abertos = 0, res = 0, hoje = 0; let dHoje = new Date().toISOString().split('T')[0];
+    
     ocorrencias.forEach((o, idx) => {
         let conteudoBuscavel = `${o.tipo} ${o.apto} ${o.morador} ${o.descricao}`.toLowerCase(); if(filtro && !conteudoBuscavel.includes(filtro.toLowerCase())) return;
-        if(o.prioridade === "Alta" && o.status !== "Resolvida") urg++; if(o.status === "Em aberto" || o.status === "Em andamento") abertos++; if(o.status === "Resolvida") res++; if(o.data === dHoje) hoje++;
-        let cBadge = o.status === "Em aberto" ? "status-pendente" : "status-entregue";
-        lista.innerHTML += `<div class="card" style="border-left:5px solid ${o.prioridade==='Alta'?'#e53935':'#cbd5e1'}"><h3>⚠️ ${o.tipo}</h3><span class="badge ${cBadge}">${o.status}</span><p>🏢 Local: ${o.apto || 'Área Comum'}</p><p>🕒 Hora: ${o.data.split('-').reverse().join('/')} às ${o.hora}</p><div style="background:rgba(0,0,0,0.02); padding:10px; border-radius:6px; margin:10px 0; font-style:italic;">"${o.descricao}"</div>${o.foto?`<img src="${o.foto}" class="foto">`:''}<div class="acoes"><button class="btn-acao editar" onclick="mudarStatusOco(${idx})">🔄 Status</button><button class="btn-acao excluir" onclick="excluirOco(${idx})">🗑️ Apagar</button></div></div>`;
+        
+        // Contadores
+        if(o.prioridade === "Alta" && !o.status.includes("Resolvido")) urg++; 
+        if(o.status.includes("Pendente") || o.status === "Em aberto") abertos++; 
+        if(o.status.includes("Resolvido")) res++; 
+        if(o.data === dHoje) hoje++;
+        
+        // Cores do Semáforo (Borda e Etiqueta)
+        let corBorda = "#cbd5e1"; let classeBadge = "";
+        if (o.status.includes("Não Resolvido")) { corBorda = "#ef4444"; classeBadge = "status-urgente"; } 
+        else if (o.status.includes("Pendente") || o.status === "Em aberto") { corBorda = "#f59e0b"; classeBadge = "status-pendente"; } 
+        else if (o.status.includes("Resolvido")) { corBorda = "#10b981"; classeBadge = "status-entregue"; }
+        
+        lista.innerHTML += `
+        <div class="card" style="border-left: 5px solid ${corBorda}">
+            <h3>⚠️ ${o.tipo} <span style="font-size: 12px; color: #64748b;">(Prioridade: ${o.prioridade})</span></h3>
+            <span class="badge ${classeBadge}">${o.status}</span>
+            <p>🏢 Local: ${o.apto || 'Área Comum'} ${o.morador ? '- ' + o.morador : ''}</p>
+            <p>🕒 Hora: ${o.data.split('-').reverse().join('/')} às ${o.hora}</p>
+            <p>👮 Registrado por: ${o.registradoPor || 'Sistema'}</p>
+            <div style="background:rgba(0,0,0,0.02); padding:10px; border-radius:6px; margin:10px 0; font-style:italic;">"${o.descricao}"</div>
+            ${o.foto?`<img src="${o.foto}" class="foto">`:''}
+            <div class="acoes">
+                ${!o.status.includes("Resolvido") ? `<button class="btn-acao entregue" onclick="resolverOcorrencia(${idx})">✅ Resolver</button>` : ''}
+                <button class="btn-acao editar" onclick="prepararEdicaoOcorrencia(${idx})">✏️ Editar</button>
+                <button class="btn-acao excluir" onclick="excluirOco(${idx})">🗑️ Apagar</button>
+            </div>
+        </div>`;
     });
-    let sUrg = document.getElementById("stat-urgente"); if(sUrg) sUrg.innerText = urg; let sAb = document.getElementById("stat-aberto"); if(sAb) sAb.innerText = abertos;
-    let sRes = document.getElementById("stat-resolvida"); if(sRes) sRes.innerText = res; let sHj = document.getElementById("stat-hoje"); if(sHj) sHj.innerText = hoje;
+    
+    let sUrg = document.getElementById("stat-urgente"); if(sUrg) sUrg.innerText = urg; 
+    let sAb = document.getElementById("stat-aberto"); if(sAb) sAb.innerText = abertos;
+    let sRes = document.getElementById("stat-resolvida"); if(sRes) sRes.innerText = res; 
+    let sHj = document.getElementById("stat-hoje"); if(sHj) sHj.innerText = hoje;
 }
-function mudarStatusOco(i) { let n = prompt("Novo status (Em aberto, Resolvida):", ocorrencias[i].status); if(n) { ocorrencias[i].status = n; localStorage.setItem("ocorrencias", JSON.stringify(ocorrencias)); mostrarOcorrencias(); } }
-function excluirOco(i) { if(confirm("Apagar?")) { ocorrencias.splice(i,1); localStorage.setItem("ocorrencias", JSON.stringify(ocorrencias)); mostrarOcorrencias(); } }
+
+function excluirOco(i) { if(confirm("Apagar ocorrência?")) { ocorrencias.splice(i,1); localStorage.setItem("ocorrencias", JSON.stringify(ocorrencias)); mostrarOcorrencias(); atualizarDashboard(); } }
 function pesquisarOcorrencias() { let t = document.getElementById("pesquisaOcorrencia").value; mostrarOcorrencias(t); }
 function gerarRelatorioOcorrencias() { const { jsPDF } = window.jspdf; const doc = new jsPDF(); doc.text("Histórico de Ocorrências", 14, 20); doc.save("Ocorrencias.pdf"); }
 
 /* =========================================================================
-   📦 ENCOMENDAS
+   📦 ENCOMENDAS (INTACTO COMO SOLICITADO)
    ========================================================================= */
 let encomendas = JSON.parse(localStorage.getItem("encomendas")) || [];
 function salvarEncomenda(){
@@ -813,20 +833,133 @@ function iniciarLeitorQR() { document.getElementById('leitor-qr').style.display 
 function fecharLeitorQR() { if (html5QrcodeScanner) html5QrcodeScanner.clear(); document.getElementById('leitor-qr').style.display = 'none'; document.getElementById('btn-fechar-leitor').style.display = 'none'; }
 
 /* =========================================================================
-   📢 COMUNICADOS
+   📢 COMUNICADOS (MODIFICADO COM STATUS SEMÁFORO, EDIÇÃO E WHATSAPP)
    ========================================================================= */
 let comunicados = JSON.parse(localStorage.getItem("comunicados")) || [];
+let editandoIndexComunicado = -1;
+
 function salvarComunicado(){
-    comunicados.unshift({ tipo: document.getElementById('tipoComunicado').value, titulo: document.getElementById('tituloComunicado').value, mensagem: document.getElementById('mensagemComunicado').value });
+    let tipo = document.getElementById('tipoComunicado').value;
+    let status = document.getElementById('statusComunicado').value;
+    let titulo = document.getElementById('tituloComunicado').value.trim();
+    let data = document.getElementById('dataComunicado').value;
+    let hora = document.getElementById('horaComunicado').value;
+    let local = document.getElementById('localComunicado').value.trim();
+    let mensagem = document.getElementById('mensagemComunicado').value.trim();
+    
+    let btnSalvar = document.getElementById('btnSalvarComunicado');
+
+    if(!titulo || !mensagem) return alert("⚠️ O Título e a Mensagem são obrigatórios!");
+
+    if (editandoIndexComunicado >= 0) {
+        comunicados[editandoIndexComunicado] = { tipo, status, titulo, data, hora, local, mensagem };
+        editandoIndexComunicado = -1;
+        if(btnSalvar) btnSalvar.innerText = "Publicar Comunicado";
+        alert("✅ Comunicado atualizado!");
+    } else {
+        comunicados.unshift({ tipo, status, titulo, data, hora, local, mensagem });
+        alert("✅ Comunicado publicado!");
+    }
+
     localStorage.setItem("comunicados", JSON.stringify(comunicados)); mostrarComunicados();
-    document.getElementById('tituloComunicado').value=''; document.getElementById('mensagemComunicado').value=''; alert("Aviso publicado!");
+    
+    // Limpa os campos
+    document.getElementById('tituloComunicado').value=''; document.getElementById('dataComunicado').value='';
+    document.getElementById('horaComunicado').value=''; document.getElementById('localComunicado').value='';
+    document.getElementById('mensagemComunicado').value='';
 }
-function mostrarComunicados(){ let lista = document.getElementById('listaComunicados'); if(!lista) return; lista.innerHTML=""; comunicados.forEach(c => { lista.innerHTML += `<div class="card"><h3>📢 ${c.titulo}</h3><div class="badge status-andamento">${c.tipo}</div><p>${c.mensagem}</p></div>`; }); }
+
+function prepararEdicaoComunicado(index) {
+    let c = comunicados[index];
+    document.getElementById('tipoComunicado').value = c.tipo;
+    
+    let comboStatus = document.getElementById("statusComunicado");
+    for(let i=0; i<comboStatus.options.length; i++) { if(comboStatus.options[i].value === c.status) { comboStatus.selectedIndex = i; break; } }
+    
+    document.getElementById('tituloComunicado').value = c.titulo;
+    document.getElementById('dataComunicado').value = c.data || "";
+    document.getElementById('horaComunicado').value = c.hora || "";
+    document.getElementById('localComunicado').value = c.local || "";
+    document.getElementById('mensagemComunicado').value = c.mensagem;
+    
+    let btnSalvar = document.getElementById('btnSalvarComunicado');
+    if(btnSalvar) btnSalvar.innerText = "💾 Salvar Alterações";
+    
+    editandoIndexComunicado = index;
+    window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function excluirComunicado(index) {
+    if(confirm("Deseja apagar este comunicado?")) {
+        comunicados.splice(index, 1);
+        localStorage.setItem("comunicados", JSON.stringify(comunicados));
+        mostrarComunicados();
+    }
+}
+
+function avisarWhatsappComunicado(index) {
+    let c = comunicados[index];
+    let fraseFinal = "";
+    
+    // Frases Mágicas Automáticas
+    if (c.tipo.includes("Assembleia")) fraseFinal = "Sua presença é fundamental!";
+    else if (c.tipo.includes("Manutenção")) fraseFinal = "Pedimos desculpas pelo transtorno.";
+    else if (c.tipo.includes("Ocorrência")) fraseFinal = "Pedimos atenção a este aviso.";
+    else fraseFinal = "Contamos com a colaboração de todos.";
+
+    let dataHora = c.data ? (c.data.split('-').reverse().join('/') + (c.hora ? ' às ' + c.hora : '')) : '';
+    let txtLocal = c.local ? `\n📍 *Local:* ${c.local}` : '';
+    
+    let msg = `*${c.tipo}*\n\n🔔 *${c.titulo}*\n${dataHora ? '📅 *Data:* ' + dataHora : ''}${txtLocal}\n\n📝 ${c.mensagem}\n\n_${fraseFinal}_`;
+    
+    window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`);
+}
+
+function mostrarComunicados(){
+    let lista = document.getElementById('listaComunicados'); if(!lista) return; lista.innerHTML="";
+    
+    if(comunicados.length === 0) { lista.innerHTML = "<p style='text-align:center; padding:20px; color:#777;'>Nenhum comunicado ativo.</p>"; return; }
+
+    comunicados.forEach((c, index) => {
+        // Lógica Semáforo
+        let corBorda = "#cbd5e1"; let classeBadge = "status-andamento";
+        if(c.status) {
+            if (c.status.includes("Não Resolvido")) { corBorda = "#ef4444"; classeBadge = "status-urgente"; } 
+            else if (c.status.includes("Pendente")) { corBorda = "#f59e0b"; classeBadge = "status-pendente"; } 
+            else if (c.status.includes("Resolvido")) { corBorda = "#10b981"; classeBadge = "status-entregue"; }
+        }
+
+        let dataFormatada = c.data ? c.data.split('-').reverse().join('/') : "";
+        let infosExtras = "";
+        if(dataFormatada || c.local) {
+            infosExtras = `<div style="background:#f8fafc; padding:10px; border-radius:8px; margin-bottom:10px; font-size:13px; color:#475569;">
+                ${dataFormatada ? `<b>📅 Data:</b> ${dataFormatada} ${c.hora ? `às ${c.hora}` : ''}<br>` : ''}
+                ${c.local ? `<b>📍 Local:</b> ${c.local}` : ''}
+            </div>`;
+        }
+
+        lista.innerHTML += `
+        <div class="card" style="border-left: 5px solid ${corBorda};">
+            <h3>${c.tipo}</h3>
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                <h4 style="margin:0; color:#334155; font-size:16px;">🔔 ${c.titulo}</h4>
+                <span class="badge ${classeBadge}" style="margin:0;">${c.status || "Ativo"}</span>
+            </div>
+            ${infosExtras}
+            <p style="white-space: pre-line;">${c.mensagem}</p>
+            <div class="acoes">
+                <button class="btn-acao whats" onclick="avisarWhatsappComunicado(${index})">📲 WhatsApp</button>
+                <button class="btn-acao editar" onclick="prepararEdicaoComunicado(${index})">✏️ Editar</button>
+                <button class="btn-acao excluir" onclick="excluirComunicado(${index})">🗑️ Excluir</button>
+            </div>
+        </div>`; 
+    });
+}
 
 /* MOTOR DO RELÓGIO GLOBAL */
 function iniciarRelogio() { setInterval(() => { let agora = new Date(); document.getElementById("relogio").innerText = agora.toLocaleTimeString('pt-BR'); let hora = agora.getHours(); let saudacao = hora >= 18 ? "Boa noite" : hora >= 12 ? "Boa tarde" : "Bom dia"; document.getElementById("saudacao").innerText = `${saudacao}, Webert 👋`; }, 1000); }
 function atualizarDashboard() {
-    let sOco = document.getElementById("dash-ocorrencias"); if(sOco) sOco.innerText = ocorrencias.length;
+    let sOco = document.getElementById("dash-ocorrencias"); if(sOco) sOco.innerText = ocorrencias.filter(o => !o.status.includes("Resolvido")).length;
     let sVei = document.getElementById("dash-veiculos"); if(sVei) sVei.innerText = veiculos.length;
     let sMor = document.getElementById("dash-moradores"); if(sMor) sMor.innerText = moradores.length;
     let sEnc = document.getElementById("dash-encomendas"); if(sEnc) sEnc.innerText = encomendas.filter(e=>e.status==="Pendente").length;
@@ -836,7 +969,7 @@ function toggleDarkMode() { document.body.classList.toggle("dark-mode"); }
 
 /* EXECUÇÃO OPERACIONAL INICIAL */
 window.onload = function() {
-    mostrarEquipe(); atualizarSelectEquipe(); mostrarMoradores(); iniciarRelogio(); atualizarDashboard();
+    mostrarEquipe(); atualizarSelectEquipe(); mostrarMoradores(); mostrarComunicados(); iniciarRelogio(); atualizarDashboard();
     let idParaBaixar = new URLSearchParams(window.location.search).get('baixar'); 
     if(idParaBaixar) { trocarTela('encomendas'); setTimeout(() => { confirmarEntregaPorID(idParaBaixar); window.history.replaceState({}, document.title, window.location.pathname); }, 600); }
 };
