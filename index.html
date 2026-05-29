@@ -269,11 +269,11 @@ body.dark-mode canvas { background: #0f172a; border-color: #475569; }
     <div id="moradores" class="tela">
         <div class="box">
             <h2>👤 Cadastro de Moradores</h2>
-            <input id="nome" placeholder="Nome">
+            <input id="nome" placeholder="Nome do Morador">
             <input id="apto" placeholder="Apartamento">
-            <input id="secretaria" placeholder="Secretária">
-            <input id="visitantes" placeholder="Visitantes separados por vírgula">
-            <button class="btn" onclick="addMorador()">Cadastrar Morador</button>
+            <input id="secretaria" placeholder="Secretária / Empregada">
+            <input id="visitantes" placeholder="Visitantes / Autorizados separados por vírgula">
+            <button class="btn" id="btnSalvarMorador" onclick="addMorador()">Cadastrar Morador</button>
         </div>
         <div class="box" style="background: rgba(59, 130, 246, 0.05);">
             <h2>🔍 Lista de Moradores</h2>
@@ -282,7 +282,7 @@ body.dark-mode canvas { background: #0f172a; border-color: #475569; }
                 <button class="btn" style="background:#1976d2; margin-top:0; width: auto;" onclick="gerarRelatorioMoradores()">📊 PDF Geral</button>
             </div>
         </div>
-        <div id="listaMoradores"></div>
+        <div id="listaMoradores" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px;"></div>
     </div>
 
     <div id="veiculos" class="tela">
@@ -644,8 +644,44 @@ function gerarFolhaPontoIndividual() {
    👤 CADASTRO DE MORADORES E PESQUISA RESTAURADA
    ========================================================================= */
 let moradores = JSON.parse(localStorage.getItem("moradores")) || [];
-function salvarMoradores(){ localStorage.setItem("moradores",JSON.stringify(moradores)); atualizarDashboard(); }
-function addMorador(){ moradores.push({ nome:document.getElementById('nome').value, apto:document.getElementById('apto').value, secretaria:document.getElementById('secretaria').value, visitantes:document.getElementById('visitantes').value }); salvarMoradores(); mostrarMoradores(); document.getElementById('nome').value=''; document.getElementById('apto').value=''; document.getElementById('secretaria').value=''; document.getElementById('visitantes').value=''; }
+let editandoIndexMorador = -1; // Variável de controle para edição
+
+function salvarMoradores(){ 
+    localStorage.setItem("moradores",JSON.stringify(moradores)); 
+    atualizarDashboard(); 
+}
+
+function addMorador(){ 
+    let nome = document.getElementById('nome').value.trim();
+    let apto = document.getElementById('apto').value.trim();
+    let secretaria = document.getElementById('secretaria').value.trim();
+    let visitantes = document.getElementById('visitantes').value.trim();
+    let btnSalvar = document.getElementById('btnSalvarMorador');
+
+    if(!nome || !apto) return alert("⚠️ Preencha pelo menos o Nome e o Apartamento!");
+
+    if (editandoIndexMorador >= 0) {
+        moradores[editandoIndexMorador].nome = nome;
+        moradores[editandoIndexMorador].apto = apto;
+        moradores[editandoIndexMorador].secretaria = secretaria;
+        moradores[editandoIndexMorador].visitantes = visitantes;
+        editandoIndexMorador = -1; // Sai do modo de edição
+        if(btnSalvar) btnSalvar.innerText = "Cadastrar Morador";
+        alert("✅ Morador atualizado com sucesso!");
+    } else {
+        moradores.push({ nome, apto, secretaria, visitantes }); 
+        alert("✅ Morador cadastrado!");
+    }
+
+    salvarMoradores(); 
+    mostrarMoradores(document.getElementById("pesquisaMorador").value); 
+    
+    // Limpa os campos
+    document.getElementById('nome').value=''; 
+    document.getElementById('apto').value=''; 
+    document.getElementById('secretaria').value=''; 
+    document.getElementById('visitantes').value=''; 
+}
 
 function pesquisarMoradores() {
     let termo = document.getElementById("pesquisaMorador").value.toLowerCase();
@@ -654,17 +690,72 @@ function pesquisarMoradores() {
 
 function mostrarMoradores(filtro = ""){ 
     let lista = document.getElementById('listaMoradores'); if(!lista) return; lista.innerHTML=""; 
+    
+    if(moradores.length === 0) {
+        lista.innerHTML = "<p style='text-align:center; padding:20px; color:#777; width:100%; grid-column: 1 / -1;'>Nenhum morador cadastrado.</p>";
+        return;
+    }
+
     moradores.forEach((m,index)=>{ 
         let conteudoBuscavel = `${m.nome} ${m.apto}`.toLowerCase();
         if(filtro && !conteudoBuscavel.includes(filtro)) return;
 
-        lista.innerHTML += `<div class="card"><h3>${m.nome}</h3><p>🏢 AP: ${m.apto}</p><p>👩‍💼 Emp/Sec: ${m.secretaria}</p><p>👥 Autorizados: ${m.visitantes || 'Nenhum'}</p><div class="acoes"><button class="btn-acao editar" onclick="editarMorador(${index})">✏️ Editar</button><button class="btn-acao excluir" onclick="excluirMorador(${index})">🗑️ Excluir</button></div></div>`; 
+        // O NOVO LAYOUT DO CARD AQUI
+        lista.innerHTML += `
+        <div class="card" style="position: relative; border-top: 4px solid #3b82f6; margin-top: 0;">
+            <div style="position: absolute; top: 15px; right: 15px; background: #e0f2fe; color: #0284c7; padding: 5px 12px; border-radius: 20px; font-weight: bold; font-size: 14px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">APTO ${m.apto}</div>
+            <h3 style="margin-top: 5px; margin-bottom: 15px; padding-right: 90px; color: #0f172a;"><i class="fa-regular fa-user" style="color: #94a3b8; margin-right: 5px;"></i> ${m.nome}</h3>
+            
+            <div style="display: grid; gap: 10px; font-size: 13px; margin-bottom: 15px;">
+                <div style="background: #f8fafc; padding: 10px; border-radius: 8px; border: 1px solid #e2e8f0;">
+                    <p style="margin: 0; color: #64748b; font-weight: 700; text-transform: uppercase; font-size: 10px; letter-spacing: 0.5px;">👩‍💼 Secretária / Empregada</p>
+                    <p style="margin: 4px 0 0 0; color: #334155; font-weight: 500;">${m.secretaria || '<span style="color:#cbd5e1; font-style:italic;">Nenhuma</span>'}</p>
+                </div>
+                <div style="background: #f8fafc; padding: 10px; border-radius: 8px; border: 1px solid #e2e8f0;">
+                    <p style="margin: 0; color: #64748b; font-weight: 700; text-transform: uppercase; font-size: 10px; letter-spacing: 0.5px;">👥 Autorizados / Visitantes</p>
+                    <p style="margin: 4px 0 0 0; color: #334155; font-weight: 500; line-height: 1.4;">${m.visitantes || '<span style="color:#cbd5e1; font-style:italic;">Nenhum</span>'}</p>
+                </div>
+            </div>
+
+            <div class="acoes">
+                <button class="btn-acao editar" onclick="prepararEdicaoMorador(${index})">✏️ Editar</button>
+                <button class="btn-acao excluir" onclick="excluirMorador(${index})">🗑️ Excluir</button>
+            </div>
+        </div>`; 
     }); 
 }
 
-function editarMorador(index){ let n = prompt("Nome:", moradores[index].nome); if(n) moradores[index].nome = n; salvarMoradores(); mostrarMoradores(document.getElementById("pesquisaMorador").value); }
-function excluirMorador(index){ if(confirm("Excluir morador?")) { moradores.splice(index,1); salvarMoradores(); mostrarMoradores(document.getElementById("pesquisaMorador").value); } }
-function gerarRelatorioMoradores() { if (moradores.length === 0) return alert("Vazio."); const { jsPDF } = window.jspdf; const doc = new jsPDF(); doc.text("Lista de Moradores", 14, 20); const col = ["Nome", "Apto"]; const lin = moradores.map(m => [m.nome, m.apto]); doc.autoTable({ head: [col], body: lin, startY: 30 }); doc.save("Moradores.pdf"); }
+function prepararEdicaoMorador(index) {
+    document.getElementById("nome").value = moradores[index].nome;
+    document.getElementById("apto").value = moradores[index].apto;
+    document.getElementById("secretaria").value = moradores[index].secretaria || "";
+    document.getElementById("visitantes").value = moradores[index].visitantes || "";
+    
+    let btnSalvar = document.getElementById("btnSalvarMorador");
+    if(btnSalvar) btnSalvar.innerText = "💾 Salvar Alterações";
+    
+    editandoIndexMorador = index;
+    window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function excluirMorador(index){ 
+    if(confirm("Deseja excluir este morador?")) { 
+        moradores.splice(index,1); 
+        salvarMoradores(); 
+        mostrarMoradores(document.getElementById("pesquisaMorador").value); 
+    } 
+}
+
+function gerarRelatorioMoradores() { 
+    if (moradores.length === 0) return alert("Vazio."); 
+    const { jsPDF } = window.jspdf; 
+    const doc = new jsPDF(); 
+    doc.text("Lista de Moradores", 14, 20); 
+    const col = ["Nome", "Apto", "Secretaria", "Autorizados"]; 
+    const lin = moradores.map(m => [m.nome, m.apto, m.secretaria || "-", m.visitantes || "-"]); 
+    doc.autoTable({ head: [col], body: lin, startY: 30 }); 
+    doc.save("Moradores.pdf"); 
+}
 
 /* =========================================================================
    🚘 CADASTRO DE VEÍCULOS
